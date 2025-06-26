@@ -9,151 +9,58 @@
     <!-- 樣式 -->
     <style>
         /* 通用設定 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Microsoft JhengHei', 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            padding: 20px;
+            background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+            min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:20px;
         }
 
         /* 登入卡片 */
-        .login-container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
-            transform: translateY(-20px);
-            animation: slideIn 0.8s ease-out forwards;
-        }
-
-        @keyframes slideIn {
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
+        .login-container{background:rgba(255,255,255,.95);padding:40px;border-radius:20px;box-shadow:0 20px 40px rgba(0,0,0,.1);backdrop-filter:blur(10px);width:100%;max-width:450px;text-align:center;transform:translateY(-20px);animation:slideIn .8s ease-out forwards;}
+        @keyframes slideIn{to{transform:translateY(0);opacity:1}}
 
         /* 標誌/標題區 */
-        .logo-section { margin-bottom: 30px; }
-        .company-logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            color: #fff;
-            box-shadow: 0 8px 16px rgba(76, 175, 80, 0.3);
-        }
-        .company-name {
-            font-size: 28px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-        .system-title { font-size: 24px; font-weight: bold; color: #2c3e50; margin-bottom: 5px; }
-        .subtitle { color: #7f8c8d; font-size: 14px; margin-bottom: 30px; }
+        .logo-section{margin-bottom:30px}
+        .company-logo{width:80px;height:80px;background:linear-gradient(135deg,#4CAF50,#45a049);border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 16px rgba(76,175,80,.3)}
+        .company-name{font-size:28px;font-weight:bold;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+        .system-title{font-size:24px;font-weight:bold;color:#2c3e50;margin-bottom:5px}
+        .subtitle{color:#7f8c8d;font-size:14px;margin-bottom:30px}
 
         /* 表單 */
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; margin-bottom: 8px; color: #34495e; font-weight: 500; font-size: 14px; }
-        .input-container { position: relative; }
-        .form-control {
-            width: 100%;
-            padding: 15px 20px 15px 50px;
-            border: 2px solid #e1e8ed;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
-        }
-        .form-control:focus {
-            outline: none;
-            border-color: #667eea;
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        .input-icon {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #95a5a6;
-            font-size: 18px;
-            cursor: pointer;
-        }
+        .form-group{margin-bottom:20px;text-align:left}
+        .form-group label{display:block;margin-bottom:8px;color:#34495e;font-weight:500;font-size:14px}
+        .input-container{position:relative}
+        .form-control{width:100%;padding:15px 20px 15px 50px;border:2px solid #e1e8ed;border-radius:12px;font-size:16px;transition:all .3s ease;background:#f8f9fa}
+        .form-control:focus{outline:none;border-color:#667eea;background:#fff;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+        .input-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:#95a5a6;font-size:18px;cursor:pointer}
 
         /* 按鈕 */
-        .login-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-top: 10px;
-        }
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-        }
-        .login-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+        .login-btn{width:100%;padding:15px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;transition:.2s;margin-top:10px}
+        .login-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(102,126,234,.3)}
+        .login-btn:disabled{background:#bdc3c7;cursor:not-allowed;transform:none}
 
         /* 訊息 */
-        .error-message, .success-message {
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border-left: 4px solid;
-            display: none;
-            text-align: left;
-        }
-        .error-message { background: #fee; color: #e74c3c; border-color: #e74c3c; }
-        .success-message { background: #d4edda; color: #155724; border-color: #28a745; }
+        .error-message,.success-message{padding:12px;border-radius:8px;margin-top:15px;border-left:4px solid;display:none;text-align:left}
+        .error-message{background:#fee;color:#e74c3c;border-color:#e74c3c}
+        .success-message{background:#d4edda;color:#155724;border-color:#28a745}
 
         /* 其他元件 */
-        .loading-spinner { display: none; margin-left: 10px; }
-        .spinner { width: 20px; height: 20px; border: 2px solid #fff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
-
-        .remember-me { display: flex; align-items: center; margin-top: 15px; font-size: 14px; color: #7f8c8d; }
-        .remember-me input { margin-right: 8px; }
+        .loading-spinner{display:none;margin-left:10px}
+        .spinner{width:20px;height:20px;border:2px solid #fff;border-top:2px solid transparent;border-radius:50%;animation:spin 1s linear infinite}
+        @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+        .remember-me{display:flex;align-items:center;margin-top:15px;font-size:14px;color:#7f8c8d}
+        .remember-me input{margin-right:8px}
 
         /* 版權 & 除錯 */
-        .footer-info { margin-top: 30px; padding-top: 20px; border-top: 1px solid #ecf0f1; color: #95a5a6; font-size: 12px; }
-        .version-info { margin-top: 10px; font-size: 11px; color: #bdc3c7; }
-        .debug-info {
-            background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 10px; margin-top: 20px; font-size: 12px; color: #6c757d; text-align: left; display: none;
-        }
-        .debug-info.show { display: block; }
-        .debug-toggle { background: none; border: none; color: #6c757d; font-size: 12px; cursor: pointer; margin-top: 10px; }
+        .footer-info{margin-top:30px;padding-top:20px;border-top:1px solid #ecf0f1;color:#95a5a6;font-size:12px}
+        .version-info{margin-top:10px;font-size:11px;color:#bdc3c7}
+        .debug-info{background:#f8f9fa;border:1px solid #dee2e6;border-radius:8px;padding:10px;margin-top:20px;font-size:12px;color:#6c757d;text-align:left;display:none}
+        .debug-info.show{display:block}
+        .debug-toggle{background:none;border:none;color:#6c757d;font-size:12px;cursor:pointer;margin-top:10px}
 
         /* 響應式 */
-        @media(max-width:480px){ .login-container{padding:30px 20px;} .company-name{font-size:24px;} .system-title{font-size:20px;} }
+        @media(max-width:480px){.login-container{padding:30px 20px}.company-name{font-size:24px}.system-title{font-size:20px}}
     </style>
 </head>
 <body>
@@ -211,162 +118,46 @@
     <!-- 腳本 -->
     <script>
         /* ========= 基本設定 ========= */
-        const CONFIG = {
-            GAS_URL: 'https://script.google.com/macros/s/AKfycbxOLXS85Wn25LTyeG5PnxOvI6ShdYYyxcrrtxot5cK9blW4QcpPY7kPkbG5CjcT9MUP/exec',
-            USE_MOCK_DATA: false // 若API失敗自動啟用模擬資料
-        };
-        const API_URL = CONFIG.GAS_URL;
+        const CONFIG={GAS_URL:'https://script.google.com/macros/s/AKfycbxOLXS85Wn25LTyeG5PnxOvI6ShdYYyxcrrtxot5cK9blW4QcpPY7kPkbG5CjcT9MUP/exec',USE_MOCK_DATA:false};
+        const API_URL=CONFIG.GAS_URL;
+        const MOCK_USERS={admin:{password:'admin123',name:'系統管理員',position:'總經理',level:'s4'},manager:{password:'mgr123',name:'營運經理',position:'營運經理',level:'s3'},operator:{password:'op123',name:'調度員',position:'調度員',level:'s2'},viewer:{password:'view123',name:'監控員',position:'監控員',level:'s1'}};
+        const PERMISSION_LEVELS={s4:{name:'管理者',pages:['*'],fullAccess:true},s3:{name:'主要執行者',pages:['dashboard','route-management','route-optimization','seasonal-routes','cargo-vehicle','real-time-monitor','reports'],fullAccess:false},s2:{name:'次要執行者',pages:['dashboard','route-management','route-optimization','cargo-vehicle','real-time-monitor'],fullAccess:false},s1:{name:'初階使用者',pages:['dashboard'],fullAccess:false}};
 
-        // 模擬帳號 (開發環境用)
-        const MOCK_USERS = {
-            'admin':   { password: 'admin123',  name: '系統管理員', position: '總經理', level: 's4' },
-            'manager': { password: 'mgr123',    name: '營運經理', position: '營運經理', level: 's3' },
-            'operator':{ password: 'op123',     name: '調度員',   position: '調度員',   level: 's2' },
-            'viewer':  { password: 'view123',   name: '監控員',   position: '監控員',   level: 's1' }
-        };
-
-        // 權限等級
-        const PERMISSION_LEVELS = {
-            s4: { name: '管理者',       pages: ['*'], fullAccess: true },
-            s3: { name: '主要執行者',   pages: ['dashboard','route-management','route-optimization','seasonal-routes','cargo-vehicle','real-time-monitor','reports'], fullAccess: false },
-            s2: { name: '次要執行者',   pages: ['dashboard','route-management','route-optimization','cargo-vehicle','real-time-monitor'], fullAccess: false },
-            s1: { name: '初階使用者',   pages: ['dashboard'], fullAccess: false }
-        };
-
-        /* ========= DOM 元素 ========= */
-        const loginForm      = document.getElementById('loginForm');
-        const loginBtn       = document.getElementById('loginBtn');
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        const errorMessage   = document.getElementById('errorMessage');
-        const successMessage = document.getElementById('successMessage');
-        const errorText      = document.getElementById('errorText');
-        const successText    = document.getElementById('successText');
-        const apiStatus      = document.getElementById('apiStatus');
+        /* ========= DOM ========= */
+        const loginForm=document.getElementById('loginForm');
+        const loginBtn=document.getElementById('loginBtn');
+        const loadingSpinner=document.getElementById('loadingSpinner');
+        const errorMessage=document.getElementById('errorMessage');
+        const successMessage=document.getElementById('successMessage');
+        const errorText=document.getElementById('errorText');
+        const successText=document.getElementById('successText');
+        const apiStatus=document.getElementById('apiStatus');
 
         /* ========= 初始化 ========= */
-        document.addEventListener('DOMContentLoaded', () => {
-            checkExistingLogin();
-            testApiConnection();
-            document.getElementById('username').focus();
-        });
+        document.addEventListener('DOMContentLoaded',()=>{checkExistingLogin();testApiConnection();document.getElementById('username').focus();});
 
-        /* ========= 事件監聽 ========= */
-        loginForm.addEventListener('submit', handleLogin);
-        // Enter 快捷登入
-        document.addEventListener('keydown', e => { if(e.key==='Enter' && !loginBtn.disabled){ loginForm.dispatchEvent(new Event('submit')); } });
-        // 顯示/隱藏密碼
-        const passwordInput = document.getElementById('password');
-        const passwordIcon  = document.getElementById('passwordIcon');
-        passwordIcon.addEventListener('click', ()=>{
-            if(passwordInput.type==='password'){ passwordInput.type='text'; passwordIcon.classList.replace('fa-lock','fa-unlock'); }
-            else{ passwordInput.type='password'; passwordIcon.classList.replace('fa-unlock','fa-lock'); }
-        });
+        /* ========= 事件 ========= */
+        loginForm.addEventListener('submit',handleLogin);
+        document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!loginBtn.disabled)loginForm.dispatchEvent(new Event('submit'));});
+        document.getElementById('passwordIcon').addEventListener('click',()=>{const p=document.getElementById('password'),i=document.getElementById('passwordIcon');if(p.type==='password'){p.type='text';i.classList.replace('fa-lock','fa-unlock');}else{p.type='password';i.classList.replace('fa-unlock','fa-lock');}});
 
         /* ========= 函式 ========= */
-        function checkExistingLogin(){
-            const savedUser = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
-            if(!savedUser) return;
-            try{
-                const userData = JSON.parse(savedUser);
-                const hoursDiff = (Date.now() - new Date(userData.loginTime)) / 36e5;
-                if(hoursDiff < 24){ redirectToDashboard(userData); }
-            }catch{ /* ignore */ }
-        }
+        function checkExistingLogin(){const saved=localStorage.getItem('currentUser')||sessionStorage.getItem('currentUser');if(!saved)return;try{const u=JSON.parse(saved);if((Date.now()-new Date(u.loginTime))/36e5<24){window.location.href='dashboard.html';}}catch{/* ignore */}}
 
-        async function testApiConnection(){
-            try{
-                const resp = await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'testConnection'})});
-                const result = await resp.json();
-                if(result.success){ apiStatus.textContent='連線正常'; apiStatus.style.color='#28a745'; }
-                else{ throw new Error('fail'); }
-            }catch(e){ apiStatus.textContent='連線失敗'; apiStatus.style.color='#dc3545'; CONFIG.USE_MOCK_DATA=true; }
-        }
+        async function testApiConnection(){try{const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'testConnection'})});const j=await r.json();if(j.success){apiStatus.textContent='連線正常';apiStatus.style.color='#28a745';}else throw new Error('fail');}catch(e){apiStatus.textContent='連線失敗';apiStatus.style.color='#dc3545';CONFIG.USE_MOCK_DATA=true;}}
 
-        async function handleLogin(e){
-            e.preventDefault();
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value;
-            const remember = document.getElementById('rememberMe').checked;
-            if(!username || !password){ showError('請輸入帳號和密碼'); return; }
-            setLoading(true); hideMessages();
-            try{
-                let userData = null;
-                // 先嘗試 API
-                if(!CONFIG.USE_MOCK_DATA){
-                    try{ userData = await apiLogin(username,password); }
-                    catch(apiErr){ console.warn('API登入失敗, 改用模擬',apiErr); CONFIG.USE_MOCK_DATA = true; }
-                }
-                // 模擬登入
-                if(CONFIG.USE_MOCK_DATA && !userData){ userData = mockLogin(username,password); }
-                if(!userData) throw new Error('登入失敗');
-                await handleLoginSuccess(userData,remember);
-            }catch(err){ handleLoginError(err); }
-            finally{ setLoading(false); }
-        }
+        async function handleLogin(e){e.preventDefault();const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value,remember=document.getElementById('rememberMe').checked;if(!u||!p){showError('請輸入帳號和密碼');return;}setLoading(true);hideMessages();try{let data=null;if(!CONFIG.USE_MOCK_DATA){try{data=await apiLogin(u,p);}catch(err){console.warn('API登入失敗, 改用模擬',err);CONFIG.USE_MOCK_DATA=true;}}if(CONFIG.USE_MOCK_DATA&&!data)data=mockLogin(u,p);if(!data)throw new Error('登入失敗');await handleLoginSuccess(data,remember);}catch(err){handleLoginError(err);}finally{setLoading(false);}}
 
-        async function apiLogin(username,password){
-            const resp = await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'login',data:{username,password}})});
-            if(!resp.ok){ throw new Error(`HTTP ${resp.status}`); }
-            const result = await resp.json();
-            if(!result.success){ throw new Error(result.error || '登入失敗'); }
-            return result.data;
-        }
+        async function apiLogin(u,p){const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'login',data:{username:u,password:p}})});if(!r.ok)throw new Error(`HTTP ${r.status}`);const j=await r.json();if(!j.success)throw new Error(j.error||'登入失敗');return j.data;}
+        function mockLogin(u,p){const d=MOCK_USERS[u];if(!d||d.password!==p)throw new Error('帳號或密碼錯誤');return{username:u,name:d.name,position:d.position,level:d.level,permissions:PERMISSION_LEVELS[d.level],loginTime:new Date().toISOString()};}
 
-        function mockLogin(username,password){
-            const user = MOCK_USERS[username];
-            if(!user || user.password !== password){ throw new Error('帳號或密碼錯誤'); }
-            const perms = PERMISSION_LEVELS[user.level] || PERMISSION_LEVELS.s1;
-            return { username, name:user.name, position:user.position, level:user.level, permissions:perms, loginTime:new Date().toISOString() };
-        }
+        async function handleLoginSuccess(d,remember){const info={...d,loginTime:new Date().toISOString()};sessionStorage.setItem('currentUser',JSON.stringify(info));if(remember)localStorage.setItem('currentUser',JSON.stringify(info));showSuccess(`歡迎回來，${d.name}！正在跳轉...`);setTimeout(()=>window.location.href='dashboard.html',1200);}
 
-        async function handleLoginSuccess(userData,remember){
-            const userInfo = { ...userData, loginTime:new Date().toISOString() };
-            sessionStorage.setItem('currentUser', JSON.stringify(userInfo));
-            if(remember){ localStorage.setItem('currentUser', JSON.stringify(userInfo)); }
-            showSuccess(`歡迎回來，${userData.name}！正在跳轉...`);
-            setTimeout(()=>redirectToDashboard(userInfo), 1200);
-        }
-
-        function handleLoginError(err){
-            console.error('登入錯誤:',err);
-            if(err.message.includes('HTTP'))      showError('伺服器連線錯誤, 請稍後再試');
-            else if(err.message.includes('帳號') || err.message.includes('密碼')) showError('帳號或密碼錯誤');
-            else showError(err.message || '登入失敗');
-        }
-
-        function redirectToDashboard(userData){
-            const mainPage='index.html'; // TODO: 若有主頁請修改
-            const params=new URLSearchParams({user:encodeURIComponent(JSON.stringify({username:userData.username,name:userData.name,level:userData.level}))});
-            window.location.href=`${mainPage}?${params.toString()}`;
-        }
+        function handleLoginError(err){console.error('登入錯誤:',err);if(err.message.includes('HTTP'))showError('伺服器連線錯誤, 請稍後再試');else if(err.message.includes('帳號')||err.message.includes('密碼'))showError('帳號或密碼錯誤');else showError(err.message||'登入失敗');}
 
         /* ========= UI 輔助 ========= */
-        function setLoading(loading){
-            loginBtn.disabled = loading;
-            loadingSpinner.style.display = loading ? 'inline-block':'none';
-            loginBtn.innerHTML = loading ? '<i class="fas fa-sign-in-alt"></i> 登入中... <div class="loading-spinner" style="display:inline-block;"><div class="spinner"></div></div>' : '<i class="fas fa-sign-in-alt"></i> 登入系統';
-        }
-        function showError(msg){ errorText.textContent=msg; errorMessage.style.display='block'; }
-        function showSuccess(msg){ successText.textContent=msg; successMessage.style.display='block'; }
-        function hideMessages(){ errorMessage.style.display='none'; successMessage.style.display='none'; }
-
-        function toggleDebug(){
-            const di=document.getElementById('debugInfo');
-            const btn=document.querySelector('.debug-toggle');
-            if(di.classList.toggle('show')) btn.textContent='隱藏除錯資訊';
-            else btn.textContent='顯示除錯資訊';
-        }
-
-        /* ========= 全域錯誤 ========= */
-        window.addEventListener('error',e=>console.error('全域錯誤:',e.error));
-        window.addEventListener('unhandledrejection',e=>console.error('未處理的Promise拒絕:',e.reason));
-
-        /* ========= 開發模式 ========= */
-        if(['localhost','127.0.0.1'].includes(window.location.hostname)){
-            console.log('🔐 開發模式 - 測試帳號:');
-            Object.entries(MOCK_USERS).forEach(([u,v])=>console.log(`${u} / ${v.password}`));
-            setTimeout(()=>toggleDebug(),800);
-        }
-    </script>
-</body>
-</html>
+        function setLoading(l){loginBtn.disabled=l;loadingSpinner.style.display=l?'inline-block':'none';loginBtn.innerHTML=l?'<i class="fas fa-sign-in-alt"></i> 登入中... <div class="loading-spinner" style="display:inline-block;"><div class="spinner"></div></div>':'<i class="fas fa-sign-in-alt"></i> 登入系統';}
+        function showError(msg){errorText.textContent=msg;errorMessage.style.display='block';}
+        function showSuccess(msg){successText.textContent=msg;successMessage.style.display='block';}
+        function hideMessages(){errorMessage.style.display='none';successMessage.style.display='none';}
+        function toggleDebug(){const di=document
