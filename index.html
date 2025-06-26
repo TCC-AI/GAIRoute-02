@@ -805,6 +805,214 @@
                 display: none;
             }
         }
+        /* 路線管理頁面專用樣式 - 添加到現有 CSS 中 */
+
+/* 路線管理容器 */
+.route-management-container {
+    padding: 0;
+}
+
+/* 路線表格容器 */
+.route-table-container {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-top: 0;
+}
+
+/* 路線表格樣式 */
+.route-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 14px;
+}
+
+.route-table th,
+.route-table td {
+    padding: 12px 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.route-table th {
+    background-color: var(--light-bg);
+    font-weight: 600;
+    color: var(--text-primary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* 設定各欄位寬度 */
+.route-table th:nth-child(1),
+.route-table td:nth-child(1) { 
+    width: 10%; 
+    min-width: 80px;
+}
+
+.route-table th:nth-child(2),
+.route-table td:nth-child(2) { 
+    width: 15%; 
+    min-width: 120px;
+}
+
+.route-table th:nth-child(3),
+.route-table td:nth-child(3) { 
+    width: 12%; 
+    min-width: 100px;
+}
+
+.route-table th:nth-child(4),
+.route-table td:nth-child(4) { 
+    width: 12%; 
+    min-width: 100px;
+}
+
+.route-table th:nth-child(5),
+.route-table td:nth-child(5) { 
+    width: 12%; 
+    min-width: 100px;
+    text-align: center;
+}
+
+.route-table th:nth-child(6),
+.route-table td:nth-child(6) { 
+    width: 10%; 
+    min-width: 80px;
+    text-align: center;
+}
+
+.route-table th:nth-child(7),
+.route-table td:nth-child(7) { 
+    width: 8%; 
+    min-width: 70px;
+    text-align: center;
+}
+
+.route-table th:nth-child(8),
+.route-table td:nth-child(8) { 
+    width: 21%; 
+    min-width: 140px;
+    text-align: center;
+}
+
+.route-table tbody tr:hover {
+    background-color: var(--light-bg);
+}
+
+/* 路線操作按鈕 */
+.route-actions {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.route-action-btn {
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+    min-width: 32px;
+    justify-content: center;
+}
+
+.route-action-btn.view {
+    background-color: var(--info-color);
+    color: white;
+}
+
+.route-action-btn.view:hover {
+    background-color: #0e7490;
+}
+
+.route-action-btn.edit {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+.route-action-btn.edit:hover {
+    background-color: #b45309;
+}
+
+.route-action-btn.delete {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.route-action-btn.delete:hover {
+    background-color: #b91c1c;
+}
+
+/* 空狀態樣式 */
+.route-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+}
+
+.route-empty-state i {
+    font-size: 4rem;
+    color: var(--border-color);
+    margin-bottom: 1rem;
+}
+
+.route-empty-state h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+}
+
+.route-empty-state p {
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+/* 響應式設計 */
+@media (max-width: 1200px) {
+    .route-table {
+        font-size: 13px;
+    }
+    
+    .route-table th,
+    .route-table td {
+        padding: 10px 6px;
+    }
+}
+
+@media (max-width: 768px) {
+    .route-table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .route-table {
+        min-width: 800px;
+    }
+    
+    .route-actions {
+        flex-direction: column;
+        gap: 2px;
+    }
+    
+    .route-action-btn {
+        width: 100%;
+        min-width: auto;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -975,35 +1183,66 @@
                 </div>
             </div>
 
-            <!-- 路線管理頁面 -->
-            <div id="route-management" class="page">
-                <div class="page-header">
-                    <h2><i class="fas fa-route"></i> 路線管理</h2>
-                    <div class="header-actions">
-                        <button class="btn btn-primary" id="addRoute">
-                            <i class="fas fa-plus"></i> 新增路線
-                        </button>
-                        <button class="btn btn-secondary" id="importRoutes">
-                            <i class="fas fa-upload"></i> 批量匯入
-                        </button>
-                                    </div>
+           <!-- 路線管理頁面 -->
+<div id="route-management" class="page">
+    <div class="page-header">
+        <h2><i class="fas fa-route"></i> 路線管理</h2>
+        <div class="header-actions">
+            <button class="btn btn-primary" id="addRoute">
+                <i class="fas fa-plus"></i> 新增路線
+            </button>
+            <button class="btn btn-secondary" id="importRoutes">
+                <i class="fas fa-upload"></i> 批量匯入
+            </button>
+        </div>
+    </div>
 
-                <!-- 搜尋與篩選 -->
-                <div class="filter-section">
-                    <div class="filter-group">
-                        <input type="text" id="routeSearch" placeholder="搜尋路線..." class="form-input">
-                        <select id="regionFilter" class="form-select">
-                            <option value="">全部區域</option>
-                            <option value="north">北部</option>
-                            <option value="central">中部</option>
-                            <option value="south">南部</option>
-                            <option value="east">東部</option>
-                        </select>
-                        <button class="btn btn-primary" id="searchRoutes">
-                            <i class="fas fa-search"></i> 搜尋
-                        </button>
-                    </div>
-                </div>
+    <!-- 搜尋與篩選 -->
+    <div class="filter-section">
+        <div class="filter-group">
+            <input type="text" id="routeSearch" placeholder="搜尋路線..." class="form-input">
+            <select id="regionFilter" class="form-select">
+                <option value="">全部區域</option>
+                <option value="north">北部</option>
+                <option value="central">中部</option>
+                <option value="south">南部</option>
+                <option value="east">東部</option>
+            </select>
+            <button class="btn btn-primary" id="searchRoutes">
+                <i class="fas fa-search"></i> 搜尋
+            </button>
+        </div>
+    </div>
+
+    <!-- 路線列表 -->
+    <div class="route-table-container">
+        <table class="route-table" id="routeTable">
+            <thead>
+                <tr>
+                    <th>路線編號</th>
+                    <th>路線名稱</th>
+                    <th>起點</th>
+                    <th>終點</th>
+                    <th>收送點數量</th>
+                    <th>預估時間</th>
+                    <th>狀態</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="routeTableBody">
+                <!-- 動態載入資料 -->
+            </tbody>
+        </table>
+        
+        <!-- 空狀態 -->
+        <div id="routeEmptyState" class="route-empty-state" style="display: none;">
+            <i class="fas fa-route"></i>
+            <h3>暫無路線資料</h3>
+            <p>點擊「新增路線」開始建立您的第一條路線</p>
+        </div>
+    </div>
+</div>
+
 
                 <!-- 路線列表 -->
                 <div class="table-container">
@@ -1863,44 +2102,55 @@
                 }
             }
 
-            // 渲染路線表格
-            renderRouteTable(routes) {
-                const tbody = document.getElementById('routeTableBody');
-                if (!tbody) return;
+// 渲染路線表格 - 修正版本
+renderRouteTable(routes) {
+    const tbody = document.getElementById('routeTableBody');
+    const emptyState = document.getElementById('routeEmptyState');
+    
+    if (!tbody) return;
 
-                tbody.innerHTML = '';
+    if (!routes || routes.length === 0) {
+        tbody.innerHTML = '';
+        if (emptyState) {
+            emptyState.style.display = 'block';
+        }
+        return;
+    }
 
-                if (routes.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #64748b;">暫無路線資料</td></tr>';
-                    return;
-                }
+    if (emptyState) {
+        emptyState.style.display = 'none';
+    }
 
-                routes.forEach(route => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${route.id}</td>
-                        <td>${route.name}</td>
-                        <td>${route.startPoint}</td>
-                        <td>${route.endPoint}</td>
-                        <td>${route.stopCount}</td>
-                        <td>${route.estimatedTime} 分鐘</td>
-                        <td>
-                            <span class="status-badge ${route.status}">
-                                ${route.status}
-                            </span>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-primary" onclick="app.editRoute('${route.id}')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="app.deleteRoute('${route.id}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            }
+    tbody.innerHTML = routes.map(route => `
+        <tr>
+            <td><strong>${route.id}</strong></td>
+            <td>${route.name}</td>
+            <td>${route.startPoint}</td>
+            <td>${route.endPoint}</td>
+            <td>${route.stopCount}個收送點</td>
+            <td>${route.estimatedTime} 分鐘</td>
+            <td>
+                <span class="status-badge ${route.status}">
+                    ${route.status}
+                </span>
+            </td>
+            <td>
+                <div class="route-actions">
+                    <button class="route-action-btn view" onclick="app.viewRoute('${route.id}')" title="檢視">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="route-action-btn edit" onclick="app.editRoute('${route.id}')" title="編輯">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="route-action-btn delete" onclick="app.deleteRoute('${route.id}')" title="刪除">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
 
             // API 呼叫
             async apiCall(action, data = {}) {
@@ -2253,13 +2503,67 @@
                 console.log('載入報表分析頁面');
             }
 
-            // 路線操作方法
-            editRoute(routeId) {
-                this.showModal('編輯路線', `
-                    <p>編輯路線 ID: ${routeId}</p>
-                    <p>此功能正在開發中...</p>
-                `);
-            }
+            // 👇 在這裡添加 viewRoute 方法
+    viewRoute(routeId) {
+        // 模擬獲取路線詳情
+        const routeDetails = {
+            id: routeId,
+            name: '台北市區線',
+            startPoint: '台北車站',
+            endPoint: '信義區',
+            stopCount: 8,
+            estimatedTime: 120,
+            status: '啟用',
+            distance: '25.6 km',
+            lastUpdated: '2025-06-26 10:30:00',
+            description: '涵蓋台北市主要商業區域的配送路線'
+        };
+
+        this.showModal('路線詳情', `
+            <div style="display: grid; gap: 1rem;">
+                <div class="result-item">
+                    <span class="result-label">路線編號：</span>
+                    <span class="result-value">${routeDetails.id}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">路線名稱：</span>
+                    <span class="result-value">${routeDetails.name}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">起點：</span>
+                    <span class="result-value">${routeDetails.startPoint}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">終點：</span>
+                    <span class="result-value">${routeDetails.endPoint}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">收送點數量：</span>
+                    <span class="result-value">${routeDetails.stopCount}個</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">預估時間：</span>
+                    <span class="result-value">${routeDetails.estimatedTime} 分鐘</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">總距離：</span>
+                    <span class="result-value">${routeDetails.distance}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">狀態：</span>
+                    <span class="status-badge ${routeDetails.status}">${routeDetails.status}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">最後更新：</span>
+                    <span class="result-value">${routeDetails.lastUpdated}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">說明：</span>
+                    <span class="result-value">${routeDetails.description}</span>
+                </div>
+            </div>
+        `);
+    }
 
             async deleteRoute(routeId) {
                 if (confirm('確定要刪除此路線嗎？')) {
@@ -2649,6 +2953,20 @@
                 }
             });
         }
+                // 全域函數（供 HTML 中的 onclick 使用）
+        window.editRoute = (routeId) => {
+            app.editRoute(routeId);
+        };
+        
+        window.deleteRoute = (routeId) => {
+            app.deleteRoute(routeId);
+        };
+        
+        // 👇 添加這一行
+        window.viewRoute = (routeId) => {
+            app.viewRoute(routeId);
+        };
+
     </script>
 </body>
 </html>
