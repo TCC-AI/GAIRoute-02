@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>昶青物流 - 派車GAI數據管理系統</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
+
+    <!-- 樣式 -->
     <style>
+        /* 通用設定 */
         * {
             margin: 0;
             padding: 0;
@@ -14,512 +16,356 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Microsoft JhengHei', 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
             padding: 20px;
         }
 
+        /* 登入卡片 */
         .login-container {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 40px;
+            backdrop-filter: blur(10px);
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             text-align: center;
+            transform: translateY(-20px);
+            animation: slideIn 0.8s ease-out forwards;
         }
 
-        .logo {
+        @keyframes slideIn {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* 標誌/標題區 */
+        .logo-section { margin-bottom: 30px; }
+        .company-logo {
             width: 80px;
             height: 80px;
-            background: #4CAF50;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
             border-radius: 50%;
+            margin: 0 auto 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
+            font-size: 36px;
+            color: #fff;
+            box-shadow: 0 8px 16px rgba(76, 175, 80, 0.3);
         }
-
-        .logo i {
-            font-size: 2rem;
-            color: white;
+        .company-name {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
         }
+        .system-title { font-size: 24px; font-weight: bold; color: #2c3e50; margin-bottom: 5px; }
+        .subtitle { color: #7f8c8d; font-size: 14px; margin-bottom: 30px; }
 
-        .system-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .system-subtitle {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .form-input {
+        /* 表單 */
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; color: #34495e; font-weight: 500; font-size: 14px; }
+        .input-container { position: relative; }
+        .form-control {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
+            padding: 15px 20px 15px 50px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
         }
-
-        .form-input:focus {
+        .form-control:focus {
             outline: none;
             border-color: #667eea;
+            background: #fff;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
-
         .input-icon {
-            position: relative;
-        }
-
-        .input-icon i {
             position: absolute;
-            left: 16px;
+            left: 18px;
             top: 50%;
             transform: translateY(-50%);
-            color: #999;
+            color: #95a5a6;
+            font-size: 18px;
+            cursor: pointer;
         }
 
-        .input-icon .form-input {
-            padding-left: 45px;
-        }
-
-        .remember-me {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 25px;
-        }
-
-        .remember-me input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-        }
-
-        .remember-me label {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 0;
-        }
-
+        /* 按鈕 */
         .login-btn {
             width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.2s ease;
+            margin-top: 10px;
         }
-
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         }
+        .login-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
 
-        .login-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .footer {
-            margin-top: 30px;
-            font-size: 0.8rem;
-            color: #999;
-            line-height: 1.4;
-        }
-
-        .error-message {
-            background: #fee;
-            color: #c33;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
+        /* 訊息 */
+        .error-message, .success-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid;
             display: none;
+            text-align: left;
         }
+        .error-message { background: #fee; color: #e74c3c; border-color: #e74c3c; }
+        .success-message { background: #d4edda; color: #155724; border-color: #28a745; }
 
-        .loading {
-            display: none;
-            margin-left: 10px;
-        }
+        /* 其他元件 */
+        .loading-spinner { display: none; margin-left: 10px; }
+        .spinner { width: 20px; height: 20px; border: 2px solid #fff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
 
-        .loading i {
-            animation: spin 1s linear infinite;
-        }
+        .remember-me { display: flex; align-items: center; margin-top: 15px; font-size: 14px; color: #7f8c8d; }
+        .remember-me input { margin-right: 8px; }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        /* 版權 & 除錯 */
+        .footer-info { margin-top: 30px; padding-top: 20px; border-top: 1px solid #ecf0f1; color: #95a5a6; font-size: 12px; }
+        .version-info { margin-top: 10px; font-size: 11px; color: #bdc3c7; }
+        .debug-info {
+            background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 10px; margin-top: 20px; font-size: 12px; color: #6c757d; text-align: left; display: none;
         }
+        .debug-info.show { display: block; }
+        .debug-toggle { background: none; border: none; color: #6c757d; font-size: 12px; cursor: pointer; margin-top: 10px; }
 
-        /* 響應式設計 */
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 30px 20px;
-                margin: 10px;
-            }
-            
-            .system-title {
-                font-size: 1.3rem;
-            }
-        }
+        /* 響應式 */
+        @media(max-width:480px){ .login-container{padding:30px 20px;} .company-name{font-size:24px;} .system-title{font-size:20px;} }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <div class="logo">
-            <i class="fas fa-truck"></i>
+        <div class="logo-section">
+            <div class="company-logo"><i class="fas fa-truck"></i></div>
+            <div class="company-name">昶青物流</div>
+            <div class="system-title">派車GAI數據管理系統</div>
+            <div class="subtitle">Intelligent Dispatch Management System</div>
         </div>
-        
-        <h1 class="system-title">昶青物流</h1>
-        <h2 class="system-subtitle">派車GAI數據管理系統<br>Intelligent Dispatch Management System</h2>
-        
-        <div id="errorMessage" class="error-message"></div>
-        
+
         <form id="loginForm">
             <div class="form-group">
                 <label for="username">帳號</label>
-                <div class="input-icon">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="username" class="form-input" placeholder="請輸入帳號" required>
+                <div class="input-container">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="username" class="form-control" placeholder="請輸入您的帳號" required>
                 </div>
             </div>
-            
             <div class="form-group">
                 <label for="password">密碼</label>
-                <div class="input-icon">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="password" class="form-input" placeholder="請輸入密碼" required>
+                <div class="input-container">
+                    <i class="fas fa-lock input-icon" id="passwordIcon"></i>
+                    <input type="password" id="password" class="form-control" placeholder="請輸入您的密碼" required>
                 </div>
             </div>
-            
             <div class="remember-me">
                 <input type="checkbox" id="rememberMe">
                 <label for="rememberMe">記住我的登入狀態</label>
             </div>
-            
-            <button type="submit" id="loginBtn" class="login-btn">
-                <i class="fas fa-sign-in-alt"></i> 登入系統
-                <span class="loading"><i class="fas fa-spinner"></i></span>
+            <button type="submit" class="login-btn" id="loginBtn">
+                <i class="fas fa-sign-in-alt"></i>
+                登入系統
+                <div class="loading-spinner" id="loadingSpinner"><div class="spinner"></div></div>
             </button>
+            <div class="error-message" id="errorMessage"><i class="fas fa-exclamation-triangle"></i> <span id="errorText"></span></div>
+            <div class="success-message" id="successMessage"><i class="fas fa-check-circle"></i> <span id="successText"></span></div>
         </form>
-        
-        <div class="footer">
-            © 2025 昶青物流有限公司 版權所有<br>
-            系統版本 v2.0 | 最後更新: 2025-06-25
+
+        <div class="footer-info">
+            <div>© 2025 昶青物流有限公司 版權所有</div>
+            <div class="version-info">系統版本 v2.0 | 最後更新：2025-06-26</div>
+            <button class="debug-toggle" onclick="toggleDebug()">顯示除錯資訊</button>
+        </div>
+        <div class="debug-info" id="debugInfo">
+            <strong>測試帳號:</strong><br>
+            管理員: admin / admin123<br>
+            經理: manager / mgr123<br>
+            調度員: operator / op123<br>
+            監控員: viewer / view123<br>
+            <strong>API 狀態:</strong> <span id="apiStatus">檢查中...</span>
         </div>
     </div>
 
+    <!-- 腳本 -->
     <script>
-        // 全域設定
+        /* ========= 基本設定 ========= */
         const CONFIG = {
             GAS_URL: 'https://script.google.com/macros/s/AKfycbxOLXS85Wn25LTyeG5PnxOvI6ShdYYyxcrrtxot5cK9blW4QcpPY7kPkbG5CjcT9MUP/exec',
-            USE_MOCK_DATA: false
+            USE_MOCK_DATA: false // 若API失敗自動啟用模擬資料
         };
+        const API_URL = CONFIG.GAS_URL;
 
-        // 預設測試帳號（開發用）
+        // 模擬帳號 (開發環境用)
         const MOCK_USERS = {
-            'admin': { password: 'admin123', name: '系統管理員', position: '總經理', level: 's4' },
-            'manager': { password: 'mgr123', name: '營運經理', position: '營運經理', level: 's3' },
-            'operator': { password: 'op123', name: '調度員', position: '調度員', level: 's2' },
-            'viewer': { password: 'view123', name: '監控員', position: '監控員', level: 's1' }
+            'admin':   { password: 'admin123',  name: '系統管理員', position: '總經理', level: 's4' },
+            'manager': { password: 'mgr123',    name: '營運經理', position: '營運經理', level: 's3' },
+            'operator':{ password: 'op123',     name: '調度員',   position: '調度員',   level: 's2' },
+            'viewer':  { password: 'view123',   name: '監控員',   position: '監控員',   level: 's1' }
         };
 
-        // 權限等級定義
+        // 權限等級
         const PERMISSION_LEVELS = {
-            s4: {
-                name: '管理者',
-                pages: ['dashboard', 'route-management', 'route-optimization', 'seasonal-routes', 'cargo-vehicle', 'real-time-monitor', 'system-settings', 'reports'],
-                fullAccess: true
-            },
-            s3: {
-                name: '主要執行者',
-                pages: ['dashboard', 'route-management', 'route-optimization', 'seasonal-routes', 'cargo-vehicle', 'real-time-monitor', 'reports'],
-                fullAccess: false
-            },
-            s2: {
-                name: '次要執行者', 
-                pages: ['dashboard', 'route-management', 'route-optimization', 'cargo-vehicle', 'real-time-monitor'],
-                fullAccess: false
-            },
-            s1: {
-                name: '初階使用者',
-                pages: ['dashboard'],
-                fullAccess: false
-            }
+            s4: { name: '管理者',       pages: ['*'], fullAccess: true },
+            s3: { name: '主要執行者',   pages: ['dashboard','route-management','route-optimization','seasonal-routes','cargo-vehicle','real-time-monitor','reports'], fullAccess: false },
+            s2: { name: '次要執行者',   pages: ['dashboard','route-management','route-optimization','cargo-vehicle','real-time-monitor'], fullAccess: false },
+            s1: { name: '初階使用者',   pages: ['dashboard'], fullAccess: false }
         };
 
-        // DOM 元素
-        const elements = {
-            loginForm: document.getElementById('loginForm'),
-            username: document.getElementById('username'),
-            password: document.getElementById('password'),
-            rememberMe: document.getElementById('rememberMe'),
-            loginBtn: document.getElementById('loginBtn'),
-            errorMessage: document.getElementById('errorMessage'),
-            loading: document.querySelector('.loading')
-        };
+        /* ========= DOM 元素 ========= */
+        const loginForm      = document.getElementById('loginForm');
+        const loginBtn       = document.getElementById('loginBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const errorMessage   = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const errorText      = document.getElementById('errorText');
+        const successText    = document.getElementById('successText');
+        const apiStatus      = document.getElementById('apiStatus');
 
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            // 檢查是否已登入
+        /* ========= 初始化 ========= */
+        document.addEventListener('DOMContentLoaded', () => {
             checkExistingLogin();
-            
-            // 綁定事件
-            elements.loginForm.addEventListener('submit', handleLogin);
-            
-            // Enter 鍵登入
-            elements.password.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    handleLogin(e);
-                }
-            });
-            
-            // 載入記住的帳號
-            loadRememberedAccount();
+            testApiConnection();
+            document.getElementById('username').focus();
         });
 
-        // 檢查現有登入狀態
-        function checkExistingLogin() {
-            const sessionUser = sessionStorage.getItem('currentUser');
-            const localUser = localStorage.getItem('currentUser');
-            
-            if (sessionUser) {
-                redirectToMain();
-                return;
-            }
-            
-            if (localUser) {
-                try {
-                    const userData = JSON.parse(localUser);
-                    const loginTime = new Date(userData.loginTime);
-                    const now = new Date();
-                    const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
-                    
-                    if (hoursDiff < 24) {
-                        // 自動登入
-                        sessionStorage.setItem('currentUser', localUser);
-                        redirectToMain();
-                        return;
-                    } else {
-                        localStorage.removeItem('currentUser');
-                    }
-                } catch (error) {
-                    localStorage.removeItem('currentUser');
-                }
-            }
+        /* ========= 事件監聽 ========= */
+        loginForm.addEventListener('submit', handleLogin);
+        // Enter 快捷登入
+        document.addEventListener('keydown', e => { if(e.key==='Enter' && !loginBtn.disabled){ loginForm.dispatchEvent(new Event('submit')); } });
+        // 顯示/隱藏密碼
+        const passwordInput = document.getElementById('password');
+        const passwordIcon  = document.getElementById('passwordIcon');
+        passwordIcon.addEventListener('click', ()=>{
+            if(passwordInput.type==='password'){ passwordInput.type='text'; passwordIcon.classList.replace('fa-lock','fa-unlock'); }
+            else{ passwordInput.type='password'; passwordIcon.classList.replace('fa-unlock','fa-lock'); }
+        });
+
+        /* ========= 函式 ========= */
+        function checkExistingLogin(){
+            const savedUser = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+            if(!savedUser) return;
+            try{
+                const userData = JSON.parse(savedUser);
+                const hoursDiff = (Date.now() - new Date(userData.loginTime)) / 36e5;
+                if(hoursDiff < 24){ redirectToDashboard(userData); }
+            }catch{ /* ignore */ }
         }
 
-        // 載入記住的帳號
-        function loadRememberedAccount() {
-            const rememberedAccount = localStorage.getItem('rememberedAccount');
-            if (rememberedAccount) {
-                elements.username.value = rememberedAccount;
-                elements.rememberMe.checked = true;
-                elements.password.focus();
-            }
+        async function testApiConnection(){
+            try{
+                const resp = await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'testConnection'})});
+                const result = await resp.json();
+                if(result.success){ apiStatus.textContent='連線正常'; apiStatus.style.color='#28a745'; }
+                else{ throw new Error('fail'); }
+            }catch(e){ apiStatus.textContent='連線失敗'; apiStatus.style.color='#dc3545'; CONFIG.USE_MOCK_DATA=true; }
         }
 
-        // 處理登入
-        async function handleLogin(e) {
+        async function handleLogin(e){
             e.preventDefault();
-            
-            const username = elements.username.value.trim();
-            const password = elements.password.value;
-            const rememberMe = elements.rememberMe.checked;
-            
-            if (!username || !password) {
-                showError('請輸入帳號和密碼');
-                return;
-            }
-            
-            setLoading(true);
-            hideError();
-            
-            try {
-                let userData;
-                
-                // 嘗試真實API登入
-                if (!CONFIG.USE_MOCK_DATA) {
-                    try {
-                        userData = await apiLogin(username, password);
-                    } catch (apiError) {
-                        console.warn('API登入失敗，嘗試模擬登入:', apiError);
-                        CONFIG.USE_MOCK_DATA = true;
-                    }
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('rememberMe').checked;
+            if(!username || !password){ showError('請輸入帳號和密碼'); return; }
+            setLoading(true); hideMessages();
+            try{
+                let userData = null;
+                // 先嘗試 API
+                if(!CONFIG.USE_MOCK_DATA){
+                    try{ userData = await apiLogin(username,password); }
+                    catch(apiErr){ console.warn('API登入失敗, 改用模擬',apiErr); CONFIG.USE_MOCK_DATA = true; }
                 }
-                
                 // 模擬登入
-                if (CONFIG.USE_MOCK_DATA) {
-                    userData = mockLogin(username, password);
-                }
-                
-                if (!userData) {
-                    throw new Error('登入失敗');
-                }
-                
-                // 登入成功處理
-                await handleLoginSuccess(userData, rememberMe);
-                
-            } catch (error) {
-                showError(error.message || '登入失敗，請檢查帳號密碼');
-                console.error('登入錯誤:', error);
-            } finally {
-                setLoading(false);
-            }
+                if(CONFIG.USE_MOCK_DATA && !userData){ userData = mockLogin(username,password); }
+                if(!userData) throw new Error('登入失敗');
+                await handleLoginSuccess(userData,remember);
+            }catch(err){ handleLoginError(err); }
+            finally{ setLoading(false); }
         }
 
-        // API 登入
-        async function apiLogin(username, password) {
-            const response = await fetch(CONFIG.GAS_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain',
-                },
-                body: JSON.stringify({
-                    action: 'login',
-                    data: { username, password },
-                    timestamp: new Date().getTime()
-                })
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const result = await response.json();
-            
-            if (!result.success) {
-                throw new Error(result.error || '登入失敗');
-            }
-            
+        async function apiLogin(username,password){
+            const resp = await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'login',data:{username,password}})});
+            if(!resp.ok){ throw new Error(`HTTP ${resp.status}`); }
+            const result = await resp.json();
+            if(!result.success){ throw new Error(result.error || '登入失敗'); }
             return result.data;
         }
 
-        // 模擬登入
-        function mockLogin(username, password) {
+        function mockLogin(username,password){
             const user = MOCK_USERS[username];
-            
-            if (!user || user.password !== password) {
-                throw new Error('帳號或密碼錯誤');
-            }
-            
-            const permissions = PERMISSION_LEVELS[user.level] || PERMISSION_LEVELS.s1;
-            
-            return {
-                success: true,
-                username: username,
-                name: user.name,
-                position: user.position,
-                level: user.level,
-                permissions: permissions,
-                loginTime: new Date().toISOString()
-            };
+            if(!user || user.password !== password){ throw new Error('帳號或密碼錯誤'); }
+            const perms = PERMISSION_LEVELS[user.level] || PERMISSION_LEVELS.s1;
+            return { username, name:user.name, position:user.position, level:user.level, permissions:perms, loginTime:new Date().toISOString() };
         }
 
-        // 登入成功處理
-        async function handleLoginSuccess(userData, rememberMe) {
-            // 儲存使用者資料
-            const userDataWithTime = {
-                ...userData,
-                loginTime: new Date().toISOString()
-            };
-            
-            // 儲存到 session (總是儲存)
-            sessionStorage.setItem('currentUser', JSON.stringify(userDataWithTime));
-            
-            // 記住登入狀態
-            if (rememberMe) {
-                localStorage.setItem('currentUser', JSON.stringify(userDataWithTime));
-                localStorage.setItem('rememberedAccount', userData.username);
-            } else {
-                localStorage.removeItem('currentUser');
-                localStorage.removeItem('rememberedAccount');
-            }
-            
-            // 顯示成功訊息
-            showSuccess(`歡迎回來，${userData.name}！`);
-            
-            // 延遲跳轉，讓使用者看到成功訊息
-            setTimeout(() => {
-                redirectToMain();
-            }, 1000);
+        async function handleLoginSuccess(userData,remember){
+            const userInfo = { ...userData, loginTime:new Date().toISOString() };
+            sessionStorage.setItem('currentUser', JSON.stringify(userInfo));
+            if(remember){ localStorage.setItem('currentUser', JSON.stringify(userInfo)); }
+            showSuccess(`歡迎回來，${userData.name}！正在跳轉...`);
+            setTimeout(()=>redirectToDashboard(userInfo), 1200);
         }
 
-        // 跳轉到主系統
-        function redirectToMain() {
-            // 檢查主系統頁面是否存在
-            const mainPage = 'index.html'; // 或您的主系統頁面名稱
-            window.location.href = mainPage;
+        function handleLoginError(err){
+            console.error('登入錯誤:',err);
+            if(err.message.includes('HTTP'))      showError('伺服器連線錯誤, 請稍後再試');
+            else if(err.message.includes('帳號') || err.message.includes('密碼')) showError('帳號或密碼錯誤');
+            else showError(err.message || '登入失敗');
         }
 
-        // 設定載入狀態
-        function setLoading(isLoading) {
-            elements.loginBtn.disabled = isLoading;
-            elements.loading.style.display = isLoading ? 'inline' : 'none';
-            
-            if (isLoading) {
-                elements.loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 登入中... <span class="loading"><i class="fas fa-spinner"></i></span>';
-            } else {
-                elements.loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 登入系統';
-            }
+        function redirectToDashboard(userData){
+            const mainPage='index.html'; // TODO: 若有主頁請修改
+            const params=new URLSearchParams({user:encodeURIComponent(JSON.stringify({username:userData.username,name:userData.name,level:userData.level}))});
+            window.location.href=`${mainPage}?${params.toString()}`;
         }
 
-        // 顯示錯誤訊息
-        function showError(message) {
-            elements.errorMessage.textContent = message;
-            elements.errorMessage.style.display = 'block';
-            
-            // 3秒後自動隱藏
-            setTimeout(hideError, 3000);
+        /* ========= UI 輔助 ========= */
+        function setLoading(loading){
+            loginBtn.disabled = loading;
+            loadingSpinner.style.display = loading ? 'inline-block':'none';
+            loginBtn.innerHTML = loading ? '<i class="fas fa-sign-in-alt"></i> 登入中... <div class="loading-spinner" style="display:inline-block;"><div class="spinner"></div></div>' : '<i class="fas fa-sign-in-alt"></i> 登入系統';
+        }
+        function showError(msg){ errorText.textContent=msg; errorMessage.style.display='block'; }
+        function showSuccess(msg){ successText.textContent=msg; successMessage.style.display='block'; }
+        function hideMessages(){ errorMessage.style.display='none'; successMessage.style.display='none'; }
+
+        function toggleDebug(){
+            const di=document.getElementById('debugInfo');
+            const btn=document.querySelector('.debug-toggle');
+            if(di.classList.toggle('show')) btn.textContent='隱藏除錯資訊';
+            else btn.textContent='顯示除錯資訊';
         }
 
-        // 隱藏錯誤訊息
-        function hideError() {
-            elements.errorMessage.style.display = 'none';
-        }
+        /* ========= 全域錯誤 ========= */
+        window.addEventListener('error',e=>console.error('全域錯誤:',e.error));
+        window.addEventListener('unhandledrejection',e=>console.error('未處理的Promise拒絕:',e.reason));
 
-        // 顯示成功訊息
-        function showSuccess(message) {
-            elements.errorMessage.textContent = message;
-            elements.errorMessage.style.background = '#d4edda';
-            elements.errorMessage.style.color = '#155724';
-            elements.errorMessage.style.display = 'block';
-        }
-
-        // 開發模式提示
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        /* ========= 開發模式 ========= */
+        if(['localhost','127.0.0.1'].includes(window.location.hostname)){
             console.log('🔐 開發模式 - 測試帳號:');
-            console.log('管理員: admin / admin123');
-            console.log('經理: manager / mgr123'); 
-            console.log('調度員: operator / op123');
-            console.log('監控員: viewer / view123');
+            Object.entries(MOCK_USERS).forEach(([u,v])=>console.log(`${u} / ${v.password}`));
+            setTimeout(()=>toggleDebug(),800);
         }
     </script>
 </body>
