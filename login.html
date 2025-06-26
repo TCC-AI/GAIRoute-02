@@ -381,77 +381,109 @@
             document.getElementById('username').focus();
         });
 
-        // 登入表單提交
-        loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value;
-            const rememberMe = document.getElementById('rememberMe').checked;
+// 在您的 script 標籤中，替換現有的登入處理代碼
+loginForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const rememberMe = document.getElementById('rememberMe').checked;
 
-            if (!username || !password) {
-                showError('請輸入帳號和密碼');
-                return;
+    if (!username || !password) {
+        showError('請輸入帳號和密碼');
+        return;
+    }
+
+    // 顯示載入狀態
+    setLoading(true);
+    hideMessages();
+
+    try {
+        console.log('發送登入請求...'); // 除錯用
+        
+        const requestData = {
+            action: 'login',
+            data: {
+                username: username,
+                password: password
             }
+        };
+        
+        console.log('請求資料:', requestData); // 除錯用
 
-            // 顯示載入狀態
-            setLoading(true);
-            hideMessages();
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'text/plain',
-                    },
-                    body: JSON.stringify({
-                        action: 'login',
-                        data: {
-                            username: username,
-                            password: password
-                        }
-                    })
-                });
-
-                const textResult = await response.text();
-                const result = JSON.parse(textResult);
-
-                if (result.success) {
-                    const userData = result.data;
-                    
-                    // 儲存使用者資訊
-                    const userInfo = {
-                        username: userData.username,
-                        name: userData.name,
-                        position: userData.position,
-                        level: userData.level,
-                        permissions: userData.permissions,
-                        loginTime: new Date().toISOString()
-                    };
-
-                    if (rememberMe) {
-                        localStorage.setItem('currentUser', JSON.stringify(userInfo));
-                    } else {
-                        sessionStorage.setItem('currentUser', JSON.stringify(userInfo));
-                    }
-
-                    // 顯示成功訊息並跳轉
-                    showSuccess('登入成功！正在跳轉...');
-                    setTimeout(() => {
-                        redirectToDashboard(userInfo);
-                    }, 1000);
-
-                } else {
-                    showError(result.error || '登入失敗，請檢查帳號密碼');
-                }
-
-            } catch (error) {
-                console.error('登入錯誤:', error);
-                showError('系統連線錯誤，請稍後再試');
-            } finally {
-                setLoading(false);
-            }
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+            body: JSON.stringify(requestData)
         });
+
+        console.log('回應狀態:', response.status); // 除錯用
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const textResult = await response.text();
+        console.log('原始回應:', textResult); // 除錯用
+        
+        let result;
+        try {
+            result = JSON.parse(textResult);
+        } catch (parseError) {
+            console.error('JSON 解析錯誤:', parseError);
+            console.error('原始回應內容:', textResult);
+            throw new Error('伺服器回應格式錯誤');
+        }
+
+        console.log('解析後結果:', result); // 除錯用
+
+        if (result.success) {
+            const userData = result.data;
+            
+            // 儲存使用者資訊
+            const userInfo = {
+                username: userData.username,
+                name: userData.name,
+                position: userData.position,
+                level: userData.level,
+                permissions: userData.permissions,
+                loginTime: new Date().toISOString()
+            };
+
+            if (rememberMe) {
+                localStorage.setItem('currentUser', JSON.stringify(userInfo));
+            } else {
+                sessionStorage.setItem('currentUser', JSON.stringify(userInfo));
+            }
+
+            // 顯示成功訊息並跳轉
+            showSuccess('登入成功！正在跳轉...');
+            setTimeout(() => {
+                redirectToDashboard(userInfo);
+            }, 1000);
+
+        } else {
+            showError(result.error || '登入失敗，請檢查帳號密碼');
+        }
+
+    } catch (error) {
+        console.error('登入錯誤:', error);
+        
+        // 根據不同錯誤類型顯示不同訊息
+        if (error.message.includes('HTTP')) {
+            showError('伺服器連線錯誤，請檢查網路連線');
+        } else if (error.message.includes('JSON')) {
+            showError('伺服器回應格式錯誤，請聯繫系統管理員');
+        } else {
+            showError(error.message || '系統連線錯誤，請稍後再試');
+        }
+    } finally {
+        setLoading(false);
+    }
+});
+
 
         // 設定載入狀態
         function setLoading(loading) {
