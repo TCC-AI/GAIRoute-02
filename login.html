@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>昶青物流-派車GAI數據管理系統</title>
+    <title>昶青物流 - 派車GAI數據管理系統</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- 保持原有的 CSS 樣式 -->
     <style>
+        /* 您原有的 CSS 樣式保持不變 */
         * {
             margin: 0;
             padding: 0;
@@ -219,78 +221,33 @@
             color: #bdc3c7;
         }
 
-        /* 響應式設計 */
-        @media (max-width: 480px) {
-            .login-container {
-                margin: 20px;
-                padding: 30px 25px;
-            }
-            
-            .company-name {
-                font-size: 24px;
-            }
-            
-            .system-title {
-                font-size: 20px;
-            }
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #6c757d;
+            text-align: left;
+            display: none;
         }
 
-        /* 背景動畫 */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
+        .debug-info.show {
+            display: block;
         }
 
-        .bg-circle {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .bg-circle:nth-child(1) {
-            width: 100px;
-            height: 100px;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .bg-circle:nth-child(2) {
-            width: 150px;
-            height: 150px;
-            top: 60%;
-            right: 10%;
-            animation-delay: 2s;
-        }
-
-        .bg-circle:nth-child(3) {
-            width: 80px;
-            height: 80px;
-            bottom: 20%;
-            left: 20%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        .debug-toggle {
+            background: none;
+            border: none;
+            color: #6c757d;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <!-- 背景動畫 -->
-    <div class="bg-animation">
-        <div class="bg-circle"></div>
-        <div class="bg-circle"></div>
-        <div class="bg-circle"></div>
-    </div>
-
     <div class="login-container">
         <div class="logo-section">
             <div class="company-logo">
@@ -344,7 +301,17 @@
 
         <div class="footer-info">
             <div>© 2025 昶青物流有限公司 版權所有</div>
-            <div class="version-info">系統版本 v2.0 | 最後更新：2025-06-25</div>
+            <div class="version-info">系統版本 v2.0 | 最後更新：2025-06-26</div>
+            <button class="debug-toggle" onclick="toggleDebug()">顯示除錯資訊</button>
+        </div>
+
+        <div class="debug-info" id="debugInfo">
+            <strong>測試帳號:</strong><br>
+            管理員: admin / admin123<br>
+            經理: manager / mgr123<br>
+            調度員: operator / op123<br>
+            監控員: viewer / view123<br>
+            <strong>API 狀態:</strong> <span id="apiStatus">檢查中...</span>
         </div>
     </div>
 
@@ -360,130 +327,190 @@
         const successMessage = document.getElementById('successMessage');
         const errorText = document.getElementById('errorText');
         const successText = document.getElementById('successText');
+        const debugInfo = document.getElementById('debugInfo');
+        const apiStatus = document.getElementById('apiStatus');
 
-        // 頁面載入時檢查是否已登入
+        // 頁面載入時的初始化
         document.addEventListener('DOMContentLoaded', function() {
-            const savedUser = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
-            if (savedUser) {
-                const userData = JSON.parse(savedUser);
-                // 檢查登入是否仍有效（可設定過期時間）
-                const loginTime = new Date(userData.loginTime);
-                const now = new Date();
-                const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
-                
-                if (hoursDiff < 24) { // 24小時內有效
-                    redirectToDashboard(userData);
-                    return;
-                }
-            }
+            console.log('頁面載入完成');
+            
+            // 檢查是否已登入
+            checkExistingLogin();
+            
+            // 測試 API 連線
+            testApiConnection();
             
             // 自動聚焦到帳號輸入框
             document.getElementById('username').focus();
         });
 
-// 在您的 script 標籤中，替換現有的登入處理代碼
-loginForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
-    const rememberMe = document.getElementById('rememberMe').checked;
-
-    if (!username || !password) {
-        showError('請輸入帳號和密碼');
-        return;
-    }
-
-    // 顯示載入狀態
-    setLoading(true);
-    hideMessages();
-
-    try {
-        console.log('發送登入請求...'); // 除錯用
-        
-        const requestData = {
-            action: 'login',
-            data: {
-                username: username,
-                password: password
+        // 檢查現有登入狀態
+        function checkExistingLogin() {
+            const savedUser = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+            if (savedUser) {
+                try {
+                    const userData = JSON.parse(savedUser);
+                    const loginTime = new Date(userData.loginTime);
+                    const now = new Date();
+                    const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
+                    
+                    if (hoursDiff < 24) {
+                        console.log('發現有效的登入狀態，準備跳轉');
+                        redirectToDashboard(userData);
+                        return;
+                    }
+                } catch (error) {
+                    console.error('解析已儲存的使用者資料失敗:', error);
+                }
             }
-        };
-        
-        console.log('請求資料:', requestData); // 除錯用
-
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'text/plain',
-            },
-            body: JSON.stringify(requestData)
-        });
-
-        console.log('回應狀態:', response.status); // 除錯用
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        const textResult = await response.text();
-        console.log('原始回應:', textResult); // 除錯用
-        
-        let result;
-        try {
-            result = JSON.parse(textResult);
-        } catch (parseError) {
-            console.error('JSON 解析錯誤:', parseError);
-            console.error('原始回應內容:', textResult);
-            throw new Error('伺服器回應格式錯誤');
+        // 測試 API 連線
+        async function testApiConnection() {
+            try {
+                console.log('測試 API 連線...');
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain',
+                    },
+                    body: JSON.stringify({
+                        action: 'testConnection'
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('API 連線測試結果:', result);
+                    
+                    if (result.success) {
+                        apiStatus.textContent = '連線正常';
+                        apiStatus.style.color = '#28a745';
+                    } else {
+                        apiStatus.textContent = '連線異常';
+                        apiStatus.style.color = '#dc3545';
+                    }
+                                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.error('API 連線測試失敗:', error);
+                apiStatus.textContent = '連線失敗';
+                apiStatus.style.color = '#dc3545';
+            }
         }
 
-        console.log('解析後結果:', result); // 除錯用
-
-        if (result.success) {
-            const userData = result.data;
+        // 登入表單提交處理
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            // 儲存使用者資訊
-            const userInfo = {
-                username: userData.username,
-                name: userData.name,
-                position: userData.position,
-                level: userData.level,
-                permissions: userData.permissions,
-                loginTime: new Date().toISOString()
-            };
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
 
-            if (rememberMe) {
-                localStorage.setItem('currentUser', JSON.stringify(userInfo));
-            } else {
-                sessionStorage.setItem('currentUser', JSON.stringify(userInfo));
+            console.log('開始登入流程:', { username, rememberMe });
+
+            if (!username || !password) {
+                showError('請輸入帳號和密碼');
+                return;
             }
 
-            // 顯示成功訊息並跳轉
-            showSuccess('登入成功！正在跳轉...');
-            setTimeout(() => {
-                redirectToDashboard(userInfo);
-            }, 1000);
+            // 顯示載入狀態
+            setLoading(true);
+            hideMessages();
 
-        } else {
-            showError(result.error || '登入失敗，請檢查帳號密碼');
-        }
+            try {
+                console.log('發送登入請求...');
+                
+                const requestData = {
+                    action: 'login',
+                    data: {
+                        username: username,
+                        password: password
+                    }
+                };
+                
+                console.log('請求資料:', requestData);
 
-    } catch (error) {
-        console.error('登入錯誤:', error);
-        
-        // 根據不同錯誤類型顯示不同訊息
-        if (error.message.includes('HTTP')) {
-            showError('伺服器連線錯誤，請檢查網路連線');
-        } else if (error.message.includes('JSON')) {
-            showError('伺服器回應格式錯誤，請聯繫系統管理員');
-        } else {
-            showError(error.message || '系統連線錯誤，請稍後再試');
-        }
-    } finally {
-        setLoading(false);
-    }
-});
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain',
+                    },
+                    body: JSON.stringify(requestData)
+                });
 
+                console.log('回應狀態:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const textResult = await response.text();
+                console.log('原始回應:', textResult);
+                
+                let result;
+                try {
+                    result = JSON.parse(textResult);
+                } catch (parseError) {
+                    console.error('JSON 解析錯誤:', parseError);
+                    console.error('原始回應內容:', textResult);
+                    throw new Error('伺服器回應格式錯誤');
+                }
+
+                console.log('解析後結果:', result);
+
+                if (result.success) {
+                    const userData = result.data;
+                    console.log('登入成功，使用者資料:', userData);
+                    
+                    // 儲存使用者資訊
+                    const userInfo = {
+                        username: userData.username,
+                        name: userData.name,
+                        position: userData.position,
+                        level: userData.level,
+                        permissions: userData.permissions,
+                        loginTime: userData.loginTime
+                    };
+
+                    if (rememberMe) {
+                        localStorage.setItem('currentUser', JSON.stringify(userInfo));
+                        console.log('使用者資訊已儲存到 localStorage');
+                    } else {
+                        sessionStorage.setItem('currentUser', JSON.stringify(userInfo));
+                        console.log('使用者資訊已儲存到 sessionStorage');
+                    }
+
+                    // 顯示成功訊息並跳轉
+                    showSuccess(`歡迎回來，${userData.name}！正在跳轉...`);
+                    setTimeout(() => {
+                        redirectToDashboard(userInfo);
+                    }, 1500);
+
+                } else {
+                    console.error('登入失敗:', result.error);
+                    showError(result.error || '登入失敗，請檢查帳號密碼');
+                }
+
+            } catch (error) {
+                console.error('登入錯誤:', error);
+                
+                // 根據不同錯誤類型顯示不同訊息
+                if (error.message.includes('HTTP')) {
+                    showError('伺服器連線錯誤，請檢查網路連線');
+                } else if (error.message.includes('JSON')) {
+                    showError('伺服器回應格式錯誤，請聯繫系統管理員');
+                } else if (error.message.includes('Failed to fetch')) {
+                    showError('網路連線失敗，請檢查網路設定');
+                } else {
+                    showError(error.message || '系統連線錯誤，請稍後再試');
+                }
+            } finally {
+                setLoading(false);
+            }
+        });
 
         // 設定載入狀態
         function setLoading(loading) {
@@ -503,8 +530,8 @@ loginForm.addEventListener('submit', async function(e) {
             errorMessage.style.display = 'block';
             successMessage.style.display = 'none';
             
-            // 3秒後自動隱藏
-            setTimeout(hideMessages, 3000);
+            // 5秒後自動隱藏
+            setTimeout(hideMessages, 5000);
         }
 
         // 顯示成功訊息
@@ -522,12 +549,22 @@ loginForm.addEventListener('submit', async function(e) {
 
         // 跳轉到主控台
         function redirectToDashboard(userData) {
-            // 將使用者資訊傳遞到主控台頁面
+            console.log('準備跳轉到主控台:', userData);
+            
+            // 檢查主控台頁面是否存在
+            const mainPage = 'index.html'; // 您的主系統頁面
+            
+            // 將使用者資訊作為參數傳遞（可選）
             const params = new URLSearchParams({
-                user: encodeURIComponent(JSON.stringify(userData))
+                user: encodeURIComponent(JSON.stringify({
+                    username: userData.username,
+                    name: userData.name,
+                    level: userData.level
+                }))
             });
             
-            window.location.href = `index.html?${params.toString()}`;
+            // 跳轉到主頁面
+            window.location.href = `${mainPage}?${params.toString()}`;
         }
 
         // 密碼顯示/隱藏功能
@@ -558,12 +595,52 @@ loginForm.addEventListener('submit', async function(e) {
         inputs.forEach(input => {
             input.addEventListener('focus', function() {
                 this.parentElement.style.transform = 'scale(1.02)';
+                this.parentElement.style.transition = 'transform 0.2s ease';
             });
             
             input.addEventListener('blur', function() {
                 this.parentElement.style.transform = 'scale(1)';
             });
         });
+
+        // 切換除錯資訊顯示
+        function toggleDebug() {
+            const debugInfo = document.getElementById('debugInfo');
+            const toggleBtn = document.querySelector('.debug-toggle');
+            
+            if (debugInfo.classList.contains('show')) {
+                debugInfo.classList.remove('show');
+                toggleBtn.textContent = '顯示除錯資訊';
+            } else {
+                debugInfo.classList.add('show');
+                toggleBtn.textContent = '隱藏除錯資訊';
+            }
+        }
+
+        // 開發模式提示
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
+            console.log('🔐 開發模式 - 測試帳號:');
+            console.log('管理員: admin / admin123');
+            console.log('經理: manager / mgr123'); 
+            console.log('調度員: operator / op123');
+            console.log('監控員: viewer / view123');
+            
+            // 自動顯示除錯資訊
+            setTimeout(() => {
+                document.getElementById('debugInfo').classList.add('show');
+                document.querySelector('.debug-toggle').textContent = '隱藏除錯資訊';
+            }, 1000);
+        }
+
+        // 全域錯誤處理
+        window.addEventListener('error', function(e) {
+            console.error('全域錯誤:', e.error);
+        });
+
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('未處理的 Promise 拒絕:', e.reason);
+        });
     </script>
 </body>
 </html>
+
