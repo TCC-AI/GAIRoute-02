@@ -3736,6 +3736,9 @@ function convertToRouteTable(data) {
 }
 
 
+       
+
+
 // 匯出路線表功能
 exportRouteTable() {
     this.showNotification('匯出功能開發中...', 'info');
@@ -6058,7 +6061,7 @@ function markdownToHtml(md) {
 }
 
 
-// 4. 綁定 AI預排按鈕 - 修改後的版本
+// 4. 綁定 AI預排按鈕 - 修正版本
 document.getElementById('ai-preplan-btn').addEventListener('click', async function() {
   const deliveryList = getDeliveryListFromTable();
   if (!deliveryList.length) {
@@ -6072,8 +6075,8 @@ document.getElementById('ai-preplan-btn').addEventListener('click', async functi
   resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在載入明日建議派車表...';
 
   try {
-    // 呼叫後端API獲取明日建議派車表
-    const response = await fetch('hhttps://script.google.com/macros/s/AKfycbxH0p4bVcrm89-uXGQVYTNcOznt3xpnicDovrCwbOi89pZan54iCqUPU064iJIEee0Q/exec', {
+    // 修正：移除多餘的 h
+    const response = await fetch('https://script.google.com/macros/s/AKfycbxH0p4bVcrm89-uXGQVYTNcOznt3xpnicDovrCwbOi89pZan54iCqUPU064iJIEee0Q/exec', {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
       body: JSON.stringify({
@@ -6085,41 +6088,40 @@ document.getElementById('ai-preplan-btn').addEventListener('click', async functi
     const result = await response.json();
     
     if (result.success && result.data) {
-      // 將資料轉換為Markdown表格格式並顯示
-      const markdownTable = convertToMarkdownTable(result.data);
-      const cardsHtml = convertToRouteTable(result);
-resultDiv.innerHTML = `
-    <div style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%); margin-top: 1rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <div>
-                <h4 style="margin: 0 0 0.5rem 0; color: #2563eb; font-size: 1.5rem; font-weight: 700;">
-                    <i class="fas fa-route"></i> 當日各路線表
-                </h4>
-                <div style="font-size: 0.875rem; color: #64748b;">
-                    資料更新時間: ${new Date().toLocaleString('zh-TW')} | 共 ${getRouteCount(result)} 條路線
+      // 修正：傳入 result.data 而不是 result
+      const cardsHtml = convertToRouteTable(result.data);
+      
+      resultDiv.innerHTML = `
+        <div style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%); margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <div>
+                    <h4 style="margin: 0 0 0.5rem 0; color: #2563eb; font-size: 1.5rem; font-weight: 700;">
+                        <i class="fas fa-route"></i> 當日各路線表
+                    </h4>
+                    <div style="font-size: 0.875rem; color: #64748b;">
+                        資料更新時間: ${new Date().toLocaleString('zh-TW')} | 共 ${getRouteCount(result.data)} 條路線
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-sm btn-secondary" onclick="expandAllRoutes()" title="展開所有路線">
+                        <i class="fas fa-expand-alt"></i>
+                    </button>
+                    <button class="btn btn-sm btn-secondary" onclick="collapseAllRoutes()" title="收合所有路線">
+                        <i class="fas fa-compress-alt"></i>
+                    </button>
                 </div>
             </div>
-            <div style="display: flex; gap: 0.5rem;">
-                <button class="btn btn-sm btn-secondary" onclick="expandAllRoutes()" title="展開所有路線">
-                    <i class="fas fa-expand-alt"></i>
+            ${cardsHtml}
+            <div style="margin-top: 1.5rem; text-align: center; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+                <button class="btn btn-primary btn-sm" onclick="app.exportRouteTable()">
+                    <i class="fas fa-download"></i> 匯出路線表
                 </button>
-                <button class="btn btn-sm btn-secondary" onclick="collapseAllRoutes()" title="收合所有路線">
-                    <i class="fas fa-compress-alt"></i>
+                <button class="btn btn-secondary btn-sm" onclick="app.refreshRouteTable()" style="margin-left: 0.5rem;">
+                    <i class="fas fa-sync-alt"></i> 重新整理
                 </button>
             </div>
         </div>
-        ${cardsHtml}
-        <div style="margin-top: 1.5rem; text-align: center; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
-            <button class="btn btn-primary btn-sm" onclick="app.exportRouteTable()">
-                <i class="fas fa-download"></i> 匯出路線表
-            </button>
-            <button class="btn btn-secondary btn-sm" onclick="app.refreshRouteTable()" style="margin-left: 0.5rem;">
-                <i class="fas fa-sync-alt"></i> 重新整理
-            </button>
-        </div>
-    </div>
-`;
-
+      `;
       
       if (window.app && app.showNotification) {
         app.showNotification('明日建議派車表載入完成', 'success');
@@ -6219,6 +6221,59 @@ function exportDispatchTable() {
 function refreshDispatchTable() {
   document.getElementById('ai-preplan-btn').click();
 }
+// 切換卡片展開/收合
+function toggleRouteCard(headerElement) {
+    const card = headerElement.closest('.route-card');
+    const body = card.querySelector('.route-card-body');
+    const icon = card.querySelector('.toggle-icon');
+    
+    const isExpanded = body.classList.contains('expanded');
+    
+    if (isExpanded) {
+        body.classList.remove('expanded');
+        icon.classList.remove('expanded');
+    } else {
+        body.classList.add('expanded');
+        icon.classList.add('expanded');
+    }
+}
+
+// 計算路線數量
+function getRouteCount(data) {
+    const routeNames = new Set();
+    data.forEach(item => {
+        const routeName = item['路線名稱'];
+        if (routeName && !routeName.includes('結束')) {
+            routeNames.add(routeName);
+        }
+    });
+    return routeNames.size;
+}
+
+// 展開所有路線卡片
+function expandAllRoutes() {
+    document.querySelectorAll('.route-card-body').forEach(body => {
+        body.classList.add('expanded');
+    });
+    document.querySelectorAll('.toggle-icon').forEach(icon => {
+        icon.classList.add('expanded');
+    });
+}
+
+// 收合所有路線卡片
+function collapseAllRoutes() {
+    document.querySelectorAll('.route-card-body').forEach(body => {
+        body.classList.remove('expanded');
+    });
+    document.querySelectorAll('.toggle-icon').forEach(icon => {
+        icon.classList.remove('expanded');
+    });
+}
+
+// 設為全域函數
+window.toggleRouteCard = toggleRouteCard;
+window.expandAllRoutes = expandAllRoutes;
+window.collapseAllRoutes = collapseAllRoutes;
 
     </script>
 
