@@ -3108,6 +3108,46 @@
 document.getElementById('ai-preplan-btn')?.addEventListener('click', async () => {
     await this.handleAIPreplan();
 });
+                // 🔥 在這裡添加 getUniqueRouteCount 方法
+    getUniqueRouteCount(data) {
+        const uniqueRoutes = new Set();
+        data.forEach(item => {
+            const routeName = item['路線名稱'];
+            if (routeName && !routeName.includes('結束')) {
+                uniqueRoutes.add(routeName);
+            }
+        });
+        return uniqueRoutes.size;
+    }
+
+    // 同時添加其他相關方法
+    expandAllRoutes() {
+        document.querySelectorAll('.route-card-content').forEach(content => {
+            content.classList.add('expanded');
+        });
+        document.querySelectorAll('.route-toggle-btn').forEach(btn => {
+            btn.classList.add('expanded');
+            btn.querySelector('i').className = 'fas fa-chevron-up';
+        });
+    }
+
+    collapseAllRoutes() {
+        document.querySelectorAll('.route-card-content').forEach(content => {
+            content.classList.remove('expanded');
+        });
+        document.querySelectorAll('.route-toggle-btn').forEach(btn => {
+            btn.classList.remove('expanded');
+            btn.querySelector('i').className = 'fas fa-chevron-down';
+        });
+    }
+
+    exportRouteTable() {
+        this.showNotification('匯出功能開發中...', 'info');
+    }
+
+    refreshRouteTable() {
+        this.handleAIPreplan();
+    }
 
 // 派車收送點查詢按鈕
 document.getElementById('fetchDeliveryPointsBtn')?.addEventListener('click', async () => {
@@ -3539,7 +3579,6 @@ async executeExternalAutoCompleteProcess() {
 
 
 
-// 處理AI預排
 async handleAIPreplan() {
     const resultDiv = document.getElementById('gai-route-result');
     resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在載入當日各路線表...';
@@ -3554,8 +3593,10 @@ async handleAIPreplan() {
         console.log('API 返回結果:', result);
         
         if (result && result.length > 0) {
-            // 使用新的卡片格式顯示 - 注意這裡改為 convertToRouteCards
+            // 🔥 使用 this.getUniqueRouteCount 調用類別方法
+            const uniqueRouteCount = this.getUniqueRouteCount(result);
             const cardsHtml = this.convertToRouteCards(result);
+            
             resultDiv.innerHTML = `
                 <div style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); margin-top: 1rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
@@ -3565,14 +3606,14 @@ async handleAIPreplan() {
                                 當日各路線表
                             </h4>
                             <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #64748b;">
-                                資料更新時間: ${new Date().toLocaleString('zh-TW')} | 共 ${getUniqueRouteCount(result)} 條路線
+                                資料更新時間: ${new Date().toLocaleString('zh-TW')} | 共 ${uniqueRouteCount} 條路線
                             </p>
                         </div>
                         <div style="display: flex; gap: 0.5rem;">
-                            <button class="btn btn-secondary btn-sm" onclick="expandAllRoutes()" title="展開所有路線">
+                            <button class="btn btn-secondary btn-sm" onclick="app.expandAllRoutes()" title="展開所有路線">
                                 <i class="fas fa-expand-alt"></i>
                             </button>
-                            <button class="btn btn-secondary btn-sm" onclick="collapseAllRoutes()" title="收折所有路線">
+                            <button class="btn btn-secondary btn-sm" onclick="app.collapseAllRoutes()" title="收折所有路線">
                                 <i class="fas fa-compress-alt"></i>
                             </button>
                         </div>
@@ -3605,6 +3646,8 @@ async handleAIPreplan() {
         `;
     }
 }
+
+
 
 
 // 輔助函數：獲取唯一路線數量
@@ -6368,39 +6411,6 @@ function toggleRouteCard(button) {
     }
 }
 
-// 獲取唯一路線數量
-function getUniqueRouteCount(data) {
-    const uniqueRoutes = new Set();
-    data.forEach(item => {
-        const routeName = item['路線名稱'];
-        if (routeName && !routeName.includes('結束')) {
-            uniqueRoutes.add(routeName);
-        }
-    });
-    return uniqueRoutes.size;
-}
-
-// 展開所有路線
-function expandAllRoutes() {
-    document.querySelectorAll('.route-card-content').forEach(content => {
-        content.classList.add('expanded');
-    });
-    document.querySelectorAll('.route-toggle-btn').forEach(btn => {
-        btn.classList.add('expanded');
-        btn.querySelector('i').className = 'fas fa-chevron-up';
-    });
-}
-
-// 收折所有路線
-function collapseAllRoutes() {
-    document.querySelectorAll('.route-card-content').forEach(content => {
-        content.classList.remove('expanded');
-    });
-    document.querySelectorAll('.route-toggle-btn').forEach(btn => {
-        btn.classList.remove('expanded');
-        btn.querySelector('i').className = 'fas fa-chevron-down';
-    });
-}
 
     </script>
 
