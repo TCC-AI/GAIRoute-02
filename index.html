@@ -2972,7 +2972,7 @@
                 this.isMapViewActive = false;
                 this.currentWaypoints = [];
             }
-            // ✅ 正確的方法定義
+                // ✅ 正確位置：在類別內部，但不在其他方法內部
     getUniqueRouteCount(data) {
         const uniqueRoutes = new Set();
         data.forEach(item => {
@@ -3011,6 +3011,30 @@
     refreshRouteTable() {
         this.handleAIPreplan();
     }
+
+    // 初始化系統
+    init() {
+        this.bindEvents();
+        this.checkLoginStatus();
+    }
+
+    // 綁定事件
+    bindEvents() {
+        // 登入表單事件
+        elements.loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleLogin();
+        });
+
+        // AI預排按鈕事件
+        document.getElementById('ai-preplan-btn')?.addEventListener('click', async () => {
+            await this.handleAIPreplan();
+        });
+
+        // 派車收送點查詢按鈕
+        document.getElementById('fetchDeliveryPointsBtn')?.addEventListener('click', async () => {
+            await this.fetchDeliveryPoints();
+        });
 
             // 初始化系統
             init() {
@@ -3147,47 +3171,7 @@
 document.getElementById('ai-preplan-btn')?.addEventListener('click', async () => {
     await this.handleAIPreplan();
 });
-                // 🔥 在這裡添加 getUniqueRouteCount 方法
-    getUniqueRouteCount(data) {
-        const uniqueRoutes = new Set();
-        data.forEach(item => {
-            const routeName = item['路線名稱'];
-            if (routeName && !routeName.includes('結束')) {
-                uniqueRoutes.add(routeName);
-            }
-        });
-        return uniqueRoutes.size;
-    }
-
-    // 同時添加其他相關方法
-    expandAllRoutes() {
-        document.querySelectorAll('.route-card-content').forEach(content => {
-            content.classList.add('expanded');
-        });
-        document.querySelectorAll('.route-toggle-btn').forEach(btn => {
-            btn.classList.add('expanded');
-            btn.querySelector('i').className = 'fas fa-chevron-up';
-        });
-    }
-
-    collapseAllRoutes() {
-        document.querySelectorAll('.route-card-content').forEach(content => {
-            content.classList.remove('expanded');
-        });
-        document.querySelectorAll('.route-toggle-btn').forEach(btn => {
-            btn.classList.remove('expanded');
-            btn.querySelector('i').className = 'fas fa-chevron-down';
-        });
-    }
-
-    exportRouteTable() {
-        this.showNotification('匯出功能開發中...', 'info');
-    }
-
-    refreshRouteTable() {
-        this.handleAIPreplan();
-    }
-
+              
 // 派車收送點查詢按鈕
 document.getElementById('fetchDeliveryPointsBtn')?.addEventListener('click', async () => {
     await this.fetchDeliveryPoints();
