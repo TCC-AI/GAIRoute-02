@@ -2972,6 +2972,45 @@
                 this.isMapViewActive = false;
                 this.currentWaypoints = [];
             }
+            // ✅ 正確的方法定義
+    getUniqueRouteCount(data) {
+        const uniqueRoutes = new Set();
+        data.forEach(item => {
+            const routeName = item['路線名稱'];
+            if (routeName && !routeName.includes('結束')) {
+                uniqueRoutes.add(routeName);
+            }
+        });
+        return uniqueRoutes.size;
+    }
+
+    expandAllRoutes() {
+        document.querySelectorAll('.route-card-content').forEach(content => {
+            content.classList.add('expanded');
+        });
+        document.querySelectorAll('.route-toggle-btn').forEach(btn => {
+            btn.classList.add('expanded');
+            btn.querySelector('i').className = 'fas fa-chevron-up';
+        });
+    }
+
+    collapseAllRoutes() {
+        document.querySelectorAll('.route-card-content').forEach(content => {
+            content.classList.remove('expanded');
+        });
+        document.querySelectorAll('.route-toggle-btn').forEach(btn => {
+            btn.classList.remove('expanded');
+            btn.querySelector('i').className = 'fas fa-chevron-down';
+        });
+    }
+
+    exportRouteTable() {
+        this.showNotification('匯出功能開發中...', 'info');
+    }
+
+    refreshRouteTable() {
+        this.handleAIPreplan();
+    }
 
             // 初始化系統
             init() {
@@ -3650,39 +3689,7 @@ async handleAIPreplan() {
 
 
 
-// 輔助函數：獲取唯一路線數量
-function getUniqueRouteCount(data) {
-    const uniqueRoutes = new Set();
-    data.forEach(item => {
-        const routeName = item['路線名稱'];
-        if (routeName && !routeName.includes('結束')) {
-            uniqueRoutes.add(routeName);
-        }
-    });
-    return uniqueRoutes.size;
-}
 
-// 展開所有路線
-function expandAllRoutes() {
-    document.querySelectorAll('.route-card-content').forEach(content => {
-        content.classList.add('expanded');
-    });
-    document.querySelectorAll('.route-toggle-btn').forEach(btn => {
-        btn.classList.add('expanded');
-        btn.querySelector('i').className = 'fas fa-chevron-up';
-    });
-}
-
-// 收折所有路線
-function collapseAllRoutes() {
-    document.querySelectorAll('.route-card-content').forEach(content => {
-        content.classList.remove('expanded');
-    });
-    document.querySelectorAll('.route-toggle-btn').forEach(btn => {
-        btn.classList.remove('expanded');
-        btn.querySelector('i').className = 'fas fa-chevron-down';
-    });
-}
 
 
 // 轉換資料為路線卡片格式
