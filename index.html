@@ -3613,83 +3613,6 @@ async handleAIPreplan() {
     }
 }
 
-
-function convertToRouteTable(data) {
-    if (!data || data.length === 0) {
-        return `
-            <div class="empty-state">
-                <i class="fas fa-route"></i>
-                <h3>暫無路線資料</h3>
-                <p>請稍後重新查詢或聯絡系統管理員</p>
-            </div>
-        `;
-    }
-
-    // 按路線名稱分組
-    const routeGroups = {};
-    
-    data.forEach(item => {
-        const routeName = item['路線名稱'] || '未知路線';
-        
-        // 跳過分隔符
-        if (routeName.includes('結束')) {
-            return;
-        }
-        
-        if (!routeGroups[routeName]) {
-            routeGroups[routeName] = [];
-        }
-        
-        routeGroups[routeName].push(item);
-    });
-
-    let html = '<div class="route-cards-container">';
-    
-    Object.entries(routeGroups).forEach(([routeName, routeData]) => {
-        // 判斷路線類型
-        let routeType = 'morning';
-        let routeTypeText = '早班';
-        
-        if (routeName.startsWith('中-')) {
-            routeType = 'noon';
-            routeTypeText = '中班';
-        } else if (routeName.startsWith('晚-')) {
-            routeType = 'evening';
-            routeTypeText = '晚班';
-        }
-
-        // 統計資訊
-        const totalStops = routeData.length;
-        const totalPallets = routeData.reduce((sum, item) => {
-            const pallets = parseInt(item['商品棧板']) || 0;
-            return sum + pallets;
-        }, 0);
-
-        html += `
-            <div class="route-card ${routeType}">
-                <div class="route-card-header" onclick="toggleRouteCard(this)">
-                    <div class="route-info">
-                        <div class="route-name ${routeType}">
-                            ${routeName}
-                            <span class="route-badge ${routeType}">${routeTypeText}</span>
-                        </div>
-                        <div class="route-summary">
-                            <div class="route-stat">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>${totalStops} 個配送點</span>
-                            </div>
-                            <div class="route-stat">
-                                <i class="fas fa-boxes"></i>
-                                <span>${totalPallets} 板</span>
-                            </div>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-down toggle-icon"></i>
-                </div>
-                <div class="route-card-body">
-                    <div class="route-details">
-        `;
-
         // 添加路線詳細資料
         routeData.forEach((item, index) => {
             html += `
@@ -6274,6 +6197,127 @@ function collapseAllRoutes() {
 window.toggleRouteCard = toggleRouteCard;
 window.expandAllRoutes = expandAllRoutes;
 window.collapseAllRoutes = collapseAllRoutes;
+         // ===== 在這裡貼上 convertToRouteTable 函數 =====
+        function convertToRouteTable(data) {
+            if (!data || data.length === 0) {
+                return `
+                    <div class="empty-state">
+                        <i class="fas fa-route"></i>
+                        <h3>暫無路線資料</h3>
+                        <p>請稍後重新查詢或聯絡系統管理員</p>
+                    </div>
+                `;
+            }
+
+            // 按路線名稱分組
+            const routeGroups = {};
+            
+            data.forEach(item => {
+                const routeName = item['路線名稱'] || '未知路線';
+                
+                // 跳過分隔符
+                if (routeName.includes('結束')) {
+                    return;
+                }
+                
+                if (!routeGroups[routeName]) {
+                    routeGroups[routeName] = [];
+                }
+                
+                routeGroups[routeName].push(item);
+            });
+
+            let html = '<div class="route-cards-container">';
+            
+            Object.entries(routeGroups).forEach(([routeName, routeData]) => {
+                // 判斷路線類型
+                let routeType = 'morning';
+                let routeTypeText = '早班';
+                
+                if (routeName.startsWith('中-')) {
+                    routeType = 'noon';
+                    routeTypeText = '中班';
+                } else if (routeName.startsWith('晚-')) {
+                    routeType = 'evening';
+                    routeTypeText = '晚班';
+                }
+
+                // 統計資訊
+                const totalStops = routeData.length;
+                const totalPallets = routeData.reduce((sum, item) => {
+                    const pallets = parseInt(item['商品棧板']) || 0;
+                    return sum + pallets;
+                }, 0);
+
+                html += `
+                    <div class="route-card ${routeType}">
+                        <div class="route-card-header" onclick="toggleRouteCard(this)">
+                            <div class="route-info">
+                                <div class="route-name ${routeType}">
+                                    ${routeName}
+                                    <span class="route-badge ${routeType}">${routeTypeText}</span>
+                                </div>
+                                <div class="route-summary">
+                                    <div class="route-stat">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>${totalStops} 個配送點</span>
+                                    </div>
+                                    <div class="route-stat">
+                                        <i class="fas fa-boxes"></i>
+                                        <span>${totalPallets} 板</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </div>
+                        <div class="route-card-body">
+                            <div class="route-details">
+                `;
+
+                // 添加路線詳細資料
+                routeData.forEach((item, index) => {
+                    html += `
+                        <div class="detail-item">
+                            <div class="detail-row">
+                                <span class="detail-label">配送點</span>
+                                <span class="detail-value highlight">${item['配送點簡稱'] || '未指定'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">客戶</span>
+                                <span class="detail-value">${item['客戶簡稱'] || '未指定'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">地址</span>
+                                <span class="detail-value">${item['地址'] || '未提供'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">商品</span>
+                                <span class="detail-value">${item['商品簡稱'] || '未指定'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">棧板數</span>
+                                <span class="detail-value highlight">${item['商品棧板'] || '0'} 板</span>
+                            </div>
+                            ${item['配送備註'] ? `
+                            <div class="detail-row">
+                                <span class="detail-label">備註</span>
+                                <span class="detail-value">${item['配送備註']}</span>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+
+                html += `
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            return html;
+        }
 
     </script>
 
