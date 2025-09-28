@@ -3949,7 +3949,7 @@ justify-content:flex-end; / 右靠齊 */
         const CONFIG = {
             SPREADSHEET_ID: '1miCf_ZTVyzmA1MNbbZM3uUdZjluk99gZUH5w2q_XWs8',
             EXTERNAL_SPREADSHEET_ID: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc', // 第二個檔案ID（外部資料、GAI分析等）
-            GAS_URL: 'https://script.google.com/macros/s/AKfycbxxC_lsk5j-cRMlHZSKM8lvWRjwnyvb9xOnc8qdp2RoJeMQCVWqzJYOGBx0dPXHcRiZLw/exec',
+            GAS_URL: 'https://script.google.com/macros/s/AKfycbw4vzFthBsYovtvUsvs9-m9UC4jYpWvHdFRiJQjwEGWtEA3AjIuJBbC8-9UNO02FLV_/exec',
             USE_MOCK_DATA: false,
             MAPS_API_KEY: 'AIzaSyDtP8oDCXfr0CPLyVv_WrAqmk2V9QgteLI',
             WEATHER_API_KEY: 'a4806bc2577c0c227f9acd8bccb566a5',
@@ -6245,7 +6245,7 @@ DispatchGAISystem.prototype.fetchDeliveryPointsWithSteps = async function(){
 
     // Step 2
     update(1,'呼叫外部流程...');
-    await this.executeThreePhaseProcess();
+    await this.executeSteps1to5WithMemoryCleanup();
     finishStep(1,'流程啟動', 35);
 
     // Step 3
@@ -6914,8 +6914,8 @@ async fetchDeliveryPoints() {
             targetSpreadsheetId: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc'
         });
         
-        // 2. 自動執行外部 GAS 的 executeThreePhaseProcess 程序
-        await this.executeThreePhaseProcess();
+        // 2. 自動執行外部 GAS 的 executeSteps1to5WithMemoryCleanup 程序
+        await this.executeSteps1to5WithMemoryCleanup();
         
         if (loadingSpinner) {
             loadingSpinner.textContent = '正在等待工作表生成...';
@@ -7107,9 +7107,9 @@ refreshDeliveryReport() {
     }
 }
 
-// 執行外部 GAS 的 executeThreePhaseProcess 程序（修正 CORS 版本）
-async executeThreePhaseProcess() {
-    const externalGasUrl = 'https://script.google.com/macros/s/AKfycbxrJLFXxtrMBw5mBRCO6-DC_tBej4SgPsb7YTNNKbN3G48mgDaWVV9t47geBMq8GJKTvg/exec';
+// 執行外部 GAS 的 executeSteps1to5WithMemoryCleanup 程序（修正 CORS 版本）
+async executeSteps1to5WithMemoryCleanup() {
+    const externalGasUrl = 'https://script.google.com/macros/s/AKfycbzUERTOI-YGDJJ3_BjM4on4Sm0IZ-d4DRTssGtpQ6ZulKuyafKmwFf5mNE0lVifz_Y7mQ/exec';
     
     try {
         // 先測試 GET 請求確認服務可用
@@ -7127,7 +7127,7 @@ async executeThreePhaseProcess() {
                 'Content-Type': 'text/plain', // 改用 text/plain 避免預檢請求
             },
             body: JSON.stringify({
-                action: 'executeThreePhaseProcess',
+                action: 'executeSteps1to5WithMemoryCleanup',
                 data: {
                     timestamp: new Date().toISOString(),
                     source: '昶青智慧冷鏈物流派車系統'
@@ -7147,7 +7147,7 @@ async executeThreePhaseProcess() {
         };
         
     } catch (error) {
-        console.error('執行外部 executeThreePhaseProcess 失敗:', error);
+        console.error('執行外部 executeSteps1to5WithMemoryCleanup 失敗:', error);
         
         // 提供更友善的錯誤訊息
         if (error.name === 'TypeError') {
