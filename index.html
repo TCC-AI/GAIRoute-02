@@ -4179,6 +4179,388 @@ justify-content:flex-end; /* 右靠齊 */
     </div>
 
     <script>
+         // ===== 碳排追蹤折線圖功能 =====
+
+let carbonChartInstance = null;
+let carbonChartData = {
+    labels: [],
+    datasets: []
+};
+
+// 初始化圖表
+function initCarbonChart() {
+    const ctx = document.getElementById('carbonChart').getContext('2d');
+    
+    carbonChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: carbonChartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15,
+                        font: {
+                            family: 'Inter',
+                            size: 13,
+                            weight: '600'
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    titleColor: '#1e293b',
+                    bodyColor: '#475569',
+                    borderColor: '#e2e8f0',
+                    borderWidth: 1,
+                    padding: 12,
+                    boxPadding: 6,
+                    usePointStyle: true,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y.toFixed(2) + ' ' + context.dataset.unit;
+                            }
+                            return label;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            family: 'Inter',
+                            size: 11
+                        }
+                    }
+                },
+                yLeft: {
+                    type: 'linear',
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: '碳排量 (公斤)',
+                        font: {
+                            family: 'Inter',
+                            size: 13,
+                            weight: '600'
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        font: {
+                            family: 'Inter',
+                            size: 11
+                        }
+                    }
+                },
+                yRight: {
+                    type: 'linear',
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: '營業額 (元)',
+                        font: {
+                            family: 'Inter',
+                            size: 13,
+                            weight: '600'
+                        }
+                    },
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            family: 'Inter',
+                            size: 11
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+/**
+ * 載入碳排圖表資料 - GitHub Pages 版本（使用 fetch）
+ */
+async function loadCarbonChartData() {
+    // 1. 取得日期範圍
+    let startDate, endDate;
+    const rangeSelector = document.getElementById('carbonDateRange');
+    
+    if (rangeSelector.value === 'custom') {
+        startDate = document.getElementById('carbonStartDate')?.value;
+        endDate = document.getElementById('carbonEndDate')?.value;
+    } else {
+        // 自動計算日期
+        const today = new Date();
+        const days = parseInt(rangeSelector.value);
+        const start = new Date(today);
+        start.setDate(today.getDate() - days);
+        
+        startDate = start.toISOString().split('T')[0];
+        endDate = today.toISOString().split('T')[0];
+    }
+    
+    console.log('📊 開始載入碳排資料...');
+    console.log('📅 日期範圍:', startDate, '至', endDate);
+    
+    // 2. 驗證輸入
+    if (!startDate || !endDate) {
+        if (window.app) {
+            app.showNotification('請選擇日期範圍', 'warning');
+        }
+        return;
+    }
+    
+    if (new Date(startDate) > new Date(endDate)) {
+        if (window.app) {
+            app.showNotification('開始日期不能晚於結束日期', 'error');
+        }
+        return;
+    }
+    
+    // 3. 顯示載入狀態
+    document.getElementById('carbonChartSkeleton').style.display = 'block';
+    document.getElementById('carbonChartContainer').style.display = 'none';
+    
+    try {
+        // 4. 調用 API
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZkX_tW_3vk1edpwf7fDNVMLB0tpUgvvRda90-lzJFVCrZUHvGaVH-7Gfp7idFDznR5g/exec';
+        const url = `${GOOGLE_SCRIPT_URL}?action=getCarbonChartData&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
+        
+        console.log('🌐 API 請求:', url);
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            headers: {
+                'Accept': 'application/json',
+            }
+        });
+        
+        console.log('📡 Response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const result = await response.json();
+        console.log('📦 API 回應:', result);
+        
+        if (result.success && result.data) {
+            console.log('✅ 成功取得資料');
+            console.log('📊 資料筆數:', result.data.dates?.length || 0);
+            
+            if (result.data.dates && result.data.dates.length > 0) {
+                updateCarbonChart(result.data);
+                if (window.app) {
+                    app.showNotification(`成功載入 ${result.data.dates.length} 筆資料`, 'success');
+                }
+            } else {
+                throw new Error('查無資料，請調整日期範圍');
+            }
+        } else {
+            throw new Error(result.error || 'API 回應格式錯誤');
+        }
+        
+    } catch (error) {
+        console.error('❌ 載入碳排資料失敗:', error);
+        
+        // 顯示錯誤訊息
+        const container = document.getElementById('carbonChartContainer');
+        container.innerHTML = `
+            <div style="text-align: center; padding: 3rem; color: #dc2626;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                <h4>載入失敗</h4>
+                <p>${error.message}</p>
+                <button class="btn btn-primary" onclick="refreshCarbonChart()" style="margin-top: 1rem;">
+                    <i class="fas fa-sync-alt"></i> 重試
+                </button>
+            </div>
+        `;
+        
+        if (window.app) {
+            app.showNotification(`載入失敗: ${error.message}`, 'error');
+        }
+        
+    } finally {
+        // 隱藏載入狀態
+        document.getElementById('carbonChartSkeleton').style.display = 'none';
+        document.getElementById('carbonChartContainer').style.display = 'block';
+    }
+}
+
+
+
+// 更新圖表資料
+function updateCarbonChart(data) {
+    carbonChartData.labels = data.dates;
+    carbonChartData.datasets = [
+        {
+            label: '派車GAI',
+            data: data.dispatch,
+            borderColor: '#0ea5e9',
+            backgroundColor: 'rgba(14, 165, 233, 0.1)',
+            borderWidth: 2,
+            tension: 0.4,
+            yAxisID: 'yLeft',
+            unit: '公斤'
+        },
+        {
+            label: '運務GAI',
+            data: data.operation,
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderWidth: 2,
+            tension: 0.4,
+            yAxisID: 'yLeft',
+            unit: '公斤'
+        },
+        {
+            label: '託收托運GAI',
+            data: data.storage,
+            borderColor: '#f59e0b',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            borderWidth: 2,
+            tension: 0.4,
+            yAxisID: 'yLeft',
+            unit: '公斤'
+        },
+        {
+            label: '營業額',
+            data: data.revenue,
+            borderColor: '#ef4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            borderWidth: 2,
+            tension: 0.4,
+            yAxisID: 'yRight',
+            unit: '元'
+        }
+    ];
+    
+    if (carbonChartInstance) {
+        carbonChartInstance.data = carbonChartData;
+        carbonChartInstance.update();
+    }
+}
+
+// 切換趨勢線
+function toggleTrendLine(type) {
+    const checkbox = document.getElementById(`trend${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    const datasetIndex = {
+        'dispatch': 0,
+        'operation': 1,
+        'storage': 2,
+        'revenue': 3
+    }[type];
+    
+    if (checkbox.checked) {
+        // 計算趨勢線
+        const dataset = carbonChartData.datasets[datasetIndex];
+        const trendData = calculateTrendLine(dataset.data);
+        
+        // 新增趨勢線資料集
+        carbonChartData.datasets.push({
+            label: dataset.label + ' (趨勢)',
+            data: trendData,
+            borderColor: dataset.borderColor,
+            borderWidth: 2,
+            borderDash: [5, 5],
+            tension: 0,
+            yAxisID: dataset.yAxisID,
+            unit: dataset.unit,
+            pointRadius: 0
+        });
+    } else {
+        // 移除趨勢線
+        const trendLabel = carbonChartData.datasets[datasetIndex].label + ' (趨勢)';
+        const trendIndex = carbonChartData.datasets.findIndex(d => d.label === trendLabel);
+        if (trendIndex !== -1) {
+            carbonChartData.datasets.splice(trendIndex, 1);
+        }
+    }
+    
+    carbonChartInstance.update();
+}
+
+// 計算趨勢線（線性回歸）
+function calculateTrendLine(data) {
+    const n = data.length;
+    let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+    
+    for (let i = 0; i < n; i++) {
+        if (data[i] !== null) {
+            sumX += i;
+            sumY += data[i];
+            sumXY += i * data[i];
+            sumX2 += i * i;
+        }
+    }
+    
+    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+    
+    return data.map((_, i) => slope * i + intercept);
+}
+
+// 重新整理圖表
+function refreshCarbonChart() {
+    loadCarbonChartData();
+}
+
+// 日期範圍選擇器事件
+document.getElementById('carbonDateRange').addEventListener('change', function() {
+    const customRange = document.getElementById('customDateRange');
+    if (this.value === 'custom') {
+        customRange.style.display = 'flex';
+    } else {
+        customRange.style.display = 'none';
+        loadCarbonChartData();
+    }
+});
+
+// 自訂日期變更事件
+document.getElementById('startDate').addEventListener('change', loadCarbonChartData);
+document.getElementById('endDate').addEventListener('change', loadCarbonChartData);
+
+// 頁面載入時初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 載入 Chart.js
+    if (typeof Chart === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+        script.onload = function() {
+            initCarbonChart();
+            loadCarbonChartData();
+        };
+        document.head.appendChild(script);
+    } else {
+        initCarbonChart();
+        loadCarbonChartData();
+    }
+});
+
         // R2 角色控制類別
 class R2Character {
     constructor() {
@@ -12217,388 +12599,7 @@ function collapseAllRoutes() {
     });
 }
 
-        // ===== 碳排追蹤折線圖功能 =====
-
-let carbonChartInstance = null;
-let carbonChartData = {
-    labels: [],
-    datasets: []
-};
-
-// 初始化圖表
-function initCarbonChart() {
-    const ctx = document.getElementById('carbonChart').getContext('2d');
-    
-    carbonChartInstance = new Chart(ctx, {
-        type: 'line',
-        data: carbonChartData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                mode: 'index',
-                intersect: false,
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                    labels: {
-                        usePointStyle: true,
-                        padding: 15,
-                        font: {
-                            family: 'Inter',
-                            size: 13,
-                            weight: '600'
-                        }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                    titleColor: '#1e293b',
-                    bodyColor: '#475569',
-                    borderColor: '#e2e8f0',
-                    borderWidth: 1,
-                    padding: 12,
-                    boxPadding: 6,
-                    usePointStyle: true,
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y.toFixed(2) + ' ' + context.dataset.unit;
-                            }
-                            return label;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        font: {
-                            family: 'Inter',
-                            size: 11
-                        }
-                    }
-                },
-                yLeft: {
-                    type: 'linear',
-                    position: 'left',
-                    title: {
-                        display: true,
-                        text: '碳排量 (公斤)',
-                        font: {
-                            family: 'Inter',
-                            size: 13,
-                            weight: '600'
-                        }
-                    },
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    },
-                    ticks: {
-                        font: {
-                            family: 'Inter',
-                            size: 11
-                        }
-                    }
-                },
-                yRight: {
-                    type: 'linear',
-                    position: 'right',
-                    title: {
-                        display: true,
-                        text: '營業額 (元)',
-                        font: {
-                            family: 'Inter',
-                            size: 13,
-                            weight: '600'
-                        }
-                    },
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        font: {
-                            family: 'Inter',
-                            size: 11
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-/**
- * 載入碳排圖表資料 - GitHub Pages 版本（使用 fetch）
- */
-async function loadCarbonChartData() {
-    // 1. 取得日期範圍
-    let startDate, endDate;
-    const rangeSelector = document.getElementById('carbonDateRange');
-    
-    if (rangeSelector.value === 'custom') {
-        startDate = document.getElementById('carbonStartDate')?.value;
-        endDate = document.getElementById('carbonEndDate')?.value;
-    } else {
-        // 自動計算日期
-        const today = new Date();
-        const days = parseInt(rangeSelector.value);
-        const start = new Date(today);
-        start.setDate(today.getDate() - days);
-        
-        startDate = start.toISOString().split('T')[0];
-        endDate = today.toISOString().split('T')[0];
-    }
-    
-    console.log('📊 開始載入碳排資料...');
-    console.log('📅 日期範圍:', startDate, '至', endDate);
-    
-    // 2. 驗證輸入
-    if (!startDate || !endDate) {
-        if (window.app) {
-            app.showNotification('請選擇日期範圍', 'warning');
-        }
-        return;
-    }
-    
-    if (new Date(startDate) > new Date(endDate)) {
-        if (window.app) {
-            app.showNotification('開始日期不能晚於結束日期', 'error');
-        }
-        return;
-    }
-    
-    // 3. 顯示載入狀態
-    document.getElementById('carbonChartSkeleton').style.display = 'block';
-    document.getElementById('carbonChartContainer').style.display = 'none';
-    
-    try {
-        // 4. 調用 API
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZkX_tW_3vk1edpwf7fDNVMLB0tpUgvvRda90-lzJFVCrZUHvGaVH-7Gfp7idFDznR5g/exec';
-        const url = `${GOOGLE_SCRIPT_URL}?action=getCarbonChartData&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
-        
-        console.log('🌐 API 請求:', url);
-        
-        const response = await fetch(url, {
-            method: 'GET',
-            mode: 'cors',
-            cache: 'no-cache',
-            headers: {
-                'Accept': 'application/json',
-            }
-        });
-        
-        console.log('📡 Response status:', response.status);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        
-        const result = await response.json();
-        console.log('📦 API 回應:', result);
-        
-        if (result.success && result.data) {
-            console.log('✅ 成功取得資料');
-            console.log('📊 資料筆數:', result.data.dates?.length || 0);
-            
-            if (result.data.dates && result.data.dates.length > 0) {
-                updateCarbonChart(result.data);
-                if (window.app) {
-                    app.showNotification(`成功載入 ${result.data.dates.length} 筆資料`, 'success');
-                }
-            } else {
-                throw new Error('查無資料，請調整日期範圍');
-            }
-        } else {
-            throw new Error(result.error || 'API 回應格式錯誤');
-        }
-        
-    } catch (error) {
-        console.error('❌ 載入碳排資料失敗:', error);
-        
-        // 顯示錯誤訊息
-        const container = document.getElementById('carbonChartContainer');
-        container.innerHTML = `
-            <div style="text-align: center; padding: 3rem; color: #dc2626;">
-                <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                <h4>載入失敗</h4>
-                <p>${error.message}</p>
-                <button class="btn btn-primary" onclick="refreshCarbonChart()" style="margin-top: 1rem;">
-                    <i class="fas fa-sync-alt"></i> 重試
-                </button>
-            </div>
-        `;
-        
-        if (window.app) {
-            app.showNotification(`載入失敗: ${error.message}`, 'error');
-        }
-        
-    } finally {
-        // 隱藏載入狀態
-        document.getElementById('carbonChartSkeleton').style.display = 'none';
-        document.getElementById('carbonChartContainer').style.display = 'block';
-    }
-}
-
-
-
-// 更新圖表資料
-function updateCarbonChart(data) {
-    carbonChartData.labels = data.dates;
-    carbonChartData.datasets = [
-        {
-            label: '派車GAI',
-            data: data.dispatch,
-            borderColor: '#0ea5e9',
-            backgroundColor: 'rgba(14, 165, 233, 0.1)',
-            borderWidth: 2,
-            tension: 0.4,
-            yAxisID: 'yLeft',
-            unit: '公斤'
-        },
-        {
-            label: '運務GAI',
-            data: data.operation,
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            borderWidth: 2,
-            tension: 0.4,
-            yAxisID: 'yLeft',
-            unit: '公斤'
-        },
-        {
-            label: '託收托運GAI',
-            data: data.storage,
-            borderColor: '#f59e0b',
-            backgroundColor: 'rgba(245, 158, 11, 0.1)',
-            borderWidth: 2,
-            tension: 0.4,
-            yAxisID: 'yLeft',
-            unit: '公斤'
-        },
-        {
-            label: '營業額',
-            data: data.revenue,
-            borderColor: '#ef4444',
-            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-            borderWidth: 2,
-            tension: 0.4,
-            yAxisID: 'yRight',
-            unit: '元'
-        }
-    ];
-    
-    if (carbonChartInstance) {
-        carbonChartInstance.data = carbonChartData;
-        carbonChartInstance.update();
-    }
-}
-
-// 切換趨勢線
-function toggleTrendLine(type) {
-    const checkbox = document.getElementById(`trend${type.charAt(0).toUpperCase() + type.slice(1)}`);
-    const datasetIndex = {
-        'dispatch': 0,
-        'operation': 1,
-        'storage': 2,
-        'revenue': 3
-    }[type];
-    
-    if (checkbox.checked) {
-        // 計算趨勢線
-        const dataset = carbonChartData.datasets[datasetIndex];
-        const trendData = calculateTrendLine(dataset.data);
-        
-        // 新增趨勢線資料集
-        carbonChartData.datasets.push({
-            label: dataset.label + ' (趨勢)',
-            data: trendData,
-            borderColor: dataset.borderColor,
-            borderWidth: 2,
-            borderDash: [5, 5],
-            tension: 0,
-            yAxisID: dataset.yAxisID,
-            unit: dataset.unit,
-            pointRadius: 0
-        });
-    } else {
-        // 移除趨勢線
-        const trendLabel = carbonChartData.datasets[datasetIndex].label + ' (趨勢)';
-        const trendIndex = carbonChartData.datasets.findIndex(d => d.label === trendLabel);
-        if (trendIndex !== -1) {
-            carbonChartData.datasets.splice(trendIndex, 1);
-        }
-    }
-    
-    carbonChartInstance.update();
-}
-
-// 計算趨勢線（線性回歸）
-function calculateTrendLine(data) {
-    const n = data.length;
-    let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
-    
-    for (let i = 0; i < n; i++) {
-        if (data[i] !== null) {
-            sumX += i;
-            sumY += data[i];
-            sumXY += i * data[i];
-            sumX2 += i * i;
-        }
-    }
-    
-    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-    const intercept = (sumY - slope * sumX) / n;
-    
-    return data.map((_, i) => slope * i + intercept);
-}
-
-// 重新整理圖表
-function refreshCarbonChart() {
-    loadCarbonChartData();
-}
-
-// 日期範圍選擇器事件
-document.getElementById('carbonDateRange').addEventListener('change', function() {
-    const customRange = document.getElementById('customDateRange');
-    if (this.value === 'custom') {
-        customRange.style.display = 'flex';
-    } else {
-        customRange.style.display = 'none';
-        loadCarbonChartData();
-    }
-});
-
-// 自訂日期變更事件
-document.getElementById('startDate').addEventListener('change', loadCarbonChartData);
-document.getElementById('endDate').addEventListener('change', loadCarbonChartData);
-
-// 頁面載入時初始化
-document.addEventListener('DOMContentLoaded', function() {
-    // 載入 Chart.js
-    if (typeof Chart === 'undefined') {
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
-        script.onload = function() {
-            initCarbonChart();
-            loadCarbonChartData();
-        };
-        document.head.appendChild(script);
-    } else {
-        initCarbonChart();
-        loadCarbonChartData();
-    }
-});
-
+       
     </script>
 <!-- 任務進度覆蓋層：步驟條 + 取消 -->
 <div id="taskProgressOverlay" class="task-progress-overlay" style="display:none;">
