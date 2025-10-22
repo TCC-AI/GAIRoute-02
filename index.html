@@ -4597,16 +4597,6 @@ function initCarbonChart() {
             responsive: true,
             maintainAspectRatio: false,
             
-            // 🔑 添加 layout 設定來控制整體間距
-            layout: {
-                padding: {
-                    top: 10,
-                    bottom: 10,
-                    left: 10,
-                    right: 10
-                }
-            },
-            
             interaction: {
                 mode: 'index',
                 intersect: false,
@@ -4614,20 +4604,7 @@ function initCarbonChart() {
             
             plugins: {
                 legend: {
-                    display: true,
-                    position: 'top',
-                    align: 'end',  // 🔑 靠右對齊
-                    labels: {
-                        usePointStyle: true,
-                        padding: 10,  // 🔑 減少 padding（原本是 15）
-                        boxWidth: 10,  // 🔑 添加圖示寬度
-                        boxHeight: 10, // 🔑 添加圖示高度
-                        font: {
-                            family: 'Inter',
-                            size: 12,  // 🔑 稍微縮小字體
-                            weight: '500'  // 🔑 稍微減輕字重
-                        }
-                    }
+                    display: false  // 🔑 隱藏預設圖例
                 },
                 tooltip: {
                     backgroundColor: 'rgba(255, 255, 255, 0.95)',
@@ -4713,6 +4690,16 @@ function initCarbonChart() {
         }
     });
 }
+
+// 🔑 添加切換資料集的函數
+function toggleDataset(index) {
+    if (carbonChartInstance) {
+        const meta = carbonChartInstance.getDatasetMeta(index);
+        meta.hidden = !meta.hidden;
+        carbonChartInstance.update();
+    }
+}
+
 
 
 /**
