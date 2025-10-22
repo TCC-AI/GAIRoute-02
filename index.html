@@ -12341,76 +12341,114 @@ function initCarbonChart() {
  * 載入碳排圖表資料 - GitHub Pages 版本（使用 fetch）
  */
 async function loadCarbonChartData() {
-  const startDate = document.getElementById('carbonStartDate')?.value;
-  const endDate = document.getElementById('carbonEndDate')?.value;
-  
-  console.log('📊 開始載入碳排資料...');
-  console.log('📅 日期範圍:', startDate, '至', endDate);
-  
-  // 驗證輸入
-  if (!startDate || !endDate) {
-    showNotification('請選擇日期範圍', 'warning');
-    return;
-  }
-  
-  if (new Date(startDate) > new Date(endDate)) {
-    showNotification('開始日期不能晚於結束日期', 'error');
-    return;
-  }
-  
-  try {
-    showLoading(true);
+    // 1. 取得日期範圍
+    let startDate, endDate;
+    const rangeSelector = document.getElementById('carbonDateRange');
     
-    // 🔥 修正：使用您的 Google Apps Script Web App URL
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZkX_tW_3vk1edpwf7fDNVMLB0tpUgvvRda90-lzJFVCrZUHvGaVH-7Gfp7idFDznR5g/exec';
-    
-    // 建構 API URL（GET 請求）
-    const url = `${GOOGLE_SCRIPT_URL}?action=getCarbonChartData&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
-    
-    console.log('🌐 API 請求:', url);
-    
-    // 🔥 使用 fetch 發送請求
-    const response = await fetch(url, {
-      method: 'GET',
-      mode: 'cors',
-      cache: 'no-cache',
-      headers: {
-        'Accept': 'application/json',
-      }
-    });
-    
-    console.log('📡 Response status:', response.status);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-    
-    const result = await response.json();
-    console.log('📦 API 回應:', result);
-    
-    if (result.success) {
-      console.log('✅ 成功取得資料');
-      console.log('📊 資料筆數:', result.data.dates?.length || 0);
-      
-      if (result.data.dates && result.data.dates.length > 0) {
-        updateCarbonChart(result.data);
-        showNotification(`成功載入 ${result.data.dates.length} 筆資料`, 'success');
-      } else {
-        showNotification('查無資料，請調整日期範圍', 'warning');
-      }
+    if (rangeSelector.value === 'custom') {
+        startDate = document.getElementById('carbonStartDate')?.value;
+        endDate = document.getElementById('carbonEndDate')?.value;
     } else {
-      console.error('❌ API 回傳錯誤:', result.error);
-      showNotification('載入失敗: ' + result.error, 'error');
+        // 自動計算日期
+        const today = new Date();
+        const days = parseInt(rangeSelector.value);
+        const start = new Date(today);
+        start.setDate(today.getDate() - days);
+        
+        startDate = start.toISOString().split('T')[0];
+        endDate = today.toISOString().split('T')[0];
     }
     
-  } catch (error) {
-    console.error('❌ 載入碳排資料時發生錯誤:', error);
-    console.error('錯誤堆疊:', error.stack);
-    showNotification('載入失敗: ' + error.message, 'error');
-  } finally {
-    showLoading(false);
-  }
+    console.log('📊 開始載入碳排資料...');
+    console.log('📅 日期範圍:', startDate, '至', endDate);
+    
+    // 2. 驗證輸入
+    if (!startDate || !endDate) {
+        if (window.app) {
+            app.showNotification('請選擇日期範圍', 'warning');
+        }
+        return;
+    }
+    
+    if (new Date(startDate) > new Date(endDate)) {
+        if (window.app) {
+            app.showNotification('開始日期不能晚於結束日期', 'error');
+        }
+        return;
+    }
+    
+    // 3. 顯示載入狀態
+    document.getElementById('carbonChartSkeleton').style.display = 'block';
+    document.getElementById('carbonChartContainer').style.display = 'none';
+    
+    try {
+        // 4. 調用 API
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZkX_tW_3vk1edpwf7fDNVMLB0tpUgvvRda90-lzJFVCrZUHvGaVH-7Gfp7idFDznR5g/exec';
+        const url = `${GOOGLE_SCRIPT_URL}?action=getCarbonChartData&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
+        
+        console.log('🌐 API 請求:', url);
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            headers: {
+                'Accept': 'application/json',
+            }
+        });
+        
+        console.log('📡 Response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const result = await response.json();
+        console.log('📦 API 回應:', result);
+        
+        if (result.success && result.data) {
+            console.log('✅ 成功取得資料');
+            console.log('📊 資料筆數:', result.data.dates?.length || 0);
+            
+            if (result.data.dates && result.data.dates.length > 0) {
+                updateCarbonChart(result.data);
+                if (window.app) {
+                    app.showNotification(`成功載入 ${result.data.dates.length} 筆資料`, 'success');
+                }
+            } else {
+                throw new Error('查無資料，請調整日期範圍');
+            }
+        } else {
+            throw new Error(result.error || 'API 回應格式錯誤');
+        }
+        
+    } catch (error) {
+        console.error('❌ 載入碳排資料失敗:', error);
+        
+        // 顯示錯誤訊息
+        const container = document.getElementById('carbonChartContainer');
+        container.innerHTML = `
+            <div style="text-align: center; padding: 3rem; color: #dc2626;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                <h4>載入失敗</h4>
+                <p>${error.message}</p>
+                <button class="btn btn-primary" onclick="refreshCarbonChart()" style="margin-top: 1rem;">
+                    <i class="fas fa-sync-alt"></i> 重試
+                </button>
+            </div>
+        `;
+        
+        if (window.app) {
+            app.showNotification(`載入失敗: ${error.message}`, 'error');
+        }
+        
+    } finally {
+        // 隱藏載入狀態
+        document.getElementById('carbonChartSkeleton').style.display = 'none';
+        document.getElementById('carbonChartContainer').style.display = 'block';
+    }
 }
+
 
 
 // 更新圖表資料
