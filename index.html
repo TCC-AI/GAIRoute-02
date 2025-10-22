@@ -3942,7 +3942,7 @@ justify-content:flex-end; /* 右靠齊 */
 
                     </div>
                 </div>
-              <!-- 碳排追蹤折線圖區塊 -->
+               <!-- 碳排追蹤折線圖區塊 -->
 <div class="card" style="margin-top: 2rem;">
     <!-- 標題列 -->
     <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; padding: 1.5rem;">
@@ -3952,52 +3952,51 @@ justify-content:flex-end; /* 右靠齊 */
         </h3>
         
         <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-            <!-- 您的控制按鈕 -->
+            <!-- 日期範圍選擇器 -->
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <select id="carbonDateRange" class="form-input" style="width: auto; padding: 0.5rem 1rem; min-width: 120px;">
+                    <option value="7">近 7 天</option>
+                    <option value="30" selected>近 30 天</option>
+                    <option value="90">近 90 天</option>
+                    <option value="custom">自訂範圍</option>
+                </select>
+                
+                <div id="customDateRange" style="display: none; gap: 0.5rem;">
+                    <input type="date" id="startDate" class="form-input" style="width: auto; padding: 0.5rem;">
+                    <span style="color: var(--gray-500);">至</span>
+                    <input type="date" id="endDate" class="form-input" style="width: auto; padding: 0.5rem;">
+                </div>
+            </div>
+            
+            <!-- 統計按鈕 -->
+            <button 
+                id="toggleStatsBtn"
+                onclick="toggleStatistics()" 
+                class="btn btn-sm" 
+                style="padding: 0.5rem 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: relative; z-index: 10; white-space: nowrap;">
+                <i class="fas fa-chart-bar"></i>
+                顯示統計
+            </button>
+            
+            <!-- 預測控制器 -->
+            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: relative; z-index: 10;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: white; font-size: 0.875rem; margin: 0; white-space: nowrap;">
+                    <input type="checkbox" id="showPrediction" onchange="togglePrediction()" style="cursor: pointer; width: 16px; height: 16px;">
+                    <i class="fas fa-crystal-ball"></i>
+                    <span>預測</span>
+                </label>
+                
+                <input type="number" id="predictionDays" min="1" max="30" value="7" onchange="if(document.getElementById('showPrediction').checked) togglePrediction();" style="width: 60px; padding: 0.25rem 0.5rem; border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; background: rgba(255,255,255,0.2); color: white; text-align: center; font-size: 0.875rem;" placeholder="天數">
+                <span style="color: white; font-size: 0.875rem;">天</span>
+            </div>
+            
+            <!-- 重新整理按鈕 -->
+            <button class="btn btn-primary" onclick="refreshCarbonChart()" style="padding: 0.5rem 1rem; position: relative; z-index: 10; white-space: nowrap;">
+                <i class="fas fa-sync-alt"></i>
+                重新整理
+            </button>
         </div>
     </div>
-    
-    <!-- 統計資訊容器 -->
-    <div id="carbonStats" style="display: none; padding: 1.5rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0;"></div>
-    
-    <!-- 預測資訊顯示區 -->
-    <div id="predictionInfo" style="display: none; margin: 1rem 1.5rem 0;"></div>
-    
-    <!-- 圖表容器 -->
-    <div class="card-body" style="padding: 1.5rem;">
-        <!-- 自訂圖例 -->
-        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 1.5rem; margin-bottom: 1rem; padding: 0.75rem 1rem; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 8px; flex-wrap: wrap;">
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.875rem; user-select: none;">
-                <input type="checkbox" id="toggleCarbon" checked onchange="toggleDataset(0)" style="cursor: pointer;">
-                <span style="display: inline-block; width: 10px; height: 10px; background: #3b82f6; border-radius: 50%;"></span>
-                <span style="font-weight: 500;">碳排GA1</span>
-            </label>
-            
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.875rem; user-select: none;">
-                <input type="checkbox" id="toggleRevenue" checked onchange="toggleDataset(1)" style="cursor: pointer;">
-                <span style="display: inline-block; width: 10px; height: 10px; background: #ef4444; border-radius: 50%;"></span>
-                <span style="font-weight: 500;">營業額</span>
-            </label>
-            
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.875rem; user-select: none;">
-                <input type="checkbox" id="toggleCarbonTrend" checked onchange="toggleDataset(2)" style="cursor: pointer;">
-                <span style="display: inline-block; width: 16px; height: 2px; background: #3b82f6; opacity: 0.5;"></span>
-                <span style="font-weight: 500;">碳排GA1趨勢線</span>
-            </label>
-            
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.875rem; user-select: none;">
-                <input type="checkbox" id="toggleRevenueTrend" checked onchange="toggleDataset(3)" style="cursor: pointer;">
-                <span style="display: inline-block; width: 16px; height: 2px; background: #ef4444; opacity: 0.5;"></span>
-                <span style="font-weight: 500;">營業額趨勢線</span>
-            </label>
-        </div>
-        
-        <!-- 圖表 -->
-        <div style="position: relative; height: 450px;">
-            <canvas id="carbonChart"></canvas>
-        </div>
-    </div>
-</div>
-
     
     <!-- 統計資訊容器 -->
     <div id="carbonStats" style="display: none; padding: 1.5rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0;"></div>
@@ -4598,6 +4597,16 @@ function initCarbonChart() {
             responsive: true,
             maintainAspectRatio: false,
             
+            // 🔑 添加 layout 設定來控制整體間距
+            layout: {
+                padding: {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    right: 10
+                }
+            },
+            
             interaction: {
                 mode: 'index',
                 intersect: false,
@@ -4605,7 +4614,20 @@ function initCarbonChart() {
             
             plugins: {
                 legend: {
-                    display: false  // 🔑 隱藏預設圖例
+                    display: true,
+                    position: 'top',
+                    align: 'end',  // 🔑 靠右對齊
+                    labels: {
+                        usePointStyle: true,
+                        padding: 10,  // 🔑 減少 padding（原本是 15）
+                        boxWidth: 10,  // 🔑 添加圖示寬度
+                        boxHeight: 10, // 🔑 添加圖示高度
+                        font: {
+                            family: 'Inter',
+                            size: 12,  // 🔑 稍微縮小字體
+                            weight: '500'  // 🔑 稍微減輕字重
+                        }
+                    }
                 },
                 tooltip: {
                     backgroundColor: 'rgba(255, 255, 255, 0.95)',
@@ -4691,16 +4713,6 @@ function initCarbonChart() {
         }
     });
 }
-
-// 🔑 添加切換資料集的函數
-function toggleDataset(index) {
-    if (carbonChartInstance) {
-        const meta = carbonChartInstance.getDatasetMeta(index);
-        meta.hidden = !meta.hidden;
-        carbonChartInstance.update();
-    }
-}
-
 
 
 /**
