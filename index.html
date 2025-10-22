@@ -4587,7 +4587,6 @@ let carbonChartData = {
     datasets: []
 };
 
-// 初始化圖表
 function initCarbonChart() {
     const ctx = document.getElementById('carbonChart').getContext('2d');
     
@@ -4597,21 +4596,36 @@ function initCarbonChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            
+            // 🔑 添加 layout 設定來控制整體間距
+            layout: {
+                padding: {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    right: 10
+                }
+            },
+            
             interaction: {
                 mode: 'index',
                 intersect: false,
             },
+            
             plugins: {
                 legend: {
                     display: true,
                     position: 'top',
+                    align: 'end',  // 🔑 靠右對齊
                     labels: {
                         usePointStyle: true,
-                        padding: 15,
+                        padding: 10,  // 🔑 減少 padding（原本是 15）
+                        boxWidth: 10,  // 🔑 添加圖示寬度
+                        boxHeight: 10, // 🔑 添加圖示高度
                         font: {
                             family: 'Inter',
-                            size: 13,
-                            weight: '600'
+                            size: 12,  // 🔑 稍微縮小字體
+                            weight: '500'  // 🔑 稍微減輕字重
                         }
                     }
                 },
@@ -4638,6 +4652,7 @@ function initCarbonChart() {
                     }
                 }
             },
+            
             scales: {
                 x: {
                     grid: {
@@ -4698,6 +4713,7 @@ function initCarbonChart() {
         }
     });
 }
+
 
 /**
  * 載入碳排圖表資料 - GitHub Pages 版本（使用 fetch）
