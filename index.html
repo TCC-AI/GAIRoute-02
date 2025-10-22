@@ -8,6 +8,55 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+        /* 預測控制器樣式 */
+#showPrediction {
+    accent-color: #fff;
+}
+
+#predictionDays:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 預測資訊卡片動畫 */
+#predictionInfo {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 預測線樣式（通過 Chart.js 配置，這裡僅作參考） */
+.prediction-line {
+    stroke-dasharray: 10, 5;
+    opacity: 0.8;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .card-header {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+    
+    .card-header > div {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    #predictionDays {
+        width: 50px !important;
+    }
+}
+
         @keyframes skeleton-loading {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
@@ -3610,6 +3659,27 @@ justify-content:flex-end; /* 右靠齊 */
                 <option value="90">近 90 天</option>
                 <option value="custom">自訂範圍</option>
             </select>
+
+                        <!-- 🆕 預測控制器 -->
+            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: white; font-size: 0.875rem; margin: 0;">
+                    <input type="checkbox" id="showPrediction" onchange="togglePrediction()" style="cursor: pointer; width: 16px; height: 16px;">
+                    <i class="fas fa-crystal-ball"></i>
+                    <span>預測</span>
+                </label>
+                
+                <input 
+                    type="number" 
+                    id="predictionDays" 
+                    min="1" 
+                    max="30" 
+                    value="7" 
+                    onchange="if(document.getElementById('showPrediction').checked) togglePrediction();"
+                    style="width: 60px; padding: 0.25rem 0.5rem; border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; background: rgba(255,255,255,0.2); color: white; text-align: center; font-size: 0.875rem;"
+                    placeholder="天數"
+                >
+                <span style="color: white; font-size: 0.875rem;">天</span>
+            </div>
             
             <!-- 自訂日期範圍（隱藏） -->
             <div id="customDateRange" style="display: none; gap: 0.5rem;">
@@ -4523,11 +4593,241 @@ function calculateTrendLine(data) {
     
     return data.map((_, i) => slope * i + intercept);
 }
+/**
+ * 預測未來趨勢（線性回歸）
+ * @param {Array} data - 歷史數據
+ * @param {number} days - 預測天數
+ * @returns {Array} 預測值陣列
+ */
+function predictFutureTrend(data, days = 7) {
+    console.log('🔮 開始預測未來趨勢...');
+    console.log('📊 歷史資料筆數:', data.length);
+    console.log('📅 預測天數:', days);
+    
+    // 過濾無效數據
+    const validData = data.filter(v => v !== null && v !== undefined && !isNaN(v));
+    
+    if (validData.length < 2) {
+        console.warn('⚠️ 資料不足，無法預測');
+        return [];
+    }
+    
+    // 計算線性回歸參數
+    const n = validData.length;
+    let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+    
+    for (let i = 0; i < n; i++) {
+        sumX += i;
+        sumY += validData[i];
+        sumXY += i * validData[i];
+        sumX2 += i * i;
+    }
+    
+    // 斜率和截距
+    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+    
+    console.log('📐 回歸參數 - 斜率:', slope.toFixed(4), '截距:', intercept.toFixed(4));
+    
+    // 計算預測值
+    const predictions = [];
+    const lastIndex = n - 1;
+    
+    for (let i = 1; i <= days; i++) {
+        const predictedValue = slope * (lastIndex + i) + intercept;
+        // 確保預測值不為負數
+        predictions.push(Math.max(0, predictedValue));
+    }
+    
+    console.log('✅ 預測完成:', predictions);
+    return predictions;
+}
 
-// 重新整理圖表
+/**
+ * 生成未來日期標籤
+ * @param {string} lastDate - 最後一個日期
+ * @param {number} days - 天數
+ * @returns {Array} 日期陣列
+ */
+function generateFutureDates(lastDate, days) {
+    const dates = [];
+    const baseDate = new Date(lastDate);
+    
+    for (let i = 1; i <= days; i++) {
+        const futureDate = new Date(baseDate);
+        futureDate.setDate(baseDate.getDate() + i);
+        dates.push(futureDate.toISOString().split('T')[0]);
+    }
+    
+    return dates;
+}
+
+/**
+ * 添加預測數據到圖表
+ * @param {number} days - 預測天數
+ */
+function addPredictionToChart(days = 7) {
+    console.log('🎨 添加預測線到圖表...');
+    
+    if (!carbonChartInstance || !carbonChartData.labels || carbonChartData.labels.length === 0) {
+        console.error('❌ 圖表未初始化或無資料');
+        if (window.app) {
+            app.showNotification('請先載入歷史資料', 'warning');
+        }
+        return;
+    }
+    
+    // 移除舊的預測線
+    removePredictionFromChart();
+    
+    // 取得最後日期
+    const lastDate = carbonChartData.labels[carbonChartData.labels.length - 1];
+    const futureDates = generateFutureDates(lastDate, days);
+    
+    // 為每個數據集添加預測
+    const predictionDatasets = [];
+    const datasetConfigs = [
+        { index: 0, name: '派車GAI', color: '#0ea5e9', yAxisID: 'yLeft', unit: '公斤' },
+        { index: 1, name: '運務GAI', color: '#10b981', yAxisID: 'yLeft', unit: '公斤' },
+        { index: 2, name: '託收托運GAI', color: '#f59e0b', yAxisID: 'yLeft', unit: '公斤' },
+        { index: 3, name: '營業額', color: '#ef4444', yAxisID: 'yRight', unit: '元' }
+    ];
+    
+    datasetConfigs.forEach(config => {
+        const dataset = carbonChartData.datasets[config.index];
+        if (!dataset) return;
+        
+        // 預測未來值
+        const predictions = predictFutureTrend(dataset.data, days);
+        
+        if (predictions.length === 0) return;
+        
+        // 創建預測數據集（包含歷史最後一點作為連接）
+        const lastHistoricalValue = dataset.data[dataset.data.length - 1];
+        const predictionData = new Array(carbonChartData.labels.length - 1).fill(null);
+        predictionData.push(lastHistoricalValue);
+        predictionData.push(...predictions);
+        
+        predictionDatasets.push({
+            label: `${config.name} (預測)`,
+            data: predictionData,
+            borderColor: config.color,
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            borderDash: [10, 5],
+            tension: 0.4,
+            yAxisID: config.yAxisID,
+            unit: config.unit,
+            pointRadius: 4,
+            pointBackgroundColor: config.color,
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            fill: false,
+            isPrediction: true // 標記為預測數據
+        });
+    });
+    
+    // 更新圖表標籤（添加未來日期）
+    carbonChartData.labels = [...carbonChartData.labels, ...futureDates];
+    
+    // 添加預測數據集
+    carbonChartData.datasets.push(...predictionDatasets);
+    
+    // 更新圖表
+    carbonChartInstance.update();
+    
+    console.log('✅ 預測線已添加');
+    
+    // 顯示預測資訊
+    showPredictionInfo(days);
+    
+    if (window.app) {
+        app.showNotification(`已添加 ${days} 天預測趨勢`, 'success');
+    }
+}
+
+/**
+ * 移除預測數據
+ */
+function removePredictionFromChart() {
+    if (!carbonChartInstance) return;
+    
+    console.log('🗑️ 移除預測線...');
+    
+    // 移除預測數據集
+    carbonChartData.datasets = carbonChartData.datasets.filter(dataset => !dataset.isPrediction);
+    
+    // 恢復原始標籤（移除未來日期）
+    const originalLabels = carbonChartData.labels.filter((label, index) => {
+        // 保留有實際數據的標籤
+        return carbonChartData.datasets[0].data[index] !== null;
+    });
+    
+    carbonChartData.labels = originalLabels;
+    
+    // 更新圖表
+    carbonChartInstance.update();
+    
+    // 隱藏預測資訊
+    const predictionInfo = document.getElementById('predictionInfo');
+    if (predictionInfo) {
+        predictionInfo.style.display = 'none';
+    }
+    
+    console.log('✅ 預測線已移除');
+}
+
+/**
+ * 顯示預測資訊
+ */
+function showPredictionInfo(days) {
+    const predictionInfo = document.getElementById('predictionInfo');
+    if (!predictionInfo) return;
+    
+    // 計算預測統計
+    const predictions = carbonChartData.datasets.filter(d => d.isPrediction);
+    if (predictions.length === 0) return;
+    
+    const dispatchPrediction = predictions[0].data.filter(v => v !== null);
+    const lastPrediction = dispatchPrediction[dispatchPrediction.length - 1];
+    const firstPrediction = dispatchPrediction[1]; // 第一個預測值（索引0是連接點）
+    
+    const trend = lastPrediction > firstPrediction ? '上升' : '下降';
+    const trendIcon = trend === '上升' ? '📈' : '📉';
+    const trendColor = trend === '上升' ? '#ef4444' : '#10b981';
+    
+    predictionInfo.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="font-size: 2rem;">${trendIcon}</div>
+            <div style="flex: 1;">
+                <div style="font-size: 0.875rem; opacity: 0.9;">未來 ${days} 天趨勢預測</div>
+                <div style="font-size: 1.25rem; font-weight: 700; margin-top: 0.25rem;">
+                    預測趨勢：<span style="color: ${trendColor};">${trend}</span>
+                </div>
+                <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.5rem;">
+                    ⚠️ 預測僅供參考，實際值可能因多種因素而有所不同
+                </div>
+            </div>
+            <button onclick="removePredictionFromChart()" style="padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; color: white; cursor: pointer; transition: all 0.3s; font-size: 0.875
+
+
+/**
+ * 重新整理圖表
+ */
 function refreshCarbonChart() {
+    console.log('🔄 重新整理碳排圖表...');
+    
+    // 移除預測線
+    const predictionCheckbox = document.getElementById('showPrediction');
+    if (predictionCheckbox && predictionCheckbox.checked) {
+        predictionCheckbox.checked = false;
+        removePredictionFromChart();
+    }
+    
+    // 重新載入資料
     loadCarbonChartData();
 }
+
 
 // 日期範圍選擇器事件
 document.getElementById('carbonDateRange').addEventListener('change', function() {
