@@ -12413,7 +12413,7 @@ async function loadCarbonChartData() {
     showLoading(true);
     
     // 🔥 修正：使用您的 Google Apps Script Web App URL
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxeVBwUqxqul3C-E9_beskVC8NjCDujblEjlyfT0kHvlcG7dL1I08Hm0kb8KPzd4uDVlA/exec';
     
     // 建構 API URL（GET 請求）
     const url = `${GOOGLE_SCRIPT_URL}?action=getCarbonChartData&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
