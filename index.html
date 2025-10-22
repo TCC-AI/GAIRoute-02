@@ -4617,7 +4617,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const CONFIG = {
             SPREADSHEET_ID: '1miCf_ZTVyzmA1MNbbZM3uUdZjluk99gZUH5w2q_XWs8',
             EXTERNAL_SPREADSHEET_ID: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc', // 第二個檔案ID（外部資料、GAI分析等）
-            GAS_URL: 'https://script.google.com/macros/s/AKfycbxeVBwUqxqul3C-E9_beskVC8NjCDujblEjlyfT0kHvlcG7dL1I08Hm0kb8KPzd4uDVlA/exec',
+            GAS_URL: 'https://script.google.com/macros/s/AKfycbyZkX_tW_3vk1edpwf7fDNVMLB0tpUgvvRda90-lzJFVCrZUHvGaVH-7Gfp7idFDznR5g/exec',
             USE_MOCK_DATA: false,
             MAPS_API_KEY: 'AIzaSyDtP8oDCXfr0CPLyVv_WrAqmk2V9QgteLI',
             WEATHER_API_KEY: 'a4806bc2577c0c227f9acd8bccb566a5',
@@ -7916,57 +7916,6 @@ refreshDeliveryReport() {
                 console.error('重新整理失敗:', error);
                 this.showNotification('重新整理失敗', 'error');
             });
-    }
-}
-
-// 執行外部 GAS 的 executeSteps1to5WithMemoryCleanup 程序（修正 CORS 版本）
-async executeSteps1to5WithMemoryCleanup() {
-    const externalGasUrl = 'https://script.google.com/macros/s/AKfycbzUERTOI-YGDJJ3_BjM4on4Sm0IZ-d4DRTssGtpQ6ZulKuyafKmwFf5mNE0lVifz_Y7mQ/exec';
-    
-    try {
-        // 先測試 GET 請求確認服務可用
-        console.log('測試外部 GAS 連線...');
-        const testResponse = await fetch(externalGasUrl, {
-            method: 'GET',
-            mode: 'no-cors', // 使用 no-cors 模式避免預檢請求
-        });
-        
-        console.log('連線測試完成，開始執行 POST 請求');
-        
-        const response = await fetch(externalGasUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'text/plain', // 改用 text/plain 避免預檢請求
-            },
-            body: JSON.stringify({
-                action: 'executeSteps1to5WithMemoryCleanup',
-                data: {
-                    timestamp: new Date().toISOString(),
-                    source: '昶青智慧冷鏈物流派車系統'
-                }
-            }),
-            mode: 'no-cors', // 使用 no-cors 模式
-        });
-        
-        console.log('POST 請求已發送');
-        
-        // 由於使用 no-cors 模式，無法讀取回應內容
-        // 但請求已經發送到外部 GAS
-        return {
-            success: true,
-            message: '外部程序執行請求已發送',
-            note: '由於 CORS 限制，無法確認執行結果，請檢查外部工作表'
-        };
-        
-    } catch (error) {
-        console.error('執行外部 executeSteps1to5WithMemoryCleanup 失敗:', error);
-        
-        // 提供更友善的錯誤訊息
-        if (error.name === 'TypeError') {
-            throw new Error('網路連線問題，請檢查網路狀態或稍後再試');
-        } else {
-            throw new Error(`外部程序執行失敗: ${error.message}`);
-        }
     }
 }
 
@@ -12413,7 +12362,7 @@ async function loadCarbonChartData() {
     showLoading(true);
     
     // 🔥 修正：使用您的 Google Apps Script Web App URL
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxeVBwUqxqul3C-E9_beskVC8NjCDujblEjlyfT0kHvlcG7dL1I08Hm0kb8KPzd4uDVlA/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZkX_tW_3vk1edpwf7fDNVMLB0tpUgvvRda90-lzJFVCrZUHvGaVH-7Gfp7idFDznR5g/exec';
     
     // 建構 API URL（GET 請求）
     const url = `${GOOGLE_SCRIPT_URL}?action=getCarbonChartData&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
