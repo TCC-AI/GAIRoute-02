@@ -4713,10 +4713,10 @@ function showDataStatistics() {
     
     // 計算總碳排量（三個GAI相加）
     const totalCarbonStats = {
-        total: dispatchStats.total + operationStats.total + storageStats.total,
-        avg: dispatchStats.avg + operationStats.avg + storageStats.avg,
-        max: dispatchStats.max + operationStats.max + storageStats.max,
-        min: dispatchStats.min + operationStats.min + storageStats.min
+        total: (dispatchStats.total * 1000) + operationStats.total + storageStats.total,
+        avg:  (dispatchStats.avg * 1000) + operationStats.avg + storageStats.avg,
+        max: (dispatchStats.max * 1000) + operationStats.max + storageStats.max,
+        min: (dispatchStats.min * 1000) + operationStats.min + storageStats.min
     };
     
     console.log('✅ 統計計算完成:', {
