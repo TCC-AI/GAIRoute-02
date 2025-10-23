@@ -4897,9 +4897,9 @@ function generateInsights(dispatch, operation, storage, revenue) {
     const insights = [];
     
     // 洞察 1: 最高碳排來源
-    const maxSource = Math.max(dispatch.total, operation.total, storage.total);
+    const maxSource = Math.max(dispatch.total * 1000, operation.total, storage.total);
     let maxSourceName = '';
-    if (maxSource === dispatch.total) maxSourceName = '派車GAI';
+    if (maxSource === dispatch.total * 1000) maxSourceName = '派車GAI';
     else if (maxSource === operation.total) maxSourceName = '運務GAI';
     else maxSourceName = '託收托運GAI';
     
