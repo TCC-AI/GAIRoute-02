@@ -4741,11 +4741,11 @@ function showDataStatistics() {
                 <div class="stat-icon">
                     <i class="fas fa-chart-line"></i>
                 </div>
-                <div class="stat-content">
-                    <span class="stat-label">總碳排量</span>
-                    <span class="stat-value">${totalCarbonStats.total.toFixed(2)}</span>
-                    <span class="stat-unit">公斤</span>
-                </div>
+                         <div class="stat-content">
+                <span class="stat-label">總碳排量</span>
+                <span class="stat-value">${(totalCarbonStats.total / 1000).toFixed(2)}</span>
+                <span class="stat-unit">公噸</span>
+            </div>
             </div>
             
             <div class="stat-card stat-card-success">
@@ -4766,7 +4766,7 @@ function showDataStatistics() {
                 <div class="stat-content">
                     <span class="stat-label">最高值</span>
                     <span class="stat-value">${totalCarbonStats.max.toFixed(2)}</span>
-                    <span class="stat-unit">公斤</span>
+                    <span class="stat-unit">公斤/天</span>
                 </div>
             </div>
             
@@ -4777,7 +4777,7 @@ function showDataStatistics() {
                 <div class="stat-content">
                     <span class="stat-label">最低值</span>
                     <span class="stat-value">${totalCarbonStats.min.toFixed(2)}</span>
-                    <span class="stat-unit">公斤</span>
+                    <span class="stat-unit">公斤/天</span>
                 </div>
             </div>
         </div>
