@@ -3644,33 +3644,85 @@ justify-content:flex-end; /* 右靠齊 */
 
                     </div>
                 </div>
-                <!-- 碳排追蹤折線圖區塊 -->
+<!-- 碳排追蹤折線圖區塊 -->
 <div class="card" style="margin-top: 2rem;">
-    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; padding: 1.5rem;">
         <h3 style="margin: 0; display: flex; align-items: center; gap: 0.75rem;">
             <i class="fas fa-chart-line"></i>
             碳排追蹤趨勢分析
         </h3>
-        <div style="display: flex; gap: 1rem; align-items: center;">
+        
+        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
             <!-- 日期範圍選擇器 -->
-            <select id="carbonDateRange" class="form-input" style="width: auto; padding: 0.5rem 1rem;">
-                <option value="7">近 7 天</option>
-                <option value="30" selected>近 30 天</option>
-                <option value="90">近 90 天</option>
-                <option value="custom">自訂範圍</option>
-            </select>
-            
-            <!-- 自訂日期範圍（隱藏） -->
-            <div id="customDateRange" style="display: none; gap: 0.5rem;">
-                <input type="date" id="startDate" class="form-input" style="width: auto; padding: 0.5rem;">
-                <span style="color: var(--gray-500);">至</span>
-                <input type="date" id="endDate" class="form-input" style="width: auto; padding: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <select id="carbonDateRange" class="form-input" style="width: auto; padding: 0.5rem 1rem; min-width: 120px;">
+                    <option value="7">近 7 天</option>
+                    <option value="30" selected>近 30 天</option>
+                    <option value="90">近 90 天</option>
+                    <option value="custom">自訂範圍</option>
+                </select>
+                
+                <!-- 自訂日期範圍（隱藏） -->
+                <div id="customDateRange" style="display: none; gap: 0.5rem;">
+                    <input type="date" id="startDate" class="form-input" style="width: auto; padding: 0.5rem;">
+                    <span style="color: var(--gray-500);">至</span>
+                    <input type="date" id="endDate" class="form-input" style="width: auto; padding: 0.5rem;">
+                </div>
             </div>
-
-                        <!-- 🆕 預測控制器 -->
-            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: white; font-size: 0.875rem; margin: 0;">
-                    <input type="checkbox" id="showPrediction" onchange="togglePrediction()" style="cursor: pointer; width: 16px; height: 16px;">
+            
+            <!-- 🆕 統計按鈕 -->
+            <button 
+                id="toggleStatsBtn"
+                onclick="toggleStatistics()" 
+                class="btn btn-sm" 
+                style="
+                    padding: 0.5rem 1rem; 
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    color: white; 
+                    border: none; 
+                    border-radius: 8px; 
+                    cursor: pointer; 
+                    display: flex; 
+                    align-items: center; 
+                    gap: 0.5rem; 
+                    transition: all 0.3s; 
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    position: relative;
+                    z-index: 10;
+                    white-space: nowrap;
+                ">
+                <i class="fas fa-chart-bar"></i>
+                顯示統計
+            </button>
+            
+            <!-- 🆕 預測控制器 -->
+            <div style="
+                display: flex; 
+                align-items: center; 
+                gap: 0.5rem; 
+                padding: 0.5rem 1rem; 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                border-radius: 8px; 
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                position: relative;
+                z-index: 10;
+            ">
+                <label style="
+                    display: flex; 
+                    align-items: center; 
+                    gap: 0.5rem; 
+                    cursor: pointer; 
+                    color: white; 
+                    font-size: 0.875rem; 
+                    margin: 0;
+                    white-space: nowrap;
+                ">
+                    <input 
+                        type="checkbox" 
+                        id="showPrediction" 
+                        onchange="togglePrediction()" 
+                        style="cursor: pointer; width: 16px; height: 16px;"
+                    >
                     <i class="fas fa-crystal-ball"></i>
                     <span>預測</span>
                 </label>
@@ -3682,51 +3734,49 @@ justify-content:flex-end; /* 右靠齊 */
                     max="30" 
                     value="7" 
                     onchange="if(document.getElementById('showPrediction').checked) togglePrediction();"
-                    style="width: 60px; padding: 0.25rem 0.5rem; border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; background: rgba(255,255,255,0.2); color: white; text-align: center; font-size: 0.875rem;"
+                    style="
+                        width: 60px; 
+                        padding: 0.25rem 0.5rem; 
+                        border: 1px solid rgba(255,255,255,0.3); 
+                        border-radius: 4px; 
+                        background: rgba(255,255,255,0.2); 
+                        color: white; 
+                        text-align: center; 
+                        font-size: 0.875rem;
+                    "
                     placeholder="天數"
                 >
                 <span style="color: white; font-size: 0.875rem;">天</span>
             </div>
+            
             <!-- 重新整理按鈕 -->
-            <button class="btn btn-primary" onclick="refreshCarbonChart()" style="padding: 0.5rem 1rem;">
+            <button 
+                class="btn btn-primary" 
+                onclick="refreshCarbonChart()" 
+                style="
+                    padding: 0.5rem 1rem;
+                    position: relative;
+                    z-index: 10;
+                    white-space: nowrap;
+                ">
                 <i class="fas fa-sync-alt"></i>
                 重新整理
             </button>
         </div>
     </div>
     
-    <div class="card-body">
-        <!-- 趨勢線控制區 -->
-        <div style="display: flex; justify-content: flex-end; gap: 1.5rem; margin-bottom: 1rem; padding: 0.75rem; background: var(--gray-50); border-radius: 8px;">
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
-                <input type="checkbox" id="trendDispatch" onchange="toggleTrendLine('dispatch')" style="cursor: pointer;">
-                <span>派車GAI趨勢線</span>
-            </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
-                <input type="checkbox" id="trendOperation" onchange="toggleTrendLine('operation')" style="cursor: pointer;">
-                <span>運務GAI趨勢線</span>
-            </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
-                <input type="checkbox" id="trendStorage" onchange="toggleTrendLine('storage')" style="cursor: pointer;">
-                <span>託收托運GAI趨勢線</span>
-            </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
-                <input type="checkbox" id="trendRevenue" onchange="toggleTrendLine('revenue')" style="cursor: pointer;">
-                <span>營業額趨勢線</span>
-            </label>
-        </div>
-        
-        <!-- 載入骨架屏 -->
-        <div id="carbonChartSkeleton" style="display: none;">
-            <div style="height: 400px; background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 12px;"></div>
-        </div>
-        
-        <!-- 圖表容器 -->
-        <div id="carbonChartContainer" style="position: relative; height: 500px;">
-            <canvas id="carbonChart"></canvas>
-        </div>
+    <!-- 🆕 統計資訊容器 -->
+    <div id="carbonStats" style="display: none; padding: 1.5rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0;"></div>
+    
+    <!-- 預測資訊顯示區 -->
+    <div id="predictionInfo" style="display: none; margin: 1rem 1.5rem 0;"></div>
+    
+    <!-- 圖表容器 -->
+    <div class="card-body" style="padding: 1.5rem;">
+        <canvas id="carbonChart"></canvas>
     </div>
 </div>
+
 
                 <!-- 快速操作區 -->
                 <div class="quick-actions">
