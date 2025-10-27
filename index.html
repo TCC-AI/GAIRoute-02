@@ -9716,7 +9716,9 @@ refreshRouteTable() {
 // 👇 在這裡添加 B模態處理方法
 async handleAIPreplanBMode() {
     const resultDiv = document.getElementById('gai-route-result');
+    resultDiv.style.textAlign = 'center';
     resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在佈建AI當日各路線預排表(高裝載模態)...';
+
 
     try {
         console.log('開始獲取當日各路線表(B)...');
