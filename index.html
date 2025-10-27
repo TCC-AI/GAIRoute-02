@@ -6479,7 +6479,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             // 處理低碳排模態
-// 處理低碳排模態
 async handleAIPreplanCMode() {
     const resultDiv = document.getElementById('gai-route-result');
     this.showPartialLoading('gai-route-result', '正在佈建AI當日各路線預排表(低碳排模態)...');
@@ -6517,14 +6516,16 @@ async handleAIPreplanCMode() {
                         </div>
                     </div>
                     ${cardsHtml}
-                    <div style="margin-top: 2rem; text-align: center; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
-                        <button class="btn btn-success btn-sm" onclick="app.exportRouteTableC()" style="margin-right: 0.5rem;">
-                            <i class="fas fa-download"></i> 匯出路線表(C)
-                        </button>
-                        <button class="btn btn-secondary btn-sm" onclick="app.refreshRouteTableC()">
-                            <i class="fas fa-sync-alt"></i> 重新整理
-                        </button>
-                    </div>
+                    
+<div style="margin-top: 2rem; text-align: center; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
+    <button class="btn btn-primary btn-sm" onclick="app.exportCurrentDayRouteSheet()" style="margin-right: 0.5rem;">
+        <i class="fas fa-download"></i> 匯出路線表
+    </button>
+    <button class="btn btn-secondary btn-sm" onclick="app.refreshRouteTable()">
+        <i class="fas fa-sync-alt"></i> 重新整理
+    </button>
+</div>
+
                 </div>
             `;
             
@@ -6544,17 +6545,6 @@ async handleAIPreplanCMode() {
         `;
     }
 }
-
-// 匯出路線表(C)功能
-exportRouteTableC() {
-    this.showNotification('匯出功能開發中...', 'info');
-}
-
-// 重新整理路線表(C)
-refreshRouteTableC() {
-    this.handleAIPreplanCMode();
-}
-
 
 // 匯出路線表(C)功能
 exportRouteTableC() {
