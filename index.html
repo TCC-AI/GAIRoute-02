@@ -8,633 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        @keyframes skeleton-loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-        /* 響應式調整 */
-@media (max-width: 768px) {
-    #deliveryPointsPanel .card-body > div:first-child {
-        grid-template-columns: 1fr !important;
-        gap: 1rem !important;
-    }
-    
-    #deliveryPointsPanel h3 {
-        font-size: 1.5rem !important;
-    }
-    
-    #morningOrderBtn, #eveningOrderBtn {
-        font-size: 1rem !important;
-        padding: 1rem 1.5rem !important;
-        min-height: 60px !important;
-    }
-}
-
-        /* 格式保留提示動畫 */
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOutRight {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-}
-
-/* 匯出按鈕增強樣式 */
-.export-btn-enhanced {
-    background: linear-gradient(135deg, #10b981, #059669);
-    border: none;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-}
-
-.export-btn-enhanced:hover {
-    background: linear-gradient(135deg, #059669, #047857);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
-}
-
-.export-btn-enhanced i {
-    margin-right: 0.5rem;
-}
-
-        /* ===== 左右分割佈局 ===== */
-.gai-split-layout {
-    display: flex;
-    height: calc(90vh - 148px);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* 左側聊天區域 (70%) */
-.gai-chat-section {
-    flex: 0 0 70%;
-    display: flex;
-    flex-direction: column;
-    background: #f8fafc;
-    border-right: 1px solid #e2e8f0;
-}
-
-.gai-chat-header {
-    padding: 1.5rem;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.gai-chat-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-}
-
-.gai-chat-history {
-    flex: 1;
-    max-height: 450px;
-    overflow-y: auto;
-    background: white;
-    border-radius: 12px;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border: 1px solid #e2e8f0;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
-}
-
-.gai-chat-input-area {
-    display: flex;
-    gap: 0.75rem;
-    align-items: flex-end;
-}
-
-.gai-chat-input {
-    flex: 1;
-    padding: 0.75rem 1rem;
-    border: 2px solid #d1d5db;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    resize: none;
-    min-height: 44px;
-    max-height: 120px;
-    transition: all 0.3s ease;
-}
-
-.gai-chat-input:focus {
-    outline: none;
-    border-color: #0ea5e9;
-    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
-}
-
-.gai-send-btn {
-    background: linear-gradient(135deg, #0ea5e9, #14b8a6);
-    color: white;
-    border: none;
-    padding: 0.75rem 1.25rem;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    min-width: 80px;
-    height: 44px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 14px rgba(14, 165, 233, 0.25);
-}
-
-.gai-send-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(14, 165, 233, 0.35);
-}
-
-.gai-send-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* 可調整分割線 */
-.gai-resizer {
-    width: 8px;
-    background: linear-gradient(to bottom, 
-        rgba(14, 165, 233, 0.1) 0%, 
-        rgba(20, 184, 166, 0.1) 100%);
-    cursor: col-resize;
-    position: relative;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-}
-
-.gai-resizer:hover {
-    background: linear-gradient(to bottom, 
-        rgba(14, 165, 233, 0.2) 0%, 
-        rgba(20, 184, 166, 0.2) 100%);
-}
-
-.gai-resizer::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 3px;
-    height: 40px;
-    background: rgba(14, 165, 233, 0.4);
-    border-radius: 2px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.gai-resizer:hover::before {
-    opacity: 1;
-}
-
-.gai-resizer.resizing {
-    background: linear-gradient(to bottom, 
-        rgba(14, 165, 233, 0.3) 0%, 
-        rgba(20, 184, 166, 0.3) 100%);
-}
-
-.gai-resizer.resizing::before {
-    opacity: 1;
-    background: rgba(14, 165, 233, 0.8);
-}
-
-/* 右側功能區域 (30%) */
-.gai-functions-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background: #ffffff;
-}
-
-.gai-functions-header {
-    padding: 1.5rem;
-    background: linear-gradient(135deg, #fcfcfc 0%, #f1f5f9 100%);
-    border-bottom: 1px solid #e2e8f0;
-    text-align: center;
-}
-
-.gai-secretary-avatar {
-    width: 220px;
-    height: 220px;
-    border-radius: 30%;
-    object-fit: cover;
-    border: 3px solid rgba(255, 255, 255, 0.8);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    position: relative;
-    /* 添加動畫基礎 */
-    animation: r2-breathing 4s ease-in-out infinite;
-}
-
-/* R2 呼吸動畫 */
-@keyframes r2-breathing {
-    0%, 100% { 
-        transform: scale(1);
-        filter: brightness(1) saturate(1);
-    }
-    50% { 
-        transform: scale(1.02);
-        filter: brightness(1.1) saturate(1.1);
-    }
-}
-
-/* R2 表情狀態 */
-.gai-secretary-avatar.happy {
-    animation: r2-happy 1s ease-in-out;
-    filter: brightness(1.2) saturate(1.3) hue-rotate(10deg);
-}
-
-.gai-secretary-avatar.thinking {
-    animation: r2-thinking 2s ease-in-out infinite;
-}
-
-.gai-secretary-avatar.working {
-    animation: r2-working 1.5s ease-in-out infinite;
-    filter: brightness(0.9) saturate(1.2) hue-rotate(-10deg);
-}
-
-/* R2 開心動畫 */
-@keyframes r2-happy {
-    0%, 100% { 
-        transform: scale(1) rotate(0deg);
-    }
-    25% { 
-        transform: scale(1.1) rotate(-2deg);
-    }
-    75% { 
-        transform: scale(1.1) rotate(2deg);
-    }
-}
-
-/* R2 思考動畫 */
-@keyframes r2-thinking {
-    0%, 100% { 
-        transform: scale(1) rotate(0deg);
-        filter: brightness(1) saturate(1);
-    }
-    25% { 
-        transform: scale(0.98) rotate(-1deg);
-        filter: brightness(0.95) saturate(0.9);
-    }
-    75% { 
-        transform: scale(0.98) rotate(1deg);
-        filter: brightness(0.95) saturate(0.9);
-    }
-}
-
-/* R2 工作動畫 */
-@keyframes r2-working {
-    0%, 100% { 
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% { 
-        opacity: 0.8;
-        transform: scale(0.98);
-    }
-}
-
-/* R2 懸停效果 */
-.gai-secretary-avatar:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 35px rgba(14, 165, 233, 0.4);
-    animation: r2-hover 0.6s ease-in-out;
-}
-
-@keyframes r2-hover {
-    0%, 100% { 
-        transform: scale(1.05);
-    }
-    50% { 
-        transform: scale(1.08) rotate(1deg);
-    }
-}
-
-
-.gai-functions-content {
-    flex: 1;
-    padding: 1rem;
-    overflow-y: auto;
-}
-
-.gai-function-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-}
-
-.gai-function-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    background: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: left;
-    font-size: 0.9rem;
-    min-height: 60px;
-}
-
-.gai-function-btn:hover {
-    border-color: #0ea5e9;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
-}
-
-.gai-function-btn i {
-    font-size: 1.25rem;
-    color: #0ea5e9;
-    min-width: 20px;
-}
-
-.gai-function-text {
-    flex: 1;
-}
-
-.gai-function-title {
-    font-weight: 600;
-    color: #1e293b;
-    margin-bottom: 0.25rem;
-}
-
-.gai-function-desc {
-    font-size: 0.8rem;
-    color: #64748b;
-}
-
-/* 快速操作區 */
-.gai-quick-actions {
-    border-top: 1px solid #e2e8f0;
-    padding: 1rem;
-    background: #f8fafc;
-}
-
-.gai-quick-actions h6 {
-    margin-bottom: 0.75rem;
-    color: #64748b;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.gai-quick-btn-group {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.gai-quick-btn {
-    flex: 1;
-    min-width: 0;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    background: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-}
-
-.gai-quick-btn:hover {
-    border-color: #0ea5e9;
-    background: #f0f9ff;
-    color: #0ea5e9;
-}
-
-/* 聊天訊息樣式 */
-.chat-message {
-    margin-bottom: 1rem;
-    padding: 0.75rem;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    animation: messageSlideIn 0.3s ease;
-}
-
-@keyframes messageSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.chat-message.user-message {
-    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-    color: #1e40af;
-    margin-left: 2rem;
-    border-bottom-right-radius: 4px;
-}
-
-.chat-message.assistant-message {
-    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-    color: #166534;
-    margin-right: 2rem;
-    border-bottom-left-radius: 4px;
-}
-
-.chat-message.system-message {
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    color: #92400e;
-    text-align: center;
-    font-style: italic;
-}
-
-.chat-message-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-}
-
-.chat-message-content {
-    white-space: pre-wrap;
-}
-
-/* 響應式設計 */
-@media (max-width: 1200px) {
-    .gai-split-layout {
-        flex-direction: column;
-        height: auto;
-    }
-    
-    .gai-chat-section {
-        flex: none;
-        border-right: none;
-        border-bottom: 1px solid #e2e8f0;
-    }
-    
-    .gai-chat-history {
-        max-height: 300px;
-    }
-    
-    .gai-resizer {
-        display: none;
-    }
-    
-    .gai-functions-section {
-        flex: none;
-    }
-    
-    .gai-function-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-}
-
-@media (max-width: 768px) {
-    .gai-chat-input-area {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .gai-send-btn {
-        width: 100%;
-    }
-    
-    .gai-secretary-avatar {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .gai-function-btn {
-        padding: 0.75rem;
-        min-height: 50px;
-    }
-    
-    .gai-quick-btn-group {
-        flex-direction: column;
-    }
-}
-
-/* 滾動條美化 */
-.gai-chat-history::-webkit-scrollbar,
-.gai-functions-content::-webkit-scrollbar {
-    width: 6px;
-}
-
-.gai-chat-history::-webkit-scrollbar-track,
-.gai-functions-content::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 3px;
-}
-
-.gai-chat-history::-webkit-scrollbar-thumb,
-.gai-functions-content::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #0ea5e9, #14b8a6);
-    border-radius: 3px;
-}
-
-.gai-chat-history::-webkit-scrollbar-thumb:hover,
-.gai-functions-content::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, #0284c7, #0d9488);
-}
-
-        /* GAI助手對話框專用樣式 */
-.gai-assistant-header {
-    min-height: 40px !important;
-    padding: 20px 18px !important;
-    background: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%) !important;
-    color: white !important;
-    border-radius: 24px 24px 0 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    box-sizing: border-box !important;
-}
-
-.gai-assistant-header h4 {
-    color: white !important;
-    margin: 0 !important;
-    font-size: 1.5rem !important;
-    font-weight: 600 !important;
-    line-height: 1.2 !important;
-}
-
-.gai-assistant-header .modal-close {
-    color: white !important;
-    font-size: 2rem !important;
-    cursor: pointer !important;
-    padding: 0.5rem !important;
-    border-radius: 8px !important;
-    transition: all 0.2s ease !important;
-    line-height: 1 !important;
-}
-
-.gai-assistant-header .modal-close:hover {
-    background: rgba(255, 255, 255, 0.2) !important;
-}
-
-        /* 美化滾動條 */
-.gai-modal-content::-webkit-scrollbar {
-    width: 6px;
-}
-
-.gai-modal-content::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 3px;
-}
-
-.gai-modal-content::-webkit-scrollbar-thumb {
-    background: #0ea5e9;
-    border-radius: 3px;
-}
-
-.gai-modal-content::-webkit-scrollbar-thumb:hover {
-    background: #0284c7;
-}
-
-        /* 在 CSS 中添加 */
-.gai-modal-header {
-    position: sticky;
-    top: 0;
-    background: white;
-    z-index: 10;
-    padding: 1rem;
-    text-align: center;
-    border-radius: 24px 24px 0 0;
-}
-
-.gai-secretary-avatar {
-    width: 60px;      /* 👈 縮小頭像 */
-    height: 60px;     /* 👈 縮小頭像 */
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid rgba(255, 255, 255, 0.8);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    margin-bottom: 0.5rem;
-}
-
         .btn-outline-primary {
     background: transparent;
     color: #0ea5e9;
@@ -671,8 +44,8 @@
        
         /* 針對GAI秘書頭像的樣式調整 */
 .gai-secretary-avatar {
-    width: 200px;
-    height: 200px;
+    width: 240px;
+    height: 240px;
     border-radius: 50%;
     object-fit: cover; /* 或 contain，根據圖片需求 */
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
@@ -1694,9 +1067,6 @@
             box-shadow: var(--shadow-xl);
             position: relative;
             overflow: hidden;
-            display: flex; /* 👈 新增：使用 flexbox 佈局 */
-            align-items: center; /* 👈 新增：垂直居中 */
-            justify-content: space-between; /* 👈 新增：左右分佈 */
         }
 
         .weather-card::before {
@@ -2111,8 +1481,8 @@
             border-radius: 24px;
             box-shadow: var(--shadow-2xl);
             width: 100%;
-            max-width: 1600px;
-            max-height: 900px;
+            max-width: 600px;
+            max-height: 90vh;
             overflow-y: auto;
             border: 1px solid rgba(255, 255, 255, 0.2);
             animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -2980,7 +2350,7 @@
   font-size:.25rem;
   color:#64748b;
   flex-wrap:wrap;
-justify-content:flex-end; /* 右靠齊 */
+justify-content:flex-end; / 右靠齊 */
     
 }
 .dashboard-data-meta .fresh-badge {
@@ -3270,10 +2640,10 @@ justify-content:flex-end; /* 右靠齊 */
                     <i class="fas fa-tachometer-alt"></i>
                     <span>主控台</span>
                 </li>
-                <!-- 👇 新增 TCC-GAI派車中心數位主任<br>Lisa 選單項目 -->
+                <!-- 👇 新增 GAI派車數位專員 選單項目 -->
                 <li class="menu-item" data-action="gai-assistant" data-permission="basic">
                     <i class="fas fa-robot"></i>
-                    <span>TCC-GAI派車中心數位主任<br>Lisa</span>
+                    <span>GAI派車數位專員</span>
                 </li>
                 <li class="menu-item" data-page="route-optimization" data-permission="route-optimization">
                     <i class="fas fa-brain"></i>
@@ -3283,11 +2653,6 @@ justify-content:flex-end; /* 右靠齊 */
                     <i class="fas fa-route"></i>
                     <span>路線管理</span>
                 </li>
-                <!-- 👇 新增：各路線板數選單項目 -->
-<li class="menu-item" data-page="route-pallets" data-permission="route-management">
-    <i class="fas fa-clipboard-list"></i>
-    <span>各路線板數</span>
-</li>
                 <li class="menu-item" data-page="seasonal-routes" data-permission="seasonal-routes">
                     <i class="fas fa-calendar-alt"></i>
                     <span>季節性路線</span>
@@ -3328,91 +2693,35 @@ justify-content:flex-end; /* 右靠齊 */
                 </div>
 
                 <!-- 天氣資訊卡片 -->
-<div class="weather-card" id="weatherCard" style="
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-">
-    <!-- 左側天氣資訊 -->
-    <div style="flex: 0 0 70%; position: relative; z-index: 1;">
-        <div class="weather-header">
-            <div>
-                <div class="weather-temp" id="weatherTemp">--°C</div>
-                <div id="weatherDescription">資料同步化...</div>
-            </div>
-            <div class="weather-icon" id="weatherIcon">
-                <i class="fas fa-cloud"></i>
-            </div>
-        </div>
-        <div class="weather-details">
-            <div class="weather-detail">
-                <i class="fas fa-eye"></i>
-                <span id="weatherVisibility">-- km</span>
-            </div>
-            <div class="weather-detail">
-                <i class="fas fa-wind"></i>
-                <span id="weatherWind">-- km/h</span>
-            </div>
-            <div class="weather-detail">
-                <i class="fas fa-tint"></i>
-                <span id="weatherHumidity">--%</span>
-            </div>
-            <div class="weather-detail">
-                <i class="fas fa-thermometer-half"></i>
-                <span id="weatherFeelsLike">--°C</span>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 右側R2.png圖片 -->
-    <div style="
-        flex: 0 0 30%;
-        display: flex;
-        flex-direction: column; /* 👈 新增：垂直排列 */
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        z-index: 1;
-        padding-left: 10rem; /* 👈 新增：增加左側內邊距 */
-        gap: 0.8rem; /* 👈 新增：圖片與文字間距 */
-    ">
-        <img src="R2.png" alt="TCC-GAI派車中心數位主任<br>Lisa" style="
-            width: 220px;
-            height: 220px;
-            border-radius: 30%;
-            object-fit: cover;
-            border: 3px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        " onclick="app.showGAISecretaryModal()">
-         <!-- 文字標籤 -->
-        <div style="
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-align: center;
-            line-height: 1.2;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            letter-spacing: 0.5px;
-            cursor: pointer;
-        " onclick="app.showGAISecretaryModal()">
-            TCC-GAI派車中心<br>數位主任<br>Lisa
-        </div>
-    </div>
-    
-    <!-- 背景裝飾保持不變 -->
-    <div style="
-        position: absolute;
-        top: -50%;
-        right: -50%;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-        animation: weatherFloat 15s ease-in-out infinite;
-    "></div>
-</div>
-
+                <div class="weather-card" id="weatherCard">
+                    <div class="weather-header">
+                        <div>
+                            <div class="weather-temp" id="weatherTemp">--°C</div>
+                            <div id="weatherDescription">資料同步化...</div>
+                        </div>
+                        <div class="weather-icon" id="weatherIcon">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                    </div>
+                    <div class="weather-details">
+                        <div class="weather-detail">
+                            <i class="fas fa-eye"></i>
+                            <span id="weatherVisibility">-- km</span>
+                        </div>
+                        <div class="weather-detail">
+                            <i class="fas fa-wind"></i>
+                            <span id="weatherWind">-- km/h</span>
+                        </div>
+                        <div class="weather-detail">
+                            <i class="fas fa-tint"></i>
+                            <span id="weatherHumidity">--%</span>
+                        </div>
+                        <div class="weather-detail">
+                            <i class="fas fa-thermometer-half"></i>
+                            <span id="weatherFeelsLike">--°C</span>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- 地圖儀表板 -->
                 <div class="maps-dashboard" id="mapsDashboard" style="display: none;">
@@ -3595,69 +2904,6 @@ justify-content:flex-end; /* 右靠齊 */
 
                     </div>
                 </div>
-                <!-- 碳排追蹤折線圖區塊 -->
-<div class="card" style="margin-top: 2rem;">
-    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="margin: 0; display: flex; align-items: center; gap: 0.75rem;">
-            <i class="fas fa-chart-line"></i>
-            碳排追蹤趨勢分析
-        </h3>
-        <div style="display: flex; gap: 1rem; align-items: center;">
-            <!-- 日期範圍選擇器 -->
-            <select id="carbonDateRange" class="form-input" style="width: auto; padding: 0.5rem 1rem;">
-                <option value="7">近 7 天</option>
-                <option value="30" selected>近 30 天</option>
-                <option value="90">近 90 天</option>
-                <option value="custom">自訂範圍</option>
-            </select>
-            
-            <!-- 自訂日期範圍（隱藏） -->
-            <div id="customDateRange" style="display: none; gap: 0.5rem;">
-                <input type="date" id="startDate" class="form-input" style="width: auto; padding: 0.5rem;">
-                <span style="color: var(--gray-500);">至</span>
-                <input type="date" id="endDate" class="form-input" style="width: auto; padding: 0.5rem;">
-            </div>
-            
-            <!-- 重新整理按鈕 -->
-            <button class="btn btn-primary" onclick="refreshCarbonChart()" style="padding: 0.5rem 1rem;">
-                <i class="fas fa-sync-alt"></i>
-                重新整理
-            </button>
-        </div>
-    </div>
-    
-    <div class="card-body">
-        <!-- 趨勢線控制區 -->
-        <div style="display: flex; justify-content: flex-end; gap: 1.5rem; margin-bottom: 1rem; padding: 0.75rem; background: var(--gray-50); border-radius: 8px;">
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
-                <input type="checkbox" id="trendDispatch" onchange="toggleTrendLine('dispatch')" style="cursor: pointer;">
-                <span>派車GAI趨勢線</span>
-            </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
-                <input type="checkbox" id="trendOperation" onchange="toggleTrendLine('operation')" style="cursor: pointer;">
-                <span>運務GAI趨勢線</span>
-            </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
-                <input type="checkbox" id="trendStorage" onchange="toggleTrendLine('storage')" style="cursor: pointer;">
-                <span>託收托運GAI趨勢線</span>
-            </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
-                <input type="checkbox" id="trendRevenue" onchange="toggleTrendLine('revenue')" style="cursor: pointer;">
-                <span>營業額趨勢線</span>
-            </label>
-        </div>
-        
-        <!-- 載入骨架屏 -->
-        <div id="carbonChartSkeleton" style="display: none;">
-            <div style="height: 500px; background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 12px;"></div>
-        </div>
-        
-        <!-- 圖表容器 -->
-        <div id="carbonChartContainer" style="position: relative; height: 500px;">
-            <canvas id="carbonChart"></canvas>
-        </div>
-    </div>
-</div>
 
                 <!-- 快速操作區 -->
                 <div class="quick-actions">
@@ -3751,95 +2997,31 @@ justify-content:flex-end; /* 右靠齊 */
                     <h1 style="color: #e3299f;"><i class="fas fa-brain"></i> GAI-精準智慧物流路徑規劃</h1>
                 </div>
                                 <!-- 派車收送點清單區塊 -->
-<!-- 重新設計的客戶下單收送點資料區塊 -->
-<div id="deliveryPointsPanel" class="card" style="margin-bottom: 1.5rem;">
-  <div class="card-header">
-    <h2 style="margin: 0; color: #02adeb; font-size: 1.5rem; font-weight: 700;">
-      1.【客戶下單】收送點資料
-    </h2>
-  </div>
-  <div class="card-body" style="padding: 2rem;">
-    
-    <!-- 今日日期顯示區域 -->
-    <div style="text-align: center; margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
-      <h3 style="margin: 0; font-size: 2rem; font-weight: 700; color: #1e293b; letter-spacing: -0.5px;">
-        今日日期：<span style="color: #0ea5e9;" id="currentDateDisplay">2025/09/14</span>
-      </h3>
-    </div>
-
-    <!-- 按鈕區域 -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
-      <!-- 早班訂單資訊按鈕 -->
-      <div style="text-align: center;">
-        <button id="morningOrderBtn" style="
-          background: linear-gradient(135deg, #fbbf24, #f59e0b);
-          color: white;
-          border: none;
-          padding: 1.5rem 2rem;
-          border-radius: 16px;
-          font-size: 1.25rem;
-          font-weight: 700;
-          cursor: pointer;
-          box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          width: 100%;
-          min-height: 80px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.75rem;
-        " 
-        onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 35px rgba(251, 191, 36, 0.4)';"
-        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(251, 191, 36, 0.3)';">
-          <i class="fas fa-sun" style="font-size: 1.5rem;"></i>
-          早班訂單資訊
-        </button>
-        <div style="margin-top: 0.75rem; font-size: 0.875rem; color: #64748b; font-weight: 500;">
-          每日下午18:00結算
-        </div>
-      </div>
-
-      <!-- 晚班訂單資訊按鈕 -->
-      <div style="text-align: center;">
-        <button id="eveningOrderBtn" style="
-          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-          color: white;
-          border: none;
-          padding: 1.5rem 2rem;
-          border-radius: 16px;
-          font-size: 1.25rem;
-          font-weight: 700;
-          cursor: pointer;
-          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          width: 100%;
-          min-height: 80px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.75rem;
-        "
-        onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 35px rgba(59, 130, 246, 0.4)';"
-        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(59, 130, 246, 0.3)';">
-          <i class="fas fa-moon" style="font-size: 1.5rem;"></i>
-          晚班訂單資訊
-        </button>
-        <div style="margin-top: 0.75rem; font-size: 0.875rem; color: #64748b; font-weight: 500;">
-          每日下午16:30、19:00各結算一次
-        </div>
-      </div>
-    </div>
-
-    <!-- 資料顯示區域 -->
-    <div id="deliveryPointsTableContainer">
-      <!-- 資料表格將由 JS 動態產生 -->
-    </div>
-    <button id="toggleDeliveryPoints" class="btn btn-secondary btn-sm" style="margin-top: 0.5rem; display: none;">
-      展開更多
-    </button>
-  </div>
-</div>
-
+                <div id="deliveryPointsPanel" class="card" style="margin-bottom: 1.5rem;">
+                  <div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                      <h2 style="margin: 0; color: #02adeb;">1.【客戶下單】收送點資料</h2>
+                    </div>
+                    <div>
+                      <input type="date" id="deliveryDatePicker" class="form-input" style="width: auto;">
+                      <button class="btn btn-primary btn-sm" id="fetchDeliveryPointsBtn">
+                        <i class="fas fa-search"></i> 查詢
+                      </button>
+                                         <!-- 新增上次查詢按鈕 -->
+                        <button class="btn btn-info btn-sm" id="lastQueryBtn">
+                          <i class="fas fa-history"></i> 歷史查詢
+                        </button>
+                    </div>
+                  </div>
+                  <div class="card-body" style="padding: 1rem;">
+                    <div id="deliveryPointsTableContainer">
+                      <!-- 資料表格將由 JS 動態產生 -->
+                    </div>
+                    <button id="toggleDeliveryPoints" class="btn btn-secondary btn-sm" style="margin-top: 0.5rem; display: none;">
+                      展開更多
+                    </button>
+                  </div>
+                </div>
                                 <!-- 【GAI智慧預排】當日路線區塊 -->
                 <div id="gai-route-section" style="margin-top:2em; border:1px solid #e2e8f0; border-radius:8px; padding:1em; background:#fff;">
                   <h3 style="margin-bottom:1em;">2.【GAI智慧預排】當日路線</h3>
@@ -3999,37 +3181,6 @@ justify-content:flex-end; /* 右靠齊 */
                     </div>
                 </div>
             </div>
-                <!-- 👇 新增：各路線板數頁面 -->
-<div id="route-pallets" class="page">
-    <div class="page-header">
-        <h2><i class="fas fa-clipboard-list"></i> 各路線板數</h2>
-        <div class="header-actions">
-            <button class="btn btn-primary" id="refreshRoutePallets">
-                <i class="fas fa-sync-alt"></i> 重新整理
-            </button>
-            <button class="btn btn-success" id="exportRoutePallets">
-                <i class="fas fa-download"></i> 匯出資料
-            </button>
-        </div>
-    </div>
-
-    <!-- 資料載入區域 -->
-    <div class="card">
-        <div class="card-header">
-            <h3>各路線板數統計</h3>
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <span id="routePalletsDataTime" style="font-size: 0.875rem; color: #64748b;"></span>
-                <span id="routePalletsStatus" class="fresh-badge">載入中</span>
-            </div>
-        </div>
-        <div class="card-body">
-            <div id="routePalletsTableContainer">
-                <!-- 資料表格將在這裡動態載入 -->
-            </div>
-        </div>
-    </div>
-</div>
-
 
             <!-- 季節性路線頁面 -->
             <div id="seasonal-routes" class="page">
@@ -4157,7 +3308,7 @@ justify-content:flex-end; /* 右靠齊 */
             <div class="modal-header">
                 <h3 style="color: #fafcfc;">
                     <i class="fas fa-robot" style="margin-right: 0.5rem;"></i>
-                    TCC-GAI派車中心數位主任<br>Lisa
+                    GAI派車數位秘書
                 </h3>
                 <span class="modal-close" id="gaiModalClose">&times;</span>
             </div>
@@ -4179,386 +3330,6 @@ justify-content:flex-end; /* 右靠齊 */
     </div>
 
     <script>
-        // R2 角色控制類別
-class R2Character {
-    constructor() {
-        this.element = null;
-        this.currentEmotion = 'normal';
-        this.isAnimating = false;
-        this.init();
-    }
-    
-    init() {
-        // 找到所有 R2 圖片元素
-        this.elements = document.querySelectorAll('.gai-secretary-avatar, img[src*="R2.png"]');
-        this.bindEvents();
-    }
-    
-    bindEvents() {
-        this.elements.forEach(element => {
-            // 點擊互動
-            element.addEventListener('click', () => {
-                this.showEmotion(element, 'happy');
-                // 觸發 GAI 對話框
-                if (typeof app !== 'undefined' && app.showGAISecretaryModal) {
-                    setTimeout(() => app.showGAISecretaryModal(), 300);
-                }
-            });
-            
-            // 滑鼠懸停
-            element.addEventListener('mouseenter', () => {
-                if (!this.isAnimating) {
-                    this.showEmotion(element, 'thinking');
-                }
-            });
-            
-            element.addEventListener('mouseleave', () => {
-                this.resetEmotion(element);
-            });
-        });
-    }
-    
-    showEmotion(element, emotion) {
-        if (!element) return;
-        
-        this.isAnimating = true;
-        
-        // 移除所有表情類別
-        element.classList.remove('happy', 'thinking', 'working', 'normal');
-        
-        // 添加新表情
-        element.classList.add(emotion);
-        this.currentEmotion = emotion;
-        
-        // 動畫結束後重置
-        setTimeout(() => {
-            this.isAnimating = false;
-        }, emotion === 'happy' ? 1000 : 2000);
-    }
-    
-    resetEmotion(element) {
-        if (!element || this.isAnimating) return;
-        
-        element.classList.remove('happy', 'thinking', 'working');
-        element.classList.add('normal');
-        this.currentEmotion = 'normal';
-    }
-    
-    // 工作狀態（AI 正在思考時）
-    setWorkingState() {
-        this.elements.forEach(element => {
-            this.showEmotion(element, 'working');
-        });
-    }
-    
-    // 開心狀態
-    setHappyState() {
-        this.elements.forEach(element => {
-            this.showEmotion(element, 'happy');
-        });
-    }
-    
-    // 思考狀態
-    setThinkingState() {
-        this.elements.forEach(element => {
-            this.showEmotion(element, 'thinking');
-        });
-    }
-    
-    // 隨機表情
-    randomEmotion() {
-        const emotions = ['happy', 'thinking'];
-        const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
-        this.elements.forEach(element => {
-            this.showEmotion(element, randomEmotion);
-        });
-    }
-}
-
-        // 更新當前日期顯示
-function updateCurrentDateDisplay() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const dateString = `${year}/${month}/${day}`;
-    
-    const dateElement = document.getElementById('currentDateDisplay');
-    if (dateElement) {
-        dateElement.textContent = dateString;
-    }
-}
-
-// 早班訂單按鈕事件
-document.getElementById('morningOrderBtn')?.addEventListener('click', function() {
-    app.showNotification('正在載入早班訂單資訊...', 'info');
-    // 這裡添加早班訂單的處理邏輯
-    fetchMorningOrders();
-});
-
-// 晚班訂單按鈕事件
-document.getElementById('eveningOrderBtn')?.addEventListener('click', function() {
-    app.showNotification('正在載入晚班訂單資訊...', 'info');
-    // 這裡添加晚班訂單的處理邏輯
-    fetchEveningOrders();
-});
-
-// 早班訂單處理函數
-async function fetchMorningOrders() {
-    try {
-        // 實作早班訂單邏輯
-        console.log('載入早班訂單...');
-    } catch (error) {
-        app.showNotification('載入早班訂單失敗', 'error');
-    }
-}
-
-// 晚班訂單處理函數
-async function fetchEveningOrders() {
-    try {
-        // 實作晚班訂單邏輯
-        console.log('載入晚班訂單...');
-    } catch (error) {
-        app.showNotification('載入晚班訂單失敗', 'error');
-    }
-}
-
-        /**
- * 顯示當日各路線表資料
- */
-async function showCurrentDayRouteTable() {
-    const container = document.getElementById('deliveryPointsTableContainer');
-    
-    // 顯示載入狀態
-    app.showPartialLoading('deliveryPointsTableContainer', '正在載入當日各路線表...');
-    
-    try {
-        console.log('開始獲取當日各路線表...');
-        
-        const result = await app.apiCall('getCurrentDayRouteTable', {
-            targetSpreadsheetId: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc'
-        });
-        
-        console.log('API 返回結果:', result);
-        
-        if (result && result.length > 0) {
-            displayRouteTableData(result);
-            app.showNotification(`成功載入當日各路線表，共 ${result.length} 筆資料`, 'success');
-        } else {
-            showEmptyRouteTableState();
-            app.showNotification('當日各路線表暫無資料', 'info');
-        }
-        
-    } catch (error) {
-        console.error('載入當日各路線表失敗:', error);
-        app.showErrorState('deliveryPointsTableContainer', error.message);
-        app.showNotification(`載入失敗: ${error.message}`, 'error');
-    }
-}
-
-/**
- * 顯示當日各路線表資料
- */
-function displayRouteTableData(data) {
-    const container = document.getElementById('deliveryPointsTableContainer');
-    
-    if (!data || data.length === 0) {
-        showEmptyRouteTableState();
-        return;
-    }
-
-    // 生成表格 HTML（保持 Google Sheet 的格式）
-    const headers = Object.keys(data[0]);
-    let tableHtml = `
-        <div style="margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 8px; border-left: 4px solid #0ea5e9;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <h4 style="margin: 0 0 0.5rem 0; color: #0ea5e9;">
-                        <i class="fas fa-route"></i> 當日各路線表
-                    </h4>
-                    <p style="margin: 0; color: #64748b; font-size: 0.875rem;">
-                        資料更新時間: ${new Date().toLocaleString('zh-TW')} | 共 ${data.length} 筆資料
-                    </p>
-                </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn btn-secondary btn-sm" onclick="toggleRouteTableView()" title="切換檢視模式">
-                        <i class="fas fa-table"></i>
-                    </button>
-                    <button class="btn btn-info btn-sm" onclick="exportRouteTableData()" title="匯出資料">
-                        <i class="fas fa-download"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <div style="overflow-x: auto; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-            <table class="data-table" style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
-    `;
-
-    // 表頭
-    headers.forEach(header => {
-        tableHtml += `
-            <th style="
-                padding: 1rem 0.75rem; 
-                text-align: left; 
-                border-bottom: 2px solid #e2e8f0; 
-                font-weight: 600; 
-                color: #374151;
-                font-size: 0.875rem;
-                letter-spacing: 0.025em;
-            ">${header}</th>
-        `;
-    });
-
-    tableHtml += `
-                    </tr>
-                </thead>
-                <tbody>
-    `;
-
-    // 表格內容
-    data.forEach((row, index) => {
-        const bgColor = index % 2 === 0 ? '#ffffff' : '#f8fafc';
-        
-        // 檢查是否為路線分隔符
-        const isRouteSeparator = row['路線名稱'] && row['路線名稱'].includes('結束');
-        const separatorStyle = isRouteSeparator ? 
-            'background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); font-weight: 600; color: #92400e;' : 
-            `background-color: ${bgColor};`;
-            
-        tableHtml += `<tr style="${separatorStyle} transition: all 0.2s ease;">`;
-        
-        headers.forEach((header, headerIndex) => {
-            let cellValue = row[header] || '';
-            
-            // 特殊處理不同欄位
-            let cellStyle = 'padding: 0.75rem; border-bottom: 1px solid #e2e8f0;';
-            
-            if (header === '路線名稱') {
-                // 路線名稱欄位 - 加粗顯示
-                cellStyle += ' font-weight: 600; color: #1e293b;';
-                if (isRouteSeparator) {
-                    cellStyle += ' text-align: center; font-style: italic;';
-                }
-            } else if (header === '板位' || header === '板數' || header === '商品棧板') {
-                // 板位相關欄位 - 數字右對齊，特殊顏色
-                cellStyle += ' text-align: right; font-weight: 600; color: #059669;';
-            } else if (header === '配送狀態') {
-                // 配送狀態 - 根據狀態顯示不同顏色
-                if (cellValue.includes('完成')) {
-                    cellStyle += ' color: #059669; font-weight: 600;';
-                } else if (cellValue.includes('進行') || cellValue.includes('配送中')) {
-                    cellStyle += ' color: #0ea5e9; font-weight: 600;';
-                } else if (cellValue.includes('待')) {
-                    cellStyle += ' color: #f59e0b; font-weight: 600;';
-                }
-            } else if (header === '日期' || header === '下單日期') {
-                // 日期欄位 - 特殊格式
-                cellStyle += ' font-family: monospace; font-size: 0.85rem;';
-            }
-            
-            tableHtml += `<td style="${cellStyle}">${cellValue}</td>`;
-        });
-        tableHtml += '</tr>';
-    });
-
-    tableHtml += `
-                </tbody>
-            </table>
-        </div>
-        
-        <div style="margin-top: 1.5rem; text-align: center; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
-            <button class="btn btn-primary btn-sm" onclick="exportRouteTableData()" style="margin-right: 0.5rem;">
-                <i class="fas fa-download"></i> 匯出 Excel
-            </button>
-            <button class="btn btn-success btn-sm" onclick="refreshRouteTableData()" style="margin-right: 0.5rem;">
-                <i class="fas fa-sync-alt"></i> 重新整理
-            </button>
-            <button class="btn btn-info btn-sm" onclick="openRouteTableSheet()">
-                <i class="fas fa-external-link-alt"></i> 開啟原始工作表
-            </button>
-        </div>
-    `;
-
-    container.innerHTML = tableHtml;
-
-    // 隱藏展開按鈕（因為現在顯示的是不同的資料）
-    const toggleBtn = document.getElementById('toggleDeliveryPoints');
-    if (toggleBtn) {
-        toggleBtn.style.display = 'none';
-    }
-}
-
-/**
- * 顯示空狀態
- */
-function showEmptyRouteTableState() {
-    const container = document.getElementById('deliveryPointsTableContainer');
-    container.innerHTML = `
-        <div style="text-align: center; padding: 4rem 2rem; color: #64748b;">
-            <i class="fas fa-route" style="font-size: 3rem; margin-bottom: 1.5rem; opacity: 0.5;"></i>
-            <h3 style="margin-bottom: 1rem; color: #374151;">暫無當日各路線表資料</h3>
-            <p style="margin-bottom: 2rem; line-height: 1.6;">
-                目前沒有找到當日各路線表資料<br>
-                請檢查 Google Sheet 是否包含相關資料
-            </p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <button class="btn btn-primary" onclick="refreshRouteTableData()">
-                    <i class="fas fa-sync-alt"></i> 重新載入
-                </button>
-                <button class="btn btn-secondary" onclick="openRouteTableSheet()">
-                    <i class="fas fa-external-link-alt"></i> 檢查原始資料
-                </button>
-            </div>
-        </div>
-    `;
-}
-
-/**
- * 匯出當日各路線表資料
- */
-function exportRouteTableData() {
-    app.showNotification('正在準備匯出檔案...', 'info');
-    // 這裡可以實作匯出功能，或直接開啟原始工作表
-    setTimeout(() => {
-        app.showNotification('匯出功能開發中，請直接開啟原始工作表進行匯出', 'warning');
-        openRouteTableSheet();
-    }, 1000);
-}
-
-/**
- * 重新整理當日各路線表
- */
-function refreshRouteTableData() {
-    showCurrentDayRouteTable();
-}
-
-/**
- * 開啟原始 Google Sheet
- */
-function openRouteTableSheet() {
-    const url = 'https://docs.google.com/spreadsheets/d/1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc/edit#gid=0';
-    window.open(url, '_blank');
-    app.showNotification('已在新視窗中開啟 Google Sheet', 'info');
-}
-
-/**
- * 切換檢視模式
- */
-function toggleRouteTableView() {
-    app.showNotification('檢視模式切換功能開發中...', 'info');
-}
-
-
-// 頁面載入時更新日期
-document.addEventListener('DOMContentLoaded', function() {
-    updateCurrentDateDisplay();
-    // 每天午夜更新日期
-    setInterval(updateCurrentDateDisplay, 60000); // 每分鐘檢查一次
-});
-
           // ==================== Google Maps API 動態載入 ====================
     let mapsApiLoaded = false;
     let mapsApiLoading = false;
@@ -4617,7 +3388,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const CONFIG = {
             SPREADSHEET_ID: '1miCf_ZTVyzmA1MNbbZM3uUdZjluk99gZUH5w2q_XWs8',
             EXTERNAL_SPREADSHEET_ID: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc', // 第二個檔案ID（外部資料、GAI分析等）
-            GAS_URL: 'https://script.google.com/macros/s/AKfycbyZkX_tW_3vk1edpwf7fDNVMLB0tpUgvvRda90-lzJFVCrZUHvGaVH-7Gfp7idFDznR5g/exec',
+            GAS_URL: 'https://script.google.com/macros/s/AKfycbwZPCFPMClZj3-17Hg7DUf0d7mjqnGTw29J_nOyWL7qjAO0pJQj6fL3hmqcdcRwwOI/exec',
             USE_MOCK_DATA: false,
             MAPS_API_KEY: 'AIzaSyDtP8oDCXfr0CPLyVv_WrAqmk2V9QgteLI',
             WEATHER_API_KEY: 'a4806bc2577c0c227f9acd8bccb566a5',
@@ -4639,17 +3410,17 @@ document.addEventListener('DOMContentLoaded', function() {
             's4': {
                 level: 4,
                 name: '管理者',
-                pages: ['dashboard', 'route-management', 'route-optimization', 'seasonal-routes', 'cargo-vehicle', 'real-time-monitor', 'system-settings', 'reports', 'route-pallets']
+                pages: ['dashboard', 'route-management', 'route-optimization', 'seasonal-routes', 'cargo-vehicle', 'real-time-monitor', 'system-settings', 'reports']
             },
             's3': {
                 level: 3,
                 name: '主要執行者',
-                pages: ['dashboard', 'route-management', 'route-optimization', 'seasonal-routes', 'cargo-vehicle', 'real-time-monitor', 'reports', 'route-pallets']
+                pages: ['dashboard', 'route-management', 'route-optimization', 'seasonal-routes', 'cargo-vehicle', 'real-time-monitor', 'reports']
             },
             's2': {
                 level: 2,
                 name: '次要執行者',
-                pages: ['dashboard', 'route-management', 'route-optimization', 'seasonal-routes', 'cargo-vehicle', 'real-time-monitor', 'route-pallets']
+                pages: ['dashboard', 'route-management', 'route-optimization', 'seasonal-routes', 'cargo-vehicle', 'real-time-monitor']
             },
             's1': {
                 level: 1,
@@ -4964,84 +3735,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     this.map.setZoom(12);
                 }
             }
-            // 處理低碳排模態
-async handleAIPreplanCMode() {
-    const resultDiv = document.getElementById('gai-route-result');
-    this.showPartialLoading('gai-route-result', '正在佈建AI當日各路線預排表(低碳排模態)...');
-
-    try {
-        console.log('開始獲取當日各路線表(C)...');
-        
-        const result = await this.apiCall('getCurrentDayRouteTableC', {
-            targetSpreadsheetId: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc'
-        });
-        
-        console.log('API 返回結果:', result);
-        
-        if (result && result.length > 0) {
-            const cardsHtml = this.convertToRouteCards(result);
-            resultDiv.innerHTML = `
-                <div style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); margin-top: 1rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <div>
-                            <h4 style="margin: 0; color: #dc2626; font-size: 1.5rem; font-weight: 700;">
-                                <i class="fas fa-leaf" style="margin-right: 0.5rem; color: #16a34a;"></i>
-                                當日各路線表(C) - 低碳排模態
-                            </h4>
-                            <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #64748b;">
-                                資料更新時間: ${new Date().toLocaleString('zh-TW')} | 共 ${getUniqueRouteCount(result)} 條路線
-                            </p>
-                        </div>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button class="btn btn-secondary btn-sm" onclick="expandAllRoutes()" title="展開所有路線">
-                                <i class="fas fa-expand-alt"></i>
-                            </button>
-                            <button class="btn btn-secondary btn-sm" onclick="collapseAllRoutes()" title="收折所有路線">
-                                <i class="fas fa-compress-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                    ${cardsHtml}
-                    
-<div style="margin-top: 2rem; text-align: center; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
-    <button class="btn btn-primary btn-sm" onclick="app.exportCurrentDayRouteSheet()" style="margin-right: 0.5rem;">
-        <i class="fas fa-download"></i> 匯出路線表
-    </button>
-    <button class="btn btn-secondary btn-sm" onclick="app.refreshRouteTable()">
-        <i class="fas fa-sync-alt"></i> 重新整理
-    </button>
-</div>
-
-                </div>
-            `;
-            
-            this.showNotification('當日各路線表(C)計算完成', 'success');
-        } else {
-            throw new Error('無法取得路線表(C)資料或資料為空');
-        }
-    } catch (e) {
-        console.error('載入路線表(C)失敗:', e);
-        resultDiv.innerHTML = `
-            <div style="color: #dc2626; padding: 2rem; border: 2px dashed #fecaca; border-radius: 12px; background: #fef2f2; text-align: center;">
-                <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                <h4 style="margin-bottom: 0.5rem;">載入失敗</h4>
-                <p style="margin-bottom: 1rem;">${e.message}</p>
-                <small style="color: #991b1b;">請檢查網路連線或聯絡系統管理員</small>
-            </div>
-        `;
-    }
-}
-
-// 匯出路線表(C)功能
-exportRouteTableC() {
-    this.showNotification('匯出功能開發中...', 'info');
-}
-
-// 重新整理路線表(C)
-refreshRouteTableC() {
-    this.handleAIPreplanCMode();
-}
-
 
             // 優化路線順序
             async optimizeRouteOrder(waypoints, optimizationType = 'distance') {
@@ -5229,7 +3922,6 @@ refreshRouteTableC() {
                 this.weatherService = new WeatherService();
                 this.isMapViewActive = false;
                 this.currentWaypoints = [];
-                this.r2Character = null;
                  this.routePalletSumCache = {
                     value: 0,
                     timestamp: 0,
@@ -5246,11 +3938,7 @@ refreshRouteTableC() {
             init() {
                 this.bindEvents();
                 this.checkLoginStatus();
-                // 初始化 R2 角色
-            setTimeout(() => {
-                this.r2Character = new R2Character();
-            }, 1000);
-}
+            }
             // 獲取非零次數的快取方法
 async getRoutePalletNonZeroCountWithCache() {
     const now = Date.now();
@@ -5323,186 +4011,6 @@ async showDailyOrderAnalysis() {
     this.hideGAIAssistantModal();
     await this.showLatestOrderNotification();
 }
-// 發送聊天訊息
-// 🔥 修改後的發送聊天訊息函數 - 整合快問快答
-async sendChatMessage() {
-    const chatInput = document.getElementById('chatInput');
-    const sendBtn = document.getElementById('sendChatBtn');
-    const chatHistory = document.getElementById('chatHistory');
-    
-    const userMessage = chatInput.value.trim();
-    if (!userMessage) return;
-    
-    // 清空輸入框並禁用按鈕
-    chatInput.value = '';
-    sendBtn.disabled = true;
-    sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    
-    // 添加用戶訊息到對話歷史
-    this.addChatMessage('user', userMessage);
-    // 👇 新增：R2 開始思考動畫
-    if (this.r2Character) {
-        this.r2Character.setWorkingState();
-        console.log('R2 進入工作狀態');
-    }
-    
-    try {
-        // 🔥 調用後端 ChatGPT API（已包含快問快答邏輯）
-        const response = await this.apiCall('processChatGPTQuery', {
-            userMessage: userMessage,
-            targetSpreadsheetId: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc',
-            sheetName: '託收託運回報'
-        });
-        
-        // 🔥 處理回應並顯示模式標識
-        if (response && response.reply) {
-            this.addChatMessage('assistant', response.reply, response.mode);
-            // 👇 新增：R2 變開心（表示成功回應）
-            if (this.r2Character) {
-                this.r2Character.setHappyState();
-                console.log('R2 進入開心狀態');
-            }
-        } else {
-            throw new Error('API 回應格式錯誤');
-        }
-        
-        
-    } catch (error) {
-        console.error('ChatGPT查詢失敗:', error);
-        this.addChatMessage('system', '抱歉，查詢時發生錯誤，請稍後再試。');
-                // 👇 新增：錯誤時 R2 也要恢復正常
-        if (this.r2Character) {
-            this.r2Character.resetEmotion();
-            console.log('R2 因錯誤恢復正常狀態');
-        }
-    } finally {
-        // 恢復按鈕狀態
-        sendBtn.disabled = false;
-        sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
-        chatInput.focus();
-        // 👇 新增：2秒後 R2 恢復正常狀態
-        setTimeout(() => {
-            if (this.r2Character) {
-                this.r2Character.resetEmotion();
-                console.log('R2 恢復正常狀態');
-            }
-        }, 2000);
-    }
-}
-
-
-// 🔥 增強版聊天訊息添加函數 - 支持快問快答模式顯示
-addChatMessage(type, message, mode = null) {
-    const chatHistory = document.getElementById('chatHistory');
-    if (!chatHistory) return;
-    
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `chat-message ${type}-message`;
-    
-    let bgColor, textColor, icon, label, modeInfo = '';
-    
-    switch (type) {
-        case 'user':
-            bgColor = 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)';
-            textColor = '#1e40af';
-            icon = 'fas fa-user';
-            label = '您';
-            break;
-        case 'assistant':
-            bgColor = 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)';
-            textColor = '#166534';
-            icon = 'fas fa-robot';
-            label = 'GAI秘書';
-            
-            // 🔥 根據模式添加標識
-            if (mode) {
-                const modeMap = {
-                    'quick_answer': { icon: '⚡', label: '快速回答', color: '#f59e0b' },
-                    'ai_analysis': { icon: '🤖', label: 'AI分析', color: '#0ea5e9' },
-                    'fallback': { icon: '💡', label: '備用回應', color: '#64748b' }
-                };
-                const modeData = modeMap[mode] || { icon: '🔍', label: '一般回應', color: '#64748b' };
-                modeInfo = `
-                    <span style="
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 0.25rem;
-                        font-size: 0.75rem;
-                        color: ${modeData.color};
-                        background: rgba(255,255,255,0.7);
-                        padding: 0.25rem 0.5rem;
-                        border-radius: 12px;
-                        margin-left: 0.5rem;
-                        font-weight: 600;
-                    ">
-                        ${modeData.icon} ${modeData.label}
-                    </span>
-                `;
-            }
-            break;
-        case 'system':
-            bgColor = 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)';
-            textColor = '#92400e';
-            icon = 'fas fa-info-circle';
-            label = '系統';
-            break;
-    }
-    
-    messageDiv.style.cssText = `
-        background: ${bgColor}; 
-        padding: 0.75rem; 
-        border-radius: 12px; 
-        margin-bottom: 0.75rem;
-        font-size: 0.875rem;
-        color: ${textColor};
-        animation: messageSlideIn 0.3s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    `;
-    
-    messageDiv.innerHTML = `
-        <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
-            <i class="${icon}" style="margin-top: 0.125rem; flex-shrink: 0; font-size: 1rem;"></i>
-            <div style="flex: 1;">
-                <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                    <strong>${label}</strong>
-                    ${modeInfo}
-                    <span style="margin-left: auto; font-size: 0.7rem; opacity: 0.7;">
-                        ${new Date().toLocaleTimeString('zh-TW')}
-                    </span>
-                </div>
-                <div style="white-space: pre-wrap; line-height: 1.5;">
-                    ${this.formatChatMessage(message)}
-                </div>
-            </div>
-        </div>
-    `;
-    
-    chatHistory.appendChild(messageDiv);
-    
-    // 滾動到最新訊息
-    chatHistory.scrollTop = chatHistory.scrollHeight;
-}
-// 🔥 格式化聊天訊息 - 支持 Markdown 基本語法
-formatChatMessage(message) {
-    if (!message) return '';
-    
-    // 基本 Markdown 支持
-    let formatted = message
-        // 粗體
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        // 斜體
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        // 代碼
-        .replace(/`(.*?)`/g, '<code style="background: rgba(0,0,0,0.1); padding: 0.125rem 0.25rem; border-radius: 4px; font-family: monospace;">$1</code>')
-        // 項目符號
-        .replace(/^• (.+)$/gm, '<div style="margin: 0.25rem 0; padding-left: 1rem;">• $1</div>')
-        .replace(/^✅ (.+)$/gm, '<div style="margin: 0.25rem 0; padding-left: 1rem; color: #059669;">✅ $1</div>')
-        .replace(/^❌ (.+)$/gm, '<div style="margin: 0.25rem 0; padding-left: 1rem; color: #dc2626;">❌ $1</div>')
-        .replace(/^🔥 (.+)$/gm, '<div style="margin: 0.25rem 0; padding-left: 1rem; color: #f59e0b;">🔥 $1</div>');
-    
-    return formatted;
-}
-
 
 // 前往路線規劃頁面
 showRouteOptimizationPage() {
@@ -5521,757 +4029,7 @@ showDataAnalysisReport() {
     this.hideGAIAssistantModal();
     this.switchPage('reports');
 }
-// 🚀 優化前端載入提示
-async exportCurrentDayRouteSheet(preserveFormat = true) {
-    try {
-        // 🎯 根據模式顯示不同的載入訊息
-        const loadingMessage = preserveFormat 
-            ? '正在保留格式匯出，預計需要 10-15 秒...' 
-            : '正在快速匯出，請稍候...';
-            
-        this.showLoading(loadingMessage);
-        
-        // 🎯 顯示進度提示
-        let progressCounter = 0;
-        const progressInterval = setInterval(() => {
-            progressCounter += 2;
-            if (progressCounter <= 100) {
-                const dots = '.'.repeat((progressCounter / 10) % 4);
-                const message = preserveFormat 
-                    ? `正在保留格式匯出${dots} (${progressCounter}%)` 
-                    : `正在快速匯出${dots} (${progressCounter}%)`;
-                this.updateLoadingMessage(message);
-            }
-        }, 1000);
-        
-        console.log('開始匯出當日各路線表...');
-        
-        const result = await this.apiCall('exportRouteSheetAsExcel', {
-            targetSpreadsheetId: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc',
-            sheetNames: ['當日各路線表', '各路線板數'],
-            exportFormat: 'excel',
-            multiSheet: true,
-            preserveFormat: preserveFormat
-        });
-        
-        clearInterval(progressInterval);
-        
-        console.log('API 返回結果:', result);
-        
-        if (result && result.success) {
-            this.downloadExcelFile(result.downloadUrl, result.filename);
-            
-            const message = preserveFormat 
-                ? `✅ 格式保留匯出成功！檔案：${result.filename}` 
-                : `✅ 快速匯出成功！檔案：${result.filename}`;
-                
-            this.showNotification(message, 'success', 6000);
-            
-        } else {
-            throw new Error(result?.message || '匯出失敗，請稍後再試');
-        }
-        
-    } catch (error) {
-        console.error('匯出路線表失敗:', error);
-        this.showNotification(`❌ 匯出失敗: ${error.message}`, 'error');
-        
-    } finally {
-        this.hideLoading();
-    }
-}
 
-// 🚀 新增更新載入訊息的方法
-updateLoadingMessage(message) {
-    const loadingElement = document.querySelector('.loading-message');
-    if (loadingElement) {
-        loadingElement.textContent = message;
-    }
-}
-
-
-// 🔥 新增兩個不同的匯出選項
-async exportCurrentDayRouteSheetWithFormat() {
-    return this.exportCurrentDayRouteSheet(true); // 保留格式
-}
-
-async exportCurrentDayRouteSheetDataOnly() {
-    return this.exportCurrentDayRouteSheet(false); // 只匯出資料
-}
-
-            // 檢查用戶級別
-checkUserLevel(requiredLevel) {
-    const levelHierarchy = {
-        's1': 1,  // 初階使用者
-        's2': 2,  // 次要執行者
-        's3': 3,  // 主要執行者
-        's4': 4   // 管理者
-    };
-    
-    const userLevelNum = levelHierarchy[currentUser.level] || 0;
-    const requiredLevelNum = levelHierarchy[requiredLevel] || 999;
-    
-    return userLevelNum >= requiredLevelNum;
-}
-
-
-/**
- * 顯示格式保留資訊
- */
-showFormatPreservationInfo(result) {
-    const info = document.createElement('div');
-    info.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: linear-gradient(135deg, #10b981, #059669);
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
-        z-index: 10000;
-        max-width: 350px;
-        font-size: 0.9rem;
-        line-height: 1.4;
-        animation: slideInRight 0.3s ease-out;
-    `;
-    
-    info.innerHTML = `
-        <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-            <i class="fas fa-check-circle" style="margin-right: 0.5rem; font-size: 1.2rem;"></i>
-            <strong>格式完整保留</strong>
-        </div>
-        <div style="font-size: 0.8rem; opacity: 0.9;">
-            ✓ 欄位底色和背景<br>
-            ✓ 字體樣式和顏色<br>
-            ✓ 邊框和對齊方式<br>
-            ✓ 欄寬和列高設定<br>
-            <div style="margin-top: 0.5rem; font-weight: bold;">
-                資料：${result.dataRows} 列 × ${result.dataCols} 欄
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(info);
-    
-    // 3秒後自動移除
-    setTimeout(() => {
-        if (info.parentNode) {
-            info.style.animation = 'slideOutRight 0.3s ease-in';
-            setTimeout(() => info.remove(), 300);
-        }
-    }, 3000);
-}
-
-/**
- * 下載 Excel 檔案
- */
-downloadExcelFile(downloadUrl, filename) {
-    try {
-        // 創建隱藏的下載連結
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.download = filename;
-        link.target = '_blank';
-        link.style.display = 'none';
-        
-        // 添加到頁面並觸發下載
-        document.body.appendChild(link);
-        link.click();
-        
-        // 清理
-        setTimeout(() => {
-            document.body.removeChild(link);
-        }, 100);
-        
-        console.log(`開始下載檔案: ${filename}`);
-        
-    } catch (error) {
-        console.error('下載檔案失敗:', error);
-        // 備用方案：直接開啟 URL
-        window.open(downloadUrl, '_blank');
-    }
-}
-
-/**
- * 增強的備用匯出選項
- */
-showFallbackExportOptions() {
-    const modal = document.getElementById('modal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
-    
-    modalTitle.textContent = '匯出選項';
-    modalBody.innerHTML = `
-        <div style="text-align: center; padding: 1rem;">
-            <h4 style="color: #0ea5e9; margin-bottom: 1.5rem;">
-                <i class="fas fa-download"></i> 選擇匯出方式
-            </h4>
-            
-            <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px; margin: 0 auto;">
-                <button class="btn btn-primary" onclick="app.directExportGoogleSheet()" style="padding: 1rem;">
-                    <i class="fas fa-external-link-alt"></i> 直接開啟 Google Sheet
-                    <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 0.25rem;">
-                        在新視窗中開啟，可手動匯出並保留所有格式
-                    </div>
-                </button>
-                
-                <button class="btn btn-success" onclick="app.showManualExportGuide()" style="padding: 1rem;">
-                    <i class="fas fa-info-circle"></i> 格式保留匯出教學
-                    <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 0.25rem;">
-                        詳細步驟說明，確保完整保留格式
-                    </div>
-                </button>
-            </div>
-            
-            <div style="margin-top: 1.5rem; padding: 1rem; background: #fef3c7; border-radius: 8px; font-size: 0.9rem; color: #92400e;">
-                <i class="fas fa-exclamation-triangle"></i> 
-                <strong>重要：</strong>為確保完整保留欄位底色和格式，建議使用手動匯出方式
-            </div>
-        </div>
-    `;
-    
-    modal.classList.add('show');
-}
-
-/**
- * 顯示手動匯出教學
- */
-showManualExportGuide() {
-    const modalBody = document.getElementById('modalBody');
-    modalBody.innerHTML = `
-        <div style="padding: 1rem;">
-            <h4 style="color: #0ea5e9; margin-bottom: 1rem;">
-                <i class="fas fa-palette"></i> 格式保留匯出教學
-            </h4>
-            
-            <div style="text-align: left; line-height: 1.6;">
-                <div style="margin-bottom: 1rem; padding: 1rem; background: #f0f9ff; border-left: 4px solid #0ea5e9; border-radius: 0 8px 8px 0;">
-                    <strong style="color: #0ea5e9;">步驟 1：開啟 Google Sheet</strong><br>
-                    點擊下方按鈕開啟原始工作表
-                </div>
-                
-                <div style="margin-bottom: 1rem; padding: 1rem; background: #f0fdf4; border-left: 4px solid #10b981; border-radius: 0 8px 8px 0;">
-                    <strong style="color: #10b981;">步驟 2：選擇匯出格式</strong><br>
-                    在 Google Sheet 中：<br>
-                    • 點選「檔案」選單<br>
-                    • 選擇「下載」<br>
-                    • 點選「Microsoft Excel (.xlsx)」
-                </div>
-                
-                <div style="margin-bottom: 1rem; padding: 1rem; background: #fefce8; border-left: 4px solid #eab308; border-radius: 0 8px 8px 0;">
-                    <strong style="color: #ca8a04;">步驟 3：確認格式保留</strong><br>
-                    下載的 Excel 檔案將完整保留：<br>
-                    • ✓ 所有欄位底色<br>
-                    • ✓ 字體顏色和樣式<br>
-                    • ✓ 邊框和對齊設定<br>
-                    • ✓ 欄寬和列高
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 1.5rem;">
-                <button class="btn btn-primary btn-lg" onclick="app.directExportGoogleSheet()" style="margin-right: 0.5rem; padding: 0.75rem 2rem;">
-                    <i class="fas fa-external-link-alt"></i> 立即開啟 Google Sheet
-                </button>
-                <button class="btn btn-secondary" onclick="app.hideModal()" style="padding: 0.75rem 1.5rem;">
-                    <i class="fas fa-times"></i> 關閉
-                </button>
-            </div>
-            
-            <div style="margin-top: 1rem; padding: 1rem; background: #f8fafc; border-radius: 8px; font-size: 0.85rem; color: #64748b; text-align: center;">
-                <i class="fas fa-lightbulb"></i> 
-                提示：使用此方法可以 100% 保留所有原始格式和樣式
-            </div>
-        </div>
-    `;
-}
-
-
-/**
- * 備用匯出方案
- */
-showFallbackExportOptions() {
-    const modal = document.getElementById('modal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
-    
-    modalTitle.textContent = '匯出選項';
-    modalBody.innerHTML = `
-        <div style="text-align: center; padding: 1rem;">
-            <h4 style="color: #0ea5e9; margin-bottom: 1.5rem;">
-                <i class="fas fa-download"></i> 選擇匯出方式
-            </h4>
-            
-            <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px; margin: 0 auto;">
-                <button class="btn btn-primary" onclick="app.directExportGoogleSheet()" style="padding: 1rem;">
-                    <i class="fas fa-external-link-alt"></i> 直接開啟 Google Sheet
-                    <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 0.25rem;">
-                        在新視窗中開啟原始工作表
-                    </div>
-                </button>
-                
-                <button class="btn btn-success" onclick="app.manualExportInstructions()" style="padding: 1rem;">
-                    <i class="fas fa-info-circle"></i> 手動匯出說明
-                    <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 0.25rem;">
-                        查看如何手動匯出 Excel 檔案
-                    </div>
-                </button>
-            </div>
-            
-            <div style="margin-top: 1.5rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; font-size: 0.9rem; color: #0369a1;">
-                <i class="fas fa-info-circle"></i> 
-                系統正在修復自動匯出功能，請使用上述方式獲取資料
-            </div>
-        </div>
-    `;
-    
-    modal.classList.add('show');
-}
-
-/**
- * 直接開啟 Google Sheet
- */
-directExportGoogleSheet() {
-    const url = 'https://docs.google.com/spreadsheets/d/1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc/edit#gid=0';
-    window.open(url, '_blank');
-    this.hideModal();
-    this.showNotification('已在新視窗中開啟 Google Sheet', 'info');
-}
-
-/**
- * 顯示手動匯出說明
- */
-manualExportInstructions() {
-    const modalBody = document.getElementById('modalBody');
-    modalBody.innerHTML = `
-        <div style="padding: 1rem;">
-            <h4 style="color: #0ea5e9; margin-bottom: 1rem;">
-                <i class="fas fa-download"></i> 手動匯出 Excel 步驟
-            </h4>
-            
-            <div style="text-align: left; line-height: 1.6;">
-                <div style="margin-bottom: 1rem; padding: 1rem; background: #f8fafc; border-radius: 8px;">
-                    <strong>步驟 1：</strong> 點擊下方按鈕開啟 Google Sheet
-                </div>
-                
-                <div style="margin-bottom: 1rem; padding: 1rem; background: #f8fafc; border-radius: 8px;">
-                    <strong>步驟 2：</strong> 在 Google Sheet 中點選「檔案」→「下載」→「Microsoft Excel (.xlsx)」
-                </div>
-                
-                <div style="margin-bottom: 1rem; padding: 1rem; background: #f8fafc; border-radius: 8px;">
-                    <strong>步驟 3：</strong> 檔案會自動下載到您的電腦
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 1.5rem;">
-                <button class="btn btn-primary" onclick="app.directExportGoogleSheet()" style="margin-right: 0.5rem;">
-                    <i class="fas fa-external-link-alt"></i> 開啟 Google Sheet
-                </button>
-                <button class="btn btn-secondary" onclick="app.hideModal()">
-                    <i class="fas fa-times"></i> 關閉
-                </button>
-            </div>
-        </div>
-    `;
-}
-
-
-/**
- * 下載檔案的輔助函數
- */
-downloadFile(url, filename) {
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename || '當日各路線表.xlsx';
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-// 在前端添加批次匯出功能
-async exportAllRouteTables() {
-    try {
-        this.showLoading('正在批次匯出所有路線表...');
-        
-        const result = await this.apiCall('exportAllRouteTablesAsExcel', {
-            targetSpreadsheetId: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc'
-        });
-        
-        if (result.success && result.results) {
-            let successCount = 0;
-            
-            result.results.forEach(item => {
-                if (item.success) {
-                    successCount++;
-                    // 自動下載每個檔案
-                    setTimeout(() => {
-                        this.downloadFile(item.downloadUrl, item.filename);
-                    }, successCount * 1000); // 間隔1秒下載
-                }
-            });
-            
-            this.showNotification(`成功匯出 ${successCount} 個路線表！`, 'success');
-        }
-        
-    } catch (error) {
-        console.error('批次匯出失敗:', error);
-        this.showNotification(`批次匯出失敗: ${error.message}`, 'error');
-    } finally {
-        this.hideLoading();
-    }
-}
-// 在 loadPageData 方法中添加新的 case
-async loadPageData(pageName) {
-    // 👇 新增：各路線板數頁面權限檢查
-    if (pageName === 'route-pallets') {
-        if (!this.hasPermission('route-management') || !this.checkUserLevel('s2')) {
-            this.showAccessDenied(pageName);
-            return;
-        }
-    }
-    // 檢查權限
-    if (!this.hasPermission(pageName)) {
-        this.showAccessDenied(pageName);
-        return;
-    }
-
-    // 隱藏存取被拒絕訊息
-    if (pageName === 'system-settings') {
-        document.getElementById('accessDenied').style.display = 'none';
-        document.getElementById('settingsContent').style.display = 'block';
-    } else if (pageName === 'reports') {
-        document.getElementById('reportsAccessDenied').style.display = 'none';
-        document.getElementById('reportsContent').style.display = 'block';
-    }
-
-    switch (pageName) {
-        case 'dashboard':
-            break;
-        case 'route-management':
-            await this.loadRouteManagement();
-            break;
-        case 'route-optimization':
-            await this.loadRouteOptimization();
-            break;
-        // 👇 新增：各路線板數頁面載入
-        case 'route-pallets': 
-            await this.loadRoutePallets(); 
-            break;
-        case 'seasonal-routes':
-            await this.loadSeasonalRoutes();
-            break;
-        case 'cargo-vehicle':
-            await this.loadCargoVehicle();
-            break;
-        case 'real-time-monitor':
-            await this.loadRealTimeMonitor();
-            break;
-        case 'system-settings':
-            await this.loadSystemSettings();
-            break;
-        case 'reports':
-            await this.loadReports();
-            break;
-    }
-}
-
-async loadRoutePallets() {
-    console.log('=== 開始載入各路線板數頁面 ===');
-    
-    try {
-        // 1. 頁面切換和權限檢查
-        this.showPage('route-pallets');
-        
-        // 2. 權限驗證
-        console.log('檢查用戶權限...');
-        console.log('當前用戶:', {
-            username: currentUser.username,
-            level: currentUser.level,
-            permissions: currentUser.permissions
-        });
-        
-        if (!this.hasPermission('route-management')) {
-            console.error('權限檢查失敗: 缺少 route-management 權限');
-            this.showAccessDenied('route-pallets');
-            return;
-        }
-        
-        if (!this.checkUserLevel('s2')) {
-            console.error('權限檢查失敗: 用戶級別不足 s2');
-            this.showAccessDenied('route-pallets');
-            return;
-        }
-        
-        console.log('✅ 權限檢查通過');
-        
-        // 3. 顯示載入狀態
-        this.showPartialLoading('routePalletsTableContainer', '正在載入各路線板數資料...');
-        
-        // 4. 更新狀態元素
-        const statusElement = document.getElementById('routePalletsStatus');
-        const timeElement = document.getElementById('routePalletsDataTime');
-        
-        if (statusElement) {
-            statusElement.textContent = '載入中';
-            statusElement.className = 'fresh-badge';
-        }
-        if (timeElement) {
-            timeElement.textContent = '正在載入...';
-        }
-        
-        // 5. API 參數準備
-        const apiParams = {
-            targetSpreadsheetId: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc',
-            sheetName: '各路線板數'
-        };
-        
-        console.log('API 調用參數:', apiParams);
-        
-        // 6. 調用 API 獲取資料
-        console.log('準備呼叫 API: getRoutePalletsData');
-        
-        let result;
-        if (CONFIG.USE_MOCK_DATA || !this.isOnline) {
-            console.log('使用模擬資料模式');
-            result = this.getMockRoutePalletsData();
-        } else {
-            console.log('調用真實 API...');
-            result = await this.apiCall('getRoutePalletsData', apiParams);
-        }
-        
-        console.log('API 返回結果:', {
-            type: typeof result,
-            isArray: Array.isArray(result),
-            length: result ? result.length : 0,
-            firstItem: result && result.length > 0 ? result[0] : null
-        });
-        
-        // 7. 資料驗證
-        if (!result) {
-            console.warn('API 返回 null 或 undefined');
-            throw new Error('API 返回空值，請檢查後端服務');
-        }
-        
-        if (!Array.isArray(result)) {
-            console.error('API 返回資料格式錯誤:', typeof result);
-            throw new Error(`API 返回資料格式錯誤，期望陣列但收到 ${typeof result}`);
-        }
-        
-        if (result.length === 0) {
-            console.warn('API 返回空陣列');
-            this.showEmptyRoutePalletsState();
-            this.updateRoutePalletsStatus('無資料', '暫無資料', 'expired');
-            this.showNotification('各路線板數工作表暫無資料', 'info');
-            return;
-        }
-        
-        // 8. 資料處理成功
-        console.log(`✅ 成功獲取 ${result.length} 筆各路線板數資料`);
-        
-        // 9. 顯示資料
-        this.displayRoutePalletsData(result);
-        
-        // 10. 更新狀態為成功
-        this.updateRoutePalletsStatus('最新', new Date().toLocaleString('zh-TW'), 'fresh');
-        
-        // 11. 顯示成功通知
-        this.showNotification(`✅ 成功載入 ${result.length} 筆路線板數資料`, 'success');
-        
-        console.log('=== 各路線板數頁面載入完成 ===');
-        
-    } catch (error) {
-        // 12. 錯誤處理
-        console.error('=== 載入各路線板數資料失敗 ===');
-        console.error('錯誤詳情:', {
-            name: error.name,
-            message: error.message,
-            stack: error.stack
-        });
-        
-        // 13. 顯示錯誤狀態
-        this.showErrorState('routePalletsTableContainer', this.formatErrorMessage(error));
-        
-        // 14. 更新狀態為錯誤
-        this.updateRoutePalletsStatus('載入失敗', '發生錯誤', 'expired');
-        
-        // 15. 顯示錯誤通知
-        this.showNotification(`❌ 載入失敗: ${this.formatErrorMessage(error)}`, 'error');
-        
-        // 16. 根據錯誤類型提供建議
-        this.showErrorSuggestions(error);
-    }
-}
-
-
-// 👇 新增：顯示各路線板數資料
-displayRoutePalletsData(data) {
-    const container = document.getElementById('routePalletsTableContainer');
-    
-    if (!data || data.length === 0) {
-        this.showEmptyRoutePalletsState();
-        return;
-    }
-
-    // 生成表格 HTML
-    const headers = Object.keys(data[0]);
-    let tableHtml = `
-        <div style="margin-bottom: 1rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #0ea5e9;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <h4 style="margin: 0 0 0.5rem 0; color: #0ea5e9;">
-                        <i class="fas fa-clipboard-list"></i> 各路線板數統計表
-                    </h4>
-                    <p style="margin: 0; color: #64748b; font-size: 0.875rem;">
-                        共 ${data.length} 條路線 | 資料來源: 外部 Google Sheet
-                    </p>
-                </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn btn-secondary btn-sm" onclick="app.toggleRoutePalletsView()" title="切換檢視模式">
-                        <i class="fas fa-table"></i>
-                    </button>
-                    <button class="btn btn-info btn-sm" onclick="app.analyzeRoutePalletsData()" title="數據分析">
-                        <i class="fas fa-chart-bar"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <div style="overflow-x: auto; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-            <table class="data-table" style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
-    `;
-    
-    // 表頭
-    headers.forEach(header => {
-        tableHtml += `
-            <th style="
-                padding: 1rem 0.75rem; 
-                text-align: left; 
-                border-bottom: 2px solid #e2e8f0; 
-                font-weight: 600; 
-                color: #374151;
-                font-size: 0.875rem;
-                letter-spacing: 0.025em;
-            ">${header}</th>
-        `;
-    });
-    
-    tableHtml += `
-                    </tr>
-                </thead>
-                <tbody>
-    `;
-    
-    // 表格內容
-    data.forEach((row, index) => {
-        const bgColor = index % 2 === 0 ? '#ffffff' : '#f8fafc';
-        tableHtml += `<tr style="background-color: ${bgColor}; transition: all 0.2s ease;">`;
-        
-        headers.forEach((header, headerIndex) => {
-            let cellValue = row[header] || '';
-            
-            // 特殊處理不同欄位
-            let cellStyle = 'padding: 0.75rem; border-bottom: 1px solid #e2e8f0;';
-            
-            if (headerIndex === 0) {
-                // 第一欄（路線名稱）- 加粗顯示
-                cellStyle += ' font-weight: 600; color: #1e293b;';
-            } else if (headerIndex === 1) {
-                // 第二欄（板數總和）- 數字右對齊，特殊顏色
-                cellStyle += ' text-align: right; font-weight: 600; color: #059669;';
-                if (cellValue && !isNaN(cellValue)) {
-                    cellValue = `${cellValue} 板`;
-                }
-            } else if (header.includes('取貨') || header.includes('配送')) {
-                // 取貨/配送欄位 - 左對齊，較小字體
-                cellStyle += ' text-align: left; font-size: 0.875rem; color: #64748b;';
-            } else {
-                // 其他欄位 - 預設樣式
-                cellStyle += ' text-align: left;';
-            }
-            
-            tableHtml += `<td style="${cellStyle}">${cellValue}</td>`;
-        });
-        tableHtml += '</tr>';
-    });
-    
-    tableHtml += `
-                </tbody>
-            </table>
-        </div>
-        
-        <div style="margin-top: 1.5rem; text-align: center; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
-            <button class="btn btn-primary btn-sm" onclick="app.exportRoutePalletsData()" style="margin-right: 0.5rem;">
-                <i class="fas fa-download"></i> 匯出 Excel
-            </button>
-            <button class="btn btn-success btn-sm" onclick="app.refreshRoutePallets()" style="margin-right: 0.5rem;">
-                <i class="fas fa-sync-alt"></i> 重新整理
-            </button>
-            <button class="btn btn-info btn-sm" onclick="app.openExternalSheet()">
-                <i class="fas fa-external-link-alt"></i> 開啟原始工作表
-            </button>
-        </div>
-    `;
-    
-    container.innerHTML = tableHtml;
-}
-
-// 👇 新增：顯示空狀態
-showEmptyRoutePalletsState() {
-    const container = document.getElementById('routePalletsTableContainer');
-    container.innerHTML = `
-        <div style="text-align: center; padding: 4rem 2rem; color: #64748b;">
-            <i class="fas fa-clipboard-list" style="font-size: 3rem; margin-bottom: 1.5rem; opacity: 0.5;"></i>
-            <h3 style="margin-bottom: 1rem; color: #374151;">暫無各路線板數資料</h3>
-            <p style="margin-bottom: 2rem; line-height: 1.6;">
-                目前沒有找到各路線板數統計資料<br>
-                請檢查外部 Google Sheet 是否包含相關資料
-            </p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <button class="btn btn-primary" onclick="app.refreshRoutePallets()">
-                    <i class="fas fa-sync-alt"></i> 重新載入
-                </button>
-                <button class="btn btn-secondary" onclick="app.openExternalSheet()">
-                    <i class="fas fa-external-link-alt"></i> 檢查原始資料
-                </button>
-            </div>
-        </div>
-    `;
-}
-
-// 👇 新增：重新整理各路線板數
-async refreshRoutePallets() {
-    await this.loadRoutePallets();
-}
-
-// 👇 新增：匯出各路線板數資料
-exportRoutePalletsData() {
-    this.showNotification('正在準備匯出檔案...', 'info');
-    
-    // 這裡可以實作匯出功能
-    setTimeout(() => {
-        this.showNotification('匯出功能開發中，請直接開啟原始工作表進行匯出', 'warning');
-    }, 1000);
-}
-
-// 👇 新增：開啟外部 Google Sheet
-openExternalSheet() {
-    const url = 'https://docs.google.com/spreadsheets/d/1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc/edit#gid=0';
-    window.open(url, '_blank');
-    this.showNotification('已在新視窗中開啟外部 Google Sheet', 'info');
-}
-
-// 👇 新增：切換檢視模式
-toggleRoutePalletsView() {
-    this.showNotification('檢視模式切換功能開發中...', 'info');
-}
-
-// 👇 新增：分析路線板數資料
-analyzeRoutePalletsData() {
-    this.showNotification('數據分析功能開發中...', 'info');
-}
-
-            
 // 系統健康檢查
 async performSystemHealthCheck() {
     this.hideGAIAssistantModal();
@@ -6419,7 +4177,7 @@ createOrderAnalysisModal() {
     const modalHtml = `
         <div id="orderAnalysisModal" class="modal" style="display: none;">
             <div class="modal-content" style="
-                max-width: 1000px;
+                max-width: 800px;
                 transform: scale(0.9);
                 opacity: 0;
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -6492,9 +4250,9 @@ createOrderAnalysisModal() {
             border-radius: 12px;
         ">
             <img src="R2.png" alt="GAI數位秘書" style="
-                width: 220px;
-                height: 220px;
-                border-radius: 30%;
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
                 object-fit: cover;
                 box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
                 border: 3px solid #0ea5e9;
@@ -6505,7 +4263,7 @@ createOrderAnalysisModal() {
                 color: #64748b;
                 font-size: 0.875rem;
                 font-weight: 500;
-            ">TCC-GAI派車中心數位主任<br>Lisa</p>
+            ">GAI派車數位秘書</p>
         </div>
         
         <div style="
@@ -6650,7 +4408,7 @@ hideOrderAnalysisModal() {
                         const page = e.currentTarget.dataset.page;
                         const action = e.currentTarget.dataset.action; // 新增 action 處理
                         const permission = e.currentTarget.dataset.permission;
-                        // TCC-GAI派車中心數位主任<br>Lisa - 所有用戶都可以使用
+                        // GAI派車數位專員 - 所有用戶都可以使用
                         if (action === 'gai-assistant') {
                             this.showGAIAssistantModal();
                             return;
@@ -6727,14 +4485,6 @@ hideOrderAnalysisModal() {
                 document.getElementById('calculateMatrix')?.addEventListener('click', () => {
                     this.calculateDistanceMatrix();
                 });
-                            // 👇 新增：各路線板數頁面事件
-                document.getElementById('refreshRoutePallets')?.addEventListener('click', () => {
-                    this.refreshRoutePallets();
-                });
-            
-                document.getElementById('exportRoutePallets')?.addEventListener('click', () => {
-                    this.exportRoutePalletsData();
-                });
 
                 document.getElementById('optimizeRoute')?.addEventListener('click', () => {
                     this.optimizeCurrentRoute();
@@ -6778,18 +4528,6 @@ hideOrderAnalysisModal() {
                         this.hideGAIAssistantModal();
                     }
                 });
-                                // 早班訂單按鈕事件 - 修改為顯示當日各路線表
-                document.getElementById('morningOrderBtn')?.addEventListener('click', async function() {
-                    app.showNotification('正在載入當日各路線表...', 'info');
-                    await showCurrentDayRouteTable();
-                });
-                
-                // 晚班訂單按鈕事件 - 修改為顯示當日各路線表  
-                document.getElementById('eveningOrderBtn')?.addEventListener('click', async function() {
-                    app.showNotification('正在載入當日各路線表...', 'info');
-                    await showCurrentDayRouteTable();
-                });
-
 
                 
                 
@@ -7057,7 +4795,7 @@ DispatchGAISystem.prototype.fetchDeliveryPointsWithSteps = async function(){
 
     // Step 2
     update(1,'呼叫外部流程...');
-    await this.executeSteps1to5WithMemoryCleanup();
+    await this.executeThreePhaseProcess();
     finishStep(1,'流程啟動', 35);
 
     // Step 3
@@ -7108,34 +4846,6 @@ DispatchGAISystem.prototype.handleLogin = async function(){
     this.prefetchAfterLogin();
   }
 };
-// 🔥 在 bindEvents() 函數中添加測試按鈕事件
-// 測試 ChatGPT 功能
-document.getElementById('testChatGPT')?.addEventListener('click', async () => {
-    try {
-        this.showLoading('測試 ChatGPT 連線...');
-        
-        const testResponse = await this.apiCall('processChatGPTQuery', {
-            userMessage: '你好，請簡單介紹一下你的功能',
-            targetSpreadsheetId: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc',
-            sheetName: '託收託運回報'
-        });
-        
-        if (testResponse && testResponse.reply) {
-            this.showNotification('ChatGPT 連線測試成功！', 'success');
-            console.log('ChatGPT 測試回應:', testResponse.reply);
-        } else {
-            throw new Error('回應格式錯誤');
-        }
-        
-    } catch (error) {
-        console.error('ChatGPT 測試失敗:', error);
-        this.showNotification(`ChatGPT 測試失敗: ${error.message}`, 'error');
-    } finally {
-        this.hideLoading();
-    }
-});
-
-
 
 
                 // AI優化事件
@@ -7148,11 +4858,6 @@ document.getElementById('ai-preplan-btn')?.addEventListener('click', async () =>
 document.getElementById('ai-preplan-btn-b')?.addEventListener('click', async () => {
     await this.handleAIPreplanBMode();
 });
-                // 低碳排模態按鈕事件
-document.getElementById('ai-preplan-btn-c')?.addEventListener('click', async () => {
-    await this.handleAIPreplanCMode();
-});
-
 
 // 派車收送點查詢按鈕
 document.getElementById('fetchDeliveryPointsBtn')?.addEventListener('click', async () => {
@@ -7419,16 +5124,14 @@ displayLastQueryReport(data) {
                 </tbody>
             </table>
         </div>
-        
-<div style="margin-top: 2rem; text-align: center; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
-    <button class="btn btn-primary btn-sm" onclick="app.exportCurrentDayRouteSheet()" style="margin-right: 0.5rem;">
-        <i class="fas fa-download"></i> 匯出路線表
-    </button>
-    <button class="btn btn-secondary btn-sm" onclick="app.refreshRouteTable()">
-        <i class="fas fa-sync-alt"></i> 重新整理
-    </button>
-</div>
-
+        <div style="margin-top: 1rem; text-align: right;">
+            <button class="btn btn-primary btn-sm" onclick="app.exportLastQueryReport()">
+                <i class="fas fa-download"></i> 匯出報告
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="app.refreshLastQueryReport()" style="margin-left: 0.5rem;">
+                <i class="fas fa-sync-alt"></i> 重新整理
+            </button>
+        </div>
     `;
     
     container.innerHTML = tableHtml;
@@ -7654,7 +5357,7 @@ showLatestOrderDialog(formattedTime, client) {
 
     msg.innerHTML = `
       <div style="white-space:pre-line;">
-【您好，我是TCC-GAI派車中心數位主任<br>Lisa：
+【您好，我是GAI派車數位秘書：
 剛剛 <span class="highlight-time">${time}</span> 已收到來自客戶 
             <span class="highlight-client">${client}</span> 的訂單，請檢視。】</div>
     `;
@@ -7726,8 +5429,8 @@ async fetchDeliveryPoints() {
             targetSpreadsheetId: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc'
         });
         
-        // 2. 自動執行外部 GAS 的 executeSteps1to5WithMemoryCleanup 程序
-        await this.executeSteps1to5WithMemoryCleanup();
+        // 2. 自動執行外部 GAS 的 executeThreePhaseProcess 程序
+        await this.executeThreePhaseProcess();
         
         if (loadingSpinner) {
             loadingSpinner.textContent = '正在等待工作表生成...';
@@ -7919,6 +5622,57 @@ refreshDeliveryReport() {
     }
 }
 
+// 執行外部 GAS 的 executeThreePhaseProcess 程序（修正 CORS 版本）
+async executeThreePhaseProcess() {
+    const externalGasUrl = 'https://script.google.com/macros/s/AKfycbxNG022EybrJx51v1E6WjnUTeWGO0rcLk-wBGpOzGgnGdpN1H362ZKdM44Dju1JatchaQ/exec';
+    
+    try {
+        // 先測試 GET 請求確認服務可用
+        console.log('測試外部 GAS 連線...');
+        const testResponse = await fetch(externalGasUrl, {
+            method: 'GET',
+            mode: 'no-cors', // 使用 no-cors 模式避免預檢請求
+        });
+        
+        console.log('連線測試完成，開始執行 POST 請求');
+        
+        const response = await fetch(externalGasUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain', // 改用 text/plain 避免預檢請求
+            },
+            body: JSON.stringify({
+                action: 'executeThreePhaseProcess',
+                data: {
+                    timestamp: new Date().toISOString(),
+                    source: '昶青智慧冷鏈物流派車系統'
+                }
+            }),
+            mode: 'no-cors', // 使用 no-cors 模式
+        });
+        
+        console.log('POST 請求已發送');
+        
+        // 由於使用 no-cors 模式，無法讀取回應內容
+        // 但請求已經發送到外部 GAS
+        return {
+            success: true,
+            message: '外部程序執行請求已發送',
+            note: '由於 CORS 限制，無法確認執行結果，請檢查外部工作表'
+        };
+        
+    } catch (error) {
+        console.error('執行外部 executeThreePhaseProcess 失敗:', error);
+        
+        // 提供更友善的錯誤訊息
+        if (error.name === 'TypeError') {
+            throw new Error('網路連線問題，請檢查網路狀態或稍後再試');
+        } else {
+            throw new Error(`外部程序執行失敗: ${error.message}`);
+        }
+    }
+}
+
 
 
 // 處理AI預排
@@ -7960,16 +5714,14 @@ async handleAIPreplan() {
                         </div>
                     </div>
                     ${cardsHtml}
-                   
-<div style="margin-top: 2rem; text-align: center; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
-    <button class="btn btn-primary btn-sm" onclick="app.exportCurrentDayRouteSheet()" style="margin-right: 0.5rem;">
-        <i class="fas fa-download"></i> 匯出路線表
-    </button>
-    <button class="btn btn-secondary btn-sm" onclick="app.refreshRouteTable()">
-        <i class="fas fa-sync-alt"></i> 重新整理
-    </button>
-</div>
-
+                    <div style="margin-top: 2rem; text-align: center; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
+                        <button class="btn btn-primary btn-sm" onclick="app.exportRouteTable()" style="margin-right: 0.5rem;">
+                            <i class="fas fa-download"></i> 匯出路線表
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="app.refreshRouteTable()">
+                            <i class="fas fa-sync-alt"></i> 重新整理
+                        </button>
+                    </div>
                 </div>
             `;
             
@@ -8268,81 +6020,6 @@ refreshRouteTableB() {
 refreshRouteTableB() {
     this.handleAIPreplanBMode();
 }
-// 處理低碳排模態
-async handleAIPreplanCMode() {
-    const resultDiv = document.getElementById('gai-route-result');
-    this.showPartialLoading('gai-route-result', '正在佈建AI當日各路線預排表(低碳排模態)...');
-
-    try {
-        console.log('開始獲取當日各路線表(C)...');
-        
-        const result = await this.apiCall('getCurrentDayRouteTableC', {
-            targetSpreadsheetId: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc'
-        });
-        
-        console.log('API 返回結果:', result);
-        
-        if (result && result.length > 0) {
-            const cardsHtml = this.convertToRouteCards(result);
-            resultDiv.innerHTML = `
-                <div style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); margin-top: 1rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <div>
-                            <h4 style="margin: 0; color: #dc2626; font-size: 1.5rem; font-weight: 700;">
-                                <i class="fas fa-leaf" style="margin-right: 0.5rem; color: #16a34a;"></i>
-                                當日各路線表(C) - 低碳排模態
-                            </h4>
-                            <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #64748b;">
-                                資料更新時間: ${new Date().toLocaleString('zh-TW')} | 共 ${getUniqueRouteCount(result)} 條路線
-                            </p>
-                        </div>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button class="btn btn-secondary btn-sm" onclick="expandAllRoutes()" title="展開所有路線">
-                                <i class="fas fa-expand-alt"></i>
-                            </button>
-                            <button class="btn btn-secondary btn-sm" onclick="collapseAllRoutes()" title="收折所有路線">
-                                <i class="fas fa-compress-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                    ${cardsHtml}
-                    <div style="margin-top: 2rem; text-align: center; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
-                        <button class="btn btn-success btn-sm" onclick="app.exportRouteTableC()" style="margin-right: 0.5rem;">
-                            <i class="fas fa-download"></i> 匯出路線表(C)
-                        </button>
-                        <button class="btn btn-secondary btn-sm" onclick="app.refreshRouteTableC()">
-                            <i class="fas fa-sync-alt"></i> 重新整理
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            this.showNotification('當日各路線表(C)計算完成', 'success');
-        } else {
-            throw new Error('無法取得路線表(C)資料或資料為空');
-        }
-    } catch (e) {
-        console.error('載入路線表(C)失敗:', e);
-        resultDiv.innerHTML = `
-            <div style="color: #dc2626; padding: 2rem; border: 2px dashed #fecaca; border-radius: 12px; background: #fef2f2; text-align: center;">
-                <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                <h4 style="margin-bottom: 0.5rem;">載入失敗</h4>
-                <p style="margin-bottom: 1rem;">${e.message}</p>
-                <small style="color: #991b1b;">請檢查網路連線或聯絡系統管理員</small>
-            </div>
-        `;
-    }
-}
-
-// 匯出路線表(C)功能
-exportRouteTableC() {
-    this.showNotification('匯出功能開發中...', 'info');
-}
-
-// 重新整理路線表(C)
-refreshRouteTableC() {
-    this.handleAIPreplanCMode();
-}
 
 // 獲取最新的託收託運回報資料
 async getLatestDeliveryReport() {
@@ -8405,7 +6082,7 @@ async showGAISecretaryModal() {
                 <div style="text-align: center; padding: 1.5rem;">
                     <div style="margin: 0 auto 1.5rem auto; text-align: center;">
                         <img src="R2.png" alt="GAI秘書" 
-                            style="width: 220px; height: 220px; border-radius: 30%; 
+                            style="width: 180px; height: 180px; border-radius: 50%; 
                            object-fit: cover; 
                            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
                            border: 3px solid #0ea5e9;"
@@ -8413,7 +6090,7 @@ async showGAISecretaryModal() {
                     </div>
                     
                     <h4 style="color: #1e293b; margin-bottom: 1.5rem; font-size: 1.2rem;">
-                        您好，我是TCC-GAI派車中心數位主任<br>Lisa
+                        您好，我是GAI派車數位秘書
                     </h4>
                     
                     <div style="background: #fef2f2; padding: 1.5rem; border-radius: 12px; 
@@ -8442,14 +6119,14 @@ async showGAISecretaryModal() {
                 <div style="text-align: center; padding: 1.5rem;">
                     <div style="margin: 0 auto 1.5rem auto; text-align: center;">
                         <img src="R2.png" alt="GAI秘書" 
-                             style="width: 220px; height: 220px; border-radius: 30%; 
+                             style="width: 180px; height: 180px; border-radius: 50%; 
                                     object-fit: cover; 
                                     box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
                                     border: 3px solid #0ea5e9;">
                     </div>
                     
                     <h4 style="color: #1e293b; margin-bottom: 1.5rem; font-size: 1.2rem;">
-                        您好，我是TCC-GAI派車中心數位主任<br>Lisa
+                        您好，我是GAI派車數位秘書
                     </h4>
                     
                     <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 12px; 
@@ -8471,14 +6148,14 @@ async showGAISecretaryModal() {
             <div style="text-align: center; padding: 1.5rem;">
                 <div style="margin: 0 auto 1.5rem auto; text-align: center;">
                     <img src="R2.png" alt="GAI秘書" 
-                         style="width: 220px; height: 220px; border-radius: 30%; 
+                         style="width: 180px; height: 180px; border-radius: 50%; 
                                 object-fit: cover; 
                                 box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
                                 border: 3px solid #f59e0b;">
                 </div>
                 
                 <h4 style="color: #1e293b; margin-bottom: 1.5rem; font-size: 1.2rem;">
-                    您好，我是TCC-GAI派車中心數位主任<br>Lisa
+                    您好，我是GAI派車數位秘書
                 </h4>
                 
                 <div style="background: #fef3c7; padding: 1.5rem; border-radius: 12px; 
@@ -8498,211 +6175,136 @@ async showGAISecretaryModal() {
 }
 
 
-// 隱藏GAI派車中心數位主任<br>Lisa對話框
+// 隱藏GAI派車數位秘書對話框
 hideGAISecretaryModal() {
     const modal = document.getElementById('gaiSecretaryModal');
     modal.style.display = 'none';
 }
-showGAIAssistantModal() {
-    const modal = document.getElementById('gaiAssistantModal');
-    const modalBody = document.getElementById('gaiAssistantModalBody');
-    
-    // 整合所有功能的按鈕
-    modalBody.innerHTML = `
-        <!-- 🔥 固定頭部區域 -->
-        <div class="gai-modal-header" style="
-            position: sticky;
-            top: 0;
-            background: linear-gradient(135deg, #fcfcfc 0%, #ecedeb 100%);
-            z-index: 10;
-            padding: 1rem;
-            text-align: center;
-            border-radius: 24px 24px 0 0;
-            margin: -1.5rem -1.5rem 1.5rem -1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        ">
-            <img src="R2.png" alt="GAI秘書" class="gai-secretary-avatar" style="
-                width: 220px;
-                height: 220px;
-                border-radius: 30%;
-                object-fit: cover;
-                border: 3px solid rgba(255, 255, 255, 0.9);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-                margin-bottom: 0.5rem;
-            ">
-            <h4 style="color: black; margin: 0; font-size: 1.1rem; font-weight: 500;">
-                您好，我是TCC-GAI派車中心數位主任<br>Lisa
-            </h4>
-        </div>
+ // 👇 在這裡新增整合版的 GAI 派車數位專員對話框方法
+    showGAIAssistantModal() {
+        const modal = document.getElementById('gaiAssistantModal');
+        const modalBody = document.getElementById('gaiAssistantModalBody');
         
-        <!-- 🔥 可滾動內容區域 -->
-        <div class="gai-modal-content" style="
-            max-height: calc(65vh - 100px);
-            overflow-y: auto;
-            padding: 0 0.5rem;
-        ">
-            <!-- 🔥 新增：ChatGPT 對話區域 -->
-            <div style="background: #f8fafc; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; text-align: left;">
-                <h5 style="margin-bottom: 1rem; color: #0ea5e9; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-comments"></i>
-                    智能問答助手
-                </h5>
+        // 整合所有功能的按鈕
+        modalBody.innerHTML = `
+            <div style="text-align: center; padding: 1.5rem;">
+                <!-- GAI 秘書頭像 -->
+                <div style="margin: 0 auto 1.5rem auto; text-align: center;">
+                    <img src="R2.png" alt="GAI秘書" class="gai-secretary-avatar">
+                </div>
                 
-                <!-- 對話歷史區域 -->
-                <div id="chatHistory" style="
-                    max-height: 450px; 
-                    overflow-y: auto; 
-                    background: white; 
-                    border-radius: 8px; 
-                    padding: 1rem; 
-                    margin-bottom: 1rem;
-                    border: 1px solid #e2e8f0;
-                ">
-                    <div class="chat-message system-message" style="
-                        background: #e0f2fe; 
-                        padding: 0.75rem; 
-                        border-radius: 8px; 
-                        margin-bottom: 0.5rem;
-                        font-size: 0.875rem;
+                <h4 style="color: #1e293b; margin-bottom: 2rem; font-size: 1.3rem;">
+                    您好，我是GAI派車數位專員
+                </h4>
+                
+                <!-- 功能按鈕區域 -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    
+                    <!-- 檢查最新訂單資訊 -->
+                    <button class="btn btn-primary" onclick="app.checkLatestOrderInfo()" style="
+                        padding: 1rem;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 0.5rem;
+                        height: auto;
+                        min-height: 80px;
                     ">
-                        <strong>系統：</strong>您好！我可以根據託收託運回報的資料回答您的問題。請輸入您想了解的內容。
+                        <i class="fas fa-clipboard-list" style="font-size: 1.5rem;"></i>
+                        <span>檢查最新訂單資訊</span>
+                    </button>
+                    
+                    <!-- GAI每日訂單分析 -->
+                    <button class="btn btn-info" onclick="app.showDailyOrderAnalysis()" style="
+                        padding: 1rem;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 0.5rem;
+                        height: auto;
+                        min-height: 80px;
+                    ">
+                        <i class="fas fa-chart-line" style="font-size: 1.5rem;"></i>
+                        <span>GAI每日訂單分析</span>
+                    </button>
+                    
+                    <!-- 路線規劃建議 -->
+                    <button class="btn btn-success" onclick="app.showRouteOptimizationPage()" style="
+                        padding: 1rem;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 0.5rem;
+                        height: auto;
+                        min-height: 80px;
+                    ">
+                        <i class="fas fa-route" style="font-size: 1.5rem;"></i>
+                        <span>智慧路線規劃</span>
+                    </button>
+                    
+                    <!-- 即時調度支援 -->
+                    <button class="btn btn-warning" onclick="app.showRealTimeDispatch()" style="
+                        padding: 1rem;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 0.5rem;
+                        height: auto;
+                        min-height: 80px;
+                    ">
+                        <i class="fas fa-truck" style="font-size: 1.5rem;"></i>
+                        <span>即時調度支援</span>
+                    </button>
+                    
+                    <!-- 數據分析報告 -->
+                    <button class="btn btn-secondary" onclick="app.showDataAnalysisReport()" style="
+                        padding: 1rem;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 0.5rem;
+                        height: auto;
+                        min-height: 80px;
+                    ">
+                        <i class="fas fa-chart-bar" style="font-size: 1.5rem;"></i>
+                        <span>數據分析報告</span>
+                    </button>
+                    
+                    <!-- 系統健康檢查 -->
+                    <button class="btn btn-info" onclick="app.performSystemHealthCheck()" style="
+                        padding: 1rem;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 0.5rem;
+                        height: auto;
+                        min-height: 80px;
+                    ">
+                        <i class="fas fa-heartbeat" style="font-size: 1.5rem;"></i>
+                        <span>系統健康檢查</span>
+                    </button>
+                </div>
+                
+                <!-- 快速操作區 -->
+                <div style="border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
+                    <h5 style="margin-bottom: 1rem; color: #64748b;">快速操作</h5>
+                    <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn btn-sm btn-outline-primary" onclick="app.refreshDashboard()">
+                            <i class="fas fa-sync-alt"></i> 重新整理儀表板
+                        </button>
+                        <button class="btn btn-sm btn-outline-success" onclick="app.switchPage('route-optimization')">
+                            <i class="fas fa-brain"></i> 前往路線規劃
+                        </button>
+                        <button class="btn btn-sm btn-outline-info" onclick="app.exportSystemReport()">
+                            <i class="fas fa-download"></i> 匯出系統報告
+                        </button>
                     </div>
                 </div>
-                
-                <!-- 輸入區域 -->
-                <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="chatInput" placeholder="請輸入您的問題..." style="
-                        flex: 1; 
-                        padding: 0.75rem; 
-                        border: 1px solid #d1d5db; 
-                        border-radius: 8px; 
-                        font-size: 0.875rem;
-                    " onkeypress="if(event.key==='Enter') app.sendChatMessage()">
-                    
-                    <button onclick="app.sendChatMessage()" style="
-                        background: linear-gradient(135deg, #0ea5e9, #14b8a6); 
-                        color: white; 
-                        border: none; 
-                        padding: 0.75rem 1rem; 
-                        border-radius: 8px; 
-                        cursor: pointer;
-                        font-size: 0.875rem;
-                        min-width: 60px;
-                    " id="sendChatBtn">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
             </div>
-            
-            <!-- 功能按鈕區域 -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                
-                <!-- 檢查最新訂單資訊 -->
-                <button class="btn btn-primary" onclick="app.checkLatestOrderInfo()" style="
-                    padding: 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 0.5rem;
-                    height: auto;
-                    min-height: 80px;
-                ">
-                    <i class="fas fa-clipboard-list" style="font-size: 1.5rem;"></i>
-                    <span>檢查最新訂單資訊</span>
-                </button>
-                
-                <!-- GAI每日訂單分析 -->
-                <button class="btn btn-info" onclick="app.showDailyOrderAnalysis()" style="
-                    padding: 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 0.5rem;
-                    height: auto;
-                    min-height: 80px;
-                ">
-                    <i class="fas fa-chart-line" style="font-size: 1.5rem;"></i>
-                    <span>GAI每日訂單分析</span>
-                </button>
-                
-                <!-- 路線規劃建議 -->
-                <button class="btn btn-success" onclick="app.showRouteOptimizationPage()" style="
-                    padding: 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 0.5rem;
-                    height: auto;
-                    min-height: 80px;
-                ">
-                    <i class="fas fa-route" style="font-size: 1.5rem;"></i>
-                    <span>智慧路線規劃</span>
-                </button>
-                
-                <!-- 即時調度支援 -->
-                <button class="btn btn-warning" onclick="app.showRealTimeDispatch()" style="
-                    padding: 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 0.5rem;
-                    height: auto;
-                    min-height: 80px;
-                ">
-                    <i class="fas fa-truck" style="font-size: 1.5rem;"></i>
-                    <span>即時調度支援</span>
-                </button>
-                
-                <!-- 數據分析報告 -->
-                <button class="btn btn-secondary" onclick="app.showDataAnalysisReport()" style="
-                    padding: 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 0.5rem;
-                    height: auto;
-                    min-height: 80px;
-                ">
-                    <i class="fas fa-chart-bar" style="font-size: 1.5rem;"></i>
-                    <span>數據分析報告</span>
-                </button>
-                
-                <!-- 系統健康檢查 -->
-                <button class="btn btn-info" onclick="app.performSystemHealthCheck()" style="
-                    padding: 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 0.5rem;
-                    height: auto;
-                    min-height: 80px;
-                ">
-                    <i class="fas fa-heartbeat" style="font-size: 1.5rem;"></i>
-                    <span>系統健康檢查</span>
-                </button>
-            </div>
-            
-            <!-- 快速操作區 -->
-            <div style="border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
-                <h5 style="margin-bottom: 1rem; color: #64748b;">快速操作</h5>
-                <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
-                    <button class="btn btn-sm btn-outline-primary" onclick="app.refreshDashboard()">
-                        <i class="fas fa-sync-alt"></i> 重新整理儀表板
-                    </button>
-                    <button class="btn btn-sm btn-outline-success" onclick="app.switchPage('route-optimization')">
-                        <i class="fas fa-brain"></i> 前往路線規劃
-                    </button>
-                    <button class="btn btn-sm btn-outline-info" onclick="app.exportSystemReport()">
-                        <i class="fas fa-download"></i> 匯出系統報告
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    modal.style.display = 'flex';
-}
-
+        `;
+        
+        modal.style.display = 'flex';
+    }
 
     // 👇 然後在這裡新增第4段的所有功能方法
     // 檢查最新訂單資訊
@@ -8792,19 +6394,9 @@ showGAIAssistantModal() {
         }
     }
 
-// 🔥 修改為去除前導零的版本
+// 工具方法
 formatDateForSheet(dateStr) {
     if (!dateStr) return '';
-    
-    // 將 yyyy-mm-dd 轉換為 yyyy/m/d (去除前導零)
-    const parts = dateStr.split('-');
-    if (parts.length === 3) {
-        const year = parts[0];
-        const month = parseInt(parts[1], 10); // 去除前導零
-        const day = parseInt(parts[2], 10);   // 去除前導零
-        return `${year}/${month}/${day}`;
-    }
-    
     return dateStr.replace(/-/g, '/');
 }
 
@@ -9680,7 +7272,13 @@ async showRouteAddresses(routeName) {
                 // 載入頁面特定資料
                 this.loadPageData(pageName);
                 
-                
+                // 如果切換到主控台頁面，自動顯示GAI秘書對話框
+                if (pageName === 'dashboard') {
+                    // 延遲1秒顯示，讓頁面切換動畫完成
+                    setTimeout(() => {
+                        this.showGAISecretaryModal();
+                    }, 1000);
+                }
              }
 
 
@@ -9700,13 +7298,6 @@ async showRouteAddresses(routeName) {
 
             // 載入頁面資料
             async loadPageData(pageName) {
-                             // 👇 新增：各路線板數頁面權限檢查
-                if (pageName === 'route-pallets') {
-                    if (!this.hasPermission('route-management') || !this.checkUserLevel('s2')) {
-                        this.showAccessDenied(pageName);
-                        return;
-                    }
-                }
                 // 檢查權限
                 if (!this.hasPermission(pageName)) {
                     this.showAccessDenied(pageName);
@@ -9841,17 +7432,6 @@ async showRouteAddresses(routeName) {
                     
                 } catch (error) {
                     console.error('API 呼叫失敗:', error);
-                     // 🔥 新增：ChatGPT 特定錯誤處理
-        if (action === 'processChatGPTQuery') {
-            // ChatGPT API 的特殊錯誤處理
-            if (error.message.includes('API key') || error.message.includes('401')) {
-                throw new Error('AI 服務認證失敗，請聯繫系統管理員');
-            } else if (error.message.includes('quota') || error.message.includes('429')) {
-                throw new Error('AI 服務使用額度已達上限，請稍後再試');
-            } else if (error.message.includes('timeout')) {
-                throw new Error('AI 服務回應超時，請稍後再試');
-            }
-        }
                     
                     // 如果是網路錯誤，切換到離線模式
                     if (error.name === 'TypeError' && error.message.includes('fetch')) {
@@ -9878,16 +7458,6 @@ async showRouteAddresses(routeName) {
                             level: 's4'
                         }
                     },
-                    processChatGPTQuery: {
-            reply: "您好！我是TCC-GAI派車中心數位主任<br>Lisa。我可以根據託收託運回報資料為您提供以下服務：\n\n" +
-                  "✅ 路線規劃建議\n" +
-                  "✅ 配送狀態查詢\n" +
-                  "✅ 車輛調度分析\n" +
-                  "✅ 異常情況處理建議\n\n" +
-                  "請告訴我您需要什麼協助？",
-            timestamp: new Date().toISOString(),
-            success: true
-        },
                     getDashboardData: {
                         todayDeliveries: 156,
                         vehicleUsage: 78,
@@ -9955,37 +7525,7 @@ async showRouteAddresses(routeName) {
 
 // 載入主控台資料 (修改版)
 async loadDashboard() {
-    // 🔥 新增：先檢查快取（只在線上模式且非模擬資料時使用）
-    if (!CONFIG.USE_MOCK_DATA && this.isOnline) {
-        const cachedData = DashboardCache.get();
-        
-        if (cachedData) {
-            console.log('⚡ 使用快取資料，立即顯示');
-            
-            // 立即更新 UI（使用快取資料）
-            document.getElementById('todayDeliveries').textContent = cachedData.routePalletSum;
-            document.getElementById('vehicleUsage').textContent = `${cachedData.routePalletNonZeroPercentage}%`;
-            document.getElementById('onTimeRate').textContent = cachedData.routeTableLastBValue;
-            document.getElementById('alertCount').textContent = cachedData.routeTableAlertValue;
-            
-            // 更新異常警示樣式
-            const alertElement = document.getElementById('alertCount');
-            if (cachedData.routeTableAlertValue > 2) {
-                alertElement.classList.add('alert');
-            } else {
-                alertElement.classList.remove('alert');
-            }
-            
-            // 顯示快取提示（可選）
-            this.showNotification('數據已驅動', 'info', 2000);
-            
-            return; // 直接返回，不再載入
-        }
-    }
-    
-    // 原本的載入邏輯（完全不變）
-    this.showLoading('正在載入主控台資料...', true);
-    
+     this.showLoading('正在載入主控台資料...', true); // 允許互動
     try {
         let dashboardData;
         let routePalletSum = 0;
@@ -9995,10 +7535,10 @@ async loadDashboard() {
         
         if (CONFIG.USE_MOCK_DATA || !this.isOnline) {
             dashboardData = this.getMockData('getDashboardData');
-            routePalletSum = 163;
-            routePalletNonZeroPercentage = 10;
-            routeTableLastBValue = 7436.04;
-            routeTableAlertValue = 2.01;
+            routePalletSum = 163; // 模擬資料
+            routePalletNonZeroPercentage = 10; // 模擬百分比
+            routeTableLastBValue = 7436.04; // 模擬路線表B欄位最後值
+            routeTableAlertValue = 2.01; // 模擬異常警示值 (7436.04 × 0.27 ÷ 1000)
             if (!this.isOnline) {
                 this.showNotification('目前使用離線模式', 'warning');
             }
@@ -10008,7 +7548,6 @@ async loadDashboard() {
             
             // 同時獲取各項數據
             try {
-                console.log('開始獲取各路線板數資料...');
                 const [palletSum, nonZeroPercentage, lastBValue, alertValue] = await Promise.all([
                     this.apiCall('getRoutePalletSum', {
                         targetSpreadsheetId: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc'
@@ -10024,13 +7563,6 @@ async loadDashboard() {
                     })
                 ]);
                 
-                console.log('獲取到的資料:', {
-                    palletSum,
-                    nonZeroPercentage,
-                    lastBValue,
-                    alertValue
-                });
-                
                 routePalletSum = palletSum;
                 routePalletNonZeroPercentage = nonZeroPercentage;
                 routeTableLastBValue = lastBValue;
@@ -10038,34 +7570,22 @@ async loadDashboard() {
                 
             } catch (error) {
                 console.error('獲取外部資料失敗:', error);
-                this.showNotification(`獲取各路線板數資料失敗: ${error.message}`, 'error');
                 routePalletSum = 0;
                 routePalletNonZeroPercentage = 0;
                 routeTableLastBValue = 0;
                 routeTableAlertValue = 0;
             }
-            
-            // 🔥 新增：儲存到快取（只在線上模式且非模擬資料時）
-            if (!CONFIG.USE_MOCK_DATA && this.isOnline) {
-                DashboardCache.set({
-                    routePalletSum,
-                    routePalletNonZeroPercentage,
-                    routeTableLastBValue,
-                    routeTableAlertValue
-                });
-                console.log('💾 資料已快取（30分鐘有效）');
-            }
         }
         
-        // 更新統計數據（原本的邏輯）
+        // 更新統計數據
         document.getElementById('todayDeliveries').textContent = routePalletSum;
         document.getElementById('vehicleUsage').textContent = `${routePalletNonZeroPercentage}%`;
         document.getElementById('onTimeRate').textContent = routeTableLastBValue;
-        document.getElementById('alertCount').textContent = routeTableAlertValue;
+        document.getElementById('alertCount').textContent = routeTableAlertValue; // 顯示計算後的異常警示值
 
-        // 根據異常警示值更新樣式（原本的邏輯）
+        // 根據異常警示值更新樣式
         const alertElement = document.getElementById('alertCount');
-        if (routeTableAlertValue > 2) {
+        if (routeTableAlertValue > 2) { // 可以根據需要調整閾值
             alertElement.classList.add('alert');
         } else {
             alertElement.classList.remove('alert');
@@ -10078,7 +7598,6 @@ async loadDashboard() {
         this.hideLoading();
     }
 }
-
 
 
 
@@ -10317,35 +7836,32 @@ async viewExternalRoute(routeName) {
                 `);
             }
 
-async deleteRoute(routeId) {
-    if (!confirm('確定要刪除此路線嗎？此操作無法復原。')) {
-        return;
-    }
+            // 刪除路線
+            async deleteRoute(routeId) {
+                if (!confirm('確定要刪除此路線嗎？此操作無法復原。')) {
+                    return;
+                }
 
-    this.showLoading();
-    try {
-        if (CONFIG.USE_MOCK_DATA || !this.isOnline) {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            this.showNotification('路線已刪除', 'success');
-        } else {
-            await this.apiCall('deleteRoute', { routeId });
-            this.showNotification('路線已刪除', 'success');
-        }
-        
-        // 🔥 新增：清除主控台快取
-        if (typeof DashboardCache !== 'undefined') {
-            DashboardCache.clear();
-        }
-        
-        await this.loadRouteManagement();
-    } catch (error) {
-        console.error('刪除路線失敗:', error);
-        this.showNotification('刪除路線失敗', 'error');
-    } finally {
-        this.hideLoading();
-    }
-}
-
+                this.showLoading();
+                try {
+                    if (CONFIG.USE_MOCK_DATA || !this.isOnline) {
+                        // 模擬刪除
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        this.showNotification('路線已刪除', 'success');
+                    } else {
+                        await this.apiCall('deleteRoute', { routeId });
+                        this.showNotification('路線已刪除', 'success');
+                    }
+                    
+                    // 重新載入路線列表
+                    await this.loadRouteManagement();
+                } catch (error) {
+                    console.error('刪除路線失敗:', error);
+                    this.showNotification('刪除路線失敗', 'error');
+                } finally {
+                    this.hideLoading();
+                }
+            }
 
             // 顯示新增路線模態視窗
             showAddRouteModal() {
@@ -10376,50 +7892,44 @@ async deleteRoute(routeId) {
             }
 
             // 新增路線
-           async addNewRoute() {
-    const routeName = document.getElementById('newRouteName').value.trim();
-    const startPoint = document.getElementById('newStartPoint').value.trim();
-    const endPoint = document.getElementById('newEndPoint').value.trim();
-    const stopPoints = document.getElementById('newStopPoints').value.trim().split('\n').filter(p => p.trim());
-    const estimatedTime = parseInt(document.getElementById('newEstimatedTime').value);
+            async addNewRoute() {
+                const routeName = document.getElementById('newRouteName').value.trim();
+                const startPoint = document.getElementById('newStartPoint').value.trim();
+                const endPoint = document.getElementById('newEndPoint').value.trim();
+                const stopPoints = document.getElementById('newStopPoints').value.trim().split('\n').filter(p => p.trim());
+                const estimatedTime = parseInt(document.getElementById('newEstimatedTime').value);
 
-    if (!routeName || !startPoint || !endPoint) {
-        this.showNotification('請填寫必要欄位', 'warning');
-        return;
-    }
+                if (!routeName || !startPoint || !endPoint) {
+                    this.showNotification('請填寫必要欄位', 'warning');
+                    return;
+                }
 
-    this.showLoading();
-    try {
-        if (CONFIG.USE_MOCK_DATA || !this.isOnline) {
-            // 模擬新增
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            this.showNotification('路線新增成功', 'success');
-        } else {
-            await this.apiCall('addRoute', {
-                name: routeName,
-                startPoint,
-                endPoint,
-                stopPoints,
-                estimatedTime
-            });
-            this.showNotification('路線新增成功', 'success');
-        }
-        
-        // 🔥 新增：清除主控台快取
-        if (typeof DashboardCache !== 'undefined') {
-            DashboardCache.clear();
-        }
-        
-        this.hideModal();
-        await this.loadRouteManagement();
-    } catch (error) {
-        console.error('新增路線失敗:', error);
-        this.showNotification('新增路線失敗', 'error');
-    } finally {
-        this.hideLoading();
-    }
-}
-
+                this.showLoading();
+                try {
+                    if (CONFIG.USE_MOCK_DATA || !this.isOnline) {
+                        // 模擬新增
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        this.showNotification('路線新增成功', 'success');
+                    } else {
+                        await this.apiCall('addRoute', {
+                            name: routeName,
+                            startPoint,
+                            endPoint,
+                            stopPoints,
+                            estimatedTime
+                        });
+                        this.showNotification('路線新增成功', 'success');
+                    }
+                    
+                    this.hideModal();
+                    await this.loadRouteManagement();
+                } catch (error) {
+                    console.error('新增路線失敗:', error);
+                    this.showNotification('新增路線失敗', 'error');
+                } finally {
+                    this.hideLoading();
+                }
+            }
 
             // 顯示批量匯入模態視窗
             showImportRoutesModal() {
@@ -10687,85 +8197,74 @@ async deleteRoute(routeId) {
             }
 
             // 執行緊急調派
-async executeEmergencyDispatch() {
-    const emergencyType = document.getElementById('emergencyType').value;
-    const location = document.getElementById('emergencyLocation').value.trim();
-    const description = document.getElementById('emergencyDescription').value.trim();
-    const priority = document.getElementById('emergencyPriority').value;
+            async executeEmergencyDispatch() {
+                const emergencyType = document.getElementById('emergencyType').value;
+                const location = document.getElementById('emergencyLocation').value.trim();
+                const description = document.getElementById('emergencyDescription').value.trim();
+                const priority = document.getElementById('emergencyPriority').value;
 
-    if (!emergencyType || !location || !description) {
-        this.showNotification('請填寫所有必要欄位', 'warning');
-        return;
-    }
+                if (!emergencyType || !location || !description) {
+                    this.showNotification('請填寫所有必要欄位', 'warning');
+                    return;
+                }
 
-    this.showLoading();
-    try {
-        let result;
-        if (CONFIG.USE_MOCK_DATA || !this.isOnline) {
-            result = this.getMockData('emergencyDispatch');
-        } else {
-            result = await this.apiCall('emergencyDispatch', {
-                type: emergencyType,
-                location,
-                description,
-                priority
-            });
-        }
+                this.showLoading();
+                try {
+                    let result;
+                    if (CONFIG.USE_MOCK_DATA || !this.isOnline) {
+                        result = this.getMockData('emergencyDispatch');
+                    } else {
+                        result = await this.apiCall('emergencyDispatch', {
+                            type: emergencyType,
+                            location,
+                            description,
+                            priority
+                        });
+                    }
 
-        this.hideModal();
-        this.showNotification(`緊急調派已啟動！預計 ${result.estimatedResponse} 內到達`, 'success');
-        
-        // 🔥 新增：清除主控台快取
-        if (typeof DashboardCache !== 'undefined') {
-            DashboardCache.clear();
-        }
-        
-        // 更新主控台警示數量
-        const alertCount = document.getElementById('alertCount');
-        const currentCount = parseInt(alertCount.textContent) || 0;
-        alertCount.textContent = currentCount + 1;
-        alertCount.classList.add('alert');
-        
-    } catch (error) {
-        console.error('緊急調派失敗:', error);
-        this.showNotification('緊急調派失敗', 'error');
-    } finally {
-        this.hideLoading();
-    }
-}
-
+                    this.hideModal();
+                    this.showNotification(`緊急調派已啟動！預計 ${result.estimatedResponse} 內到達`, 'success');
+                    
+                    // 更新主控台警示數量
+                    const alertCount = document.getElementById('alertCount');
+                    const currentCount = parseInt(alertCount.textContent) || 0;
+                    alertCount.textContent = currentCount + 1;
+                    alertCount.classList.add('alert');
+                    
+                } catch (error) {
+                    console.error('緊急調派失敗:', error);
+                    this.showNotification('緊急調派失敗', 'error');
+                } finally {
+                    this.hideLoading();
+                }
+            }
 
             // 路線重規劃
-async rerouteAllVehicles() {
-    if (!confirm('確定要重新規劃所有車輛路線嗎？這可能需要幾分鐘時間。')) {
-        return;
-    }
+            async rerouteAllVehicles() {
+                if (!confirm('確定要重新規劃所有車輛路線嗎？這可能需要幾分鐘時間。')) {
+                    return;
+                }
 
-    this.showLoading();
-    try {
-        if (CONFIG.USE_MOCK_DATA || !this.isOnline) {
-            await new Promise(resolve => setTimeout(resolve, 3000));
-            this.showNotification('所有車輛路線重規劃完成', 'success');
-        } else {
-            await this.apiCall('rerouteAllVehicles');
-            this.showNotification('所有車輛路線重規劃完成', 'success');
-        }
-        
-        // 🔥 新增：清除主控台快取
-        if (typeof DashboardCache !== 'undefined') {
-            DashboardCache.clear();
-        }
-        
-        // 重新載入主控台資料
-        await this.loadDashboard();
-    } catch (error) {
-        console.error('路線重規劃失敗:', error);
-        this.showNotification('路線重規劃失敗', 'error');
-    } finally {
-        this.hideLoading();
-    }
-}
-
+                this.showLoading();
+                try {
+                    if (CONFIG.USE_MOCK_DATA || !this.isOnline) {
+                        // 模擬重規劃過程
+                        await new Promise(resolve => setTimeout(resolve, 3000));
+                        this.showNotification('所有車輛路線重規劃完成', 'success');
+                    } else {
+                        await this.apiCall('rerouteAllVehicles');
+                        this.showNotification('所有車輛路線重規劃完成', 'success');
+                    }
+                    
+                    // 重新載入主控台資料
+                    await this.loadDashboard();
+                } catch (error) {
+                    console.error('路線重規劃失敗:', error);
+                    this.showNotification('路線重規劃失敗', 'error');
+                } finally {
+                    this.hideLoading();
+                }
+            }
 
             // 顯示即時改道模態視窗
             showRealTimeRerouteModal() {
@@ -10799,44 +8298,39 @@ async rerouteAllVehicles() {
                 });
             }
 
-async executeRealTimeReroute() {
-    const vehicleId = document.getElementById('rerouteVehicle').value;
-    const reason = document.getElementById('rerouteReason').value;
-    const notes = document.getElementById('rerouteNotes').value.trim();
+            // 執行即時改道
+            async executeRealTimeReroute() {
+                const vehicleId = document.getElementById('rerouteVehicle').value;
+                const reason = document.getElementById('rerouteReason').value;
+                const notes = document.getElementById('rerouteNotes').value.trim();
 
-    if (!vehicleId || !reason) {
-        this.showNotification('請填寫必要欄位', 'warning');
-        return;
-    }
+                if (!vehicleId || !reason) {
+                    this.showNotification('請填寫必要欄位', 'warning');
+                    return;
+                }
 
-    this.showLoading();
-    try {
-        if (CONFIG.USE_MOCK_DATA || !this.isOnline) {
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            this.showNotification('即時改道指令已發送', 'success');
-        } else {
-            await this.apiCall('realTimeReroute', {
-                vehicleId,
-                reason,
-                notes
-            });
-            this.showNotification('即時改道指令已發送', 'success');
-        }
-        
-        // 🔥 新增：清除主控台快取
-        if (typeof DashboardCache !== 'undefined') {
-            DashboardCache.clear();
-        }
-        
-        this.hideModal();
-    } catch (error) {
-        console.error('即時改道失敗:', error);
-        this.showNotification('即時改道失敗', 'error');
-    } finally {
-        this.hideLoading();
-    }
-}
-
+                this.showLoading();
+                try {
+                    if (CONFIG.USE_MOCK_DATA || !this.isOnline) {
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        this.showNotification('即時改道指令已發送', 'success');
+                    } else {
+                        await this.apiCall('realTimeReroute', {
+                            vehicleId,
+                            reason,
+                            notes
+                        });
+                        this.showNotification('即時改道指令已發送', 'success');
+                    }
+                    
+                    this.hideModal();
+                } catch (error) {
+                    console.error('即時改道失敗:', error);
+                    this.showNotification('即時改道失敗', 'error');
+                } finally {
+                    this.hideLoading();
+                }
+            }
 
             // 初始化工作表
             async initializeSheets() {
@@ -11585,271 +9079,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.log('版本: 1.0.0');
         console.log('作者: 昶青智慧冷鏈物流技術團隊');
         console.log('最後更新: 2025-06-27');
-        // 新增分割線拖拽功能
-class SplitLayoutManager {
-    constructor() {
-        this.isResizing = false;
-        this.minLeftWidth = 50; // 最小50%
-        this.maxLeftWidth = 80; // 最大80%
-        this.currentLeftWidth = 70; // 預設70%
-        this.init();
-    }
-
-    init() {
-        this.bindEvents();
-        this.loadUserPreference();
-    }
-
-    bindEvents() {
-        const resizer = document.querySelector('.gai-resizer');
-        if (!resizer) return;
-
-        resizer.addEventListener('mousedown', this.startResize.bind(this));
-        document.addEventListener('mousemove', this.doResize.bind(this));
-        document.addEventListener('mouseup', this.stopResize.bind(this));
-    }
-
-    startResize(e) {
-        this.isResizing = true;
-        document.body.style.cursor = 'col-resize';
-        document.body.style.userSelect = 'none';
-        
-        const resizer = document.querySelector('.gai-resizer');
-        resizer.classList.add('resizing');
-        
-        e.preventDefault();
-    }
-
-    doResize(e) {
-        if (!this.isResizing) return;
-
-        const container = document.querySelector('.gai-split-layout');
-        if (!container) return;
-
-        const containerRect = container.getBoundingClientRect();
-        const mouseX = e.clientX - containerRect.left;
-        const containerWidth = containerRect.width;
-        
-        let leftWidthPercent = (mouseX / containerWidth) * 100;
-        
-        // 限制範圍
-        leftWidthPercent = Math.max(this.minLeftWidth, Math.min(this.maxLeftWidth, leftWidthPercent));
-        
-        this.currentLeftWidth = leftWidthPercent;
-        this.updateLayout();
-    }
-
-    stopResize() {
-        if (!this.isResizing) return;
-        
-        this.isResizing = false;
-        document.body.style.cursor = '';
-        document.body.style.userSelect = '';
-        
-        const resizer = document.querySelector('.gai-resizer');
-        resizer?.classList.remove('resizing');
-        
-        this.saveUserPreference();
-    }
-
-    updateLayout() {
-        const chatSection = document.querySelector('.gai-chat-section');
-        const functionsSection = document.querySelector('.gai-functions-section');
-        
-        if (chatSection && functionsSection) {
-            chatSection.style.flex = `0 0 ${this.currentLeftWidth}%`;
-            functionsSection.style.flex = `0 0 ${100 - this.currentLeftWidth}%`;
-        }
-    }
-
-    saveUserPreference() {
-        if (typeof UserPreferences !== 'undefined') {
-            UserPreferences.save('gai_split_width', this.currentLeftWidth);
-        }
-    }
-
-    loadUserPreference() {
-        if (typeof UserPreferences !== 'undefined') {
-            const saved = UserPreferences.load('gai_split_width', 70);
-            this.currentLeftWidth = saved;
-            this.updateLayout();
-        }
-    }
-}
-
-// 初始化分割佈局管理器
-let splitLayoutManager;
-
-// 修改 showGAIAssistantModal 函數
-DispatchGAISystem.prototype.showGAIAssistantModal = function() {
-    const modal = document.getElementById('gaiAssistantModal');
-    const modalBody = document.getElementById('gaiAssistantModalBody');
-    
-    modalBody.innerHTML = `
-        <div class="gai-split-layout">
-            <!-- 左側聊天區域 -->
-            <div class="gai-chat-section">
-                <div class="gai-chat-header">
-                    <h5 style="margin: 0; color: #0ea5e9; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-comments"></i>
-                        智能問答助手
-                    </h5>
-                    <p style="margin: 0.5rem 0 0 0; color: #64748b; font-size: 0.85rem;">
-                        我可以根據託收託運回報資料回答您的問題
-                    </p>
-                </div>
-                
-                <div class="gai-chat-content">
-                    <div class="gai-chat-history" id="chatHistory">
-                        <div class="chat-message system-message">
-                            <div class="chat-message-header">
-                                <i class="fas fa-info-circle"></i>
-                                <span>系統</span>
-                            </div>
-                            <div class="chat-message-content">
-                                您好！我是TCC-GAI派車中心數位主任<br>Lisa。我可以根據託收託運回報的資料回答您的問題。請輸入您想了解的內容。
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="gai-chat-input-area">
-                        <textarea 
-                            id="chatInput" 
-                            class="gai-chat-input" 
-                            placeholder="請輸入您的問題..."
-                            rows="1"
-                        ></textarea>
-                        <button class="gai-send-btn" id="sendChatBtn">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 可調整分割線 -->
-            <div class="gai-resizer" title="拖拽調整左右比例"></div>
-            
-            <!-- 右側功能區域 -->
-            <div class="gai-functions-section">
-                <div class="gai-functions-header">
-                    <div class="gai-secretary-avatar-container">
-                        <img src="R2.png" alt="GAI秘書" class="gai-secretary-avatar">
-                    </div>
-                    <h5 style="margin: 0; color: #1e293b; font-weight: 600;">
-                        TCC-GAI派車中心數位主任<br>Lisa
-                    </h5>
-                </div>
-                
-                <div class="gai-functions-content">
-                    <div class="gai-function-grid">
-                        <div class="gai-function-btn" onclick="app.checkLatestOrderInfo()">
-                            <i class="fas fa-clipboard-list"></i>
-                            <div class="gai-function-text">
-                                <div class="gai-function-title">檢查最新訂單</div>
-                                <div class="gai-function-desc">查看最新的訂單資訊</div>
-                            </div>
-                        </div>
-                        
-                        <div class="gai-function-btn" onclick="app.showDailyOrderAnalysis()">
-                            <i class="fas fa-chart-line"></i>
-                            <div class="gai-function-text">
-                                <div class="gai-function-title">每日訂單分析</div>
-                                <div class="gai-function-desc">GAI智能分析報告</div>
-                            </div>
-                        </div>
-                        
-                        <div class="gai-function-btn" onclick="app.showRouteOptimizationPage()">
-                            <i class="fas fa-route"></i>
-                            <div class="gai-function-text">
-                                <div class="gai-function-title">智慧路線規劃</div>
-                                <div class="gai-function-desc">AI優化配送路線</div>
-                            </div>
-                        </div>
-                        
-                        <div class="gai-function-btn" onclick="app.showRealTimeDispatch()">
-                            <i class="fas fa-truck"></i>
-                            <div class="gai-function-text">
-                                <div class="gai-function-title">即時調度支援</div>
-                                <div class="gai-function-desc">緊急調度處理</div>
-                            </div>
-                        </div>
-                        
-                        <div class="gai-function-btn" onclick="app.showDataAnalysisReport()">
-                            <i class="fas fa-chart-bar"></i>
-                            <div class="gai-function-text">
-                                <div class="gai-function-title">數據分析報告</div>
-                                <div class="gai-function-desc">營運數據洞察</div>
-                            </div>
-                        </div>
-                        
-                        <div class="gai-function-btn" onclick="app.performSystemHealthCheck()">
-                            <i class="fas fa-heartbeat"></i>
-                            <div class="gai-function-text">
-                                <div class="gai-function-title">系統健康檢查</div>
-                                <div class="gai-function-desc">檢查系統狀態</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="gai-quick-actions">
-                    <h6>快速操作</h6>
-                    <div class="gai-quick-btn-group">
-                        <button class="gai-quick-btn" onclick="app.refreshDashboard()">
-                            <i class="fas fa-sync-alt"></i> 重新整理
-                        </button>
-                        <button class="gai-quick-btn" onclick="app.switchPage('route-optimization')">
-                            <i class="fas fa-brain"></i> 路線規劃
-                        </button>
-                        <button class="gai-quick-btn" onclick="app.exportSystemReport()">
-                            <i class="fas fa-download"></i> 匯出報告
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    modal.style.display = 'flex';
-    
-    // 初始化分割佈局管理器
-    setTimeout(() => {
-        if (!splitLayoutManager) {
-            splitLayoutManager = new SplitLayoutManager();
-        }
-        
-        // 綁定聊天功能
-        this.bindChatEvents();
-    }, 100);
-};
-
-// 綁定聊天事件
-DispatchGAISystem.prototype.bindChatEvents = function() {
-    const chatInput = document.getElementById('chatInput');
-    const sendBtn = document.getElementById('sendChatBtn');
-    
-    if (chatInput && sendBtn) {
-        // 自動調整輸入框高度
-        chatInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-        });
-        
-        // Enter 發送訊息 (Shift+Enter 換行)
-        chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                this.sendChatMessage();
-            }
-        });
-        
-        // 發送按鈕點擊
-        sendBtn.addEventListener('click', () => {
-            this.sendChatMessage();
-        });
-    }
-};
-
 
         // 工具：將 yyyy-mm-dd 轉 yyyy/MM/dd
 function formatDateForSheet(dateStr) {
@@ -12217,388 +9446,6 @@ function collapseAllRoutes() {
     });
 }
 
-        // ===== 碳排追蹤折線圖功能 =====
-
-let carbonChartInstance = null;
-let carbonChartData = {
-    labels: [],
-    datasets: []
-};
-
-// 初始化圖表
-function initCarbonChart() {
-    const ctx = document.getElementById('carbonChart').getContext('2d');
-    
-    carbonChartInstance = new Chart(ctx, {
-        type: 'line',
-        data: carbonChartData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                mode: 'index',
-                intersect: false,
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                    labels: {
-                        usePointStyle: true,
-                        padding: 15,
-                        font: {
-                            family: 'Inter',
-                            size: 13,
-                            weight: '600'
-                        }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                    titleColor: '#1e293b',
-                    bodyColor: '#475569',
-                    borderColor: '#e2e8f0',
-                    borderWidth: 1,
-                    padding: 12,
-                    boxPadding: 6,
-                    usePointStyle: true,
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y.toFixed(2) + ' ' + context.dataset.unit;
-                            }
-                            return label;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        font: {
-                            family: 'Inter',
-                            size: 11
-                        }
-                    }
-                },
-                yLeft: {
-                    type: 'linear',
-                    position: 'left',
-                    title: {
-                        display: true,
-                        text: '碳排量 (公斤)',
-                        font: {
-                            family: 'Inter',
-                            size: 13,
-                            weight: '600'
-                        }
-                    },
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    },
-                    ticks: {
-                        font: {
-                            family: 'Inter',
-                            size: 11
-                        }
-                    }
-                },
-                yRight: {
-                    type: 'linear',
-                    position: 'right',
-                    title: {
-                        display: true,
-                        text: '營業額 (元)',
-                        font: {
-                            family: 'Inter',
-                            size: 13,
-                            weight: '600'
-                        }
-                    },
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        font: {
-                            family: 'Inter',
-                            size: 11
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-/**
- * 載入碳排圖表資料 - GitHub Pages 版本（使用 fetch）
- */
-async function loadCarbonChartData() {
-    // 1. 取得日期範圍
-    let startDate, endDate;
-    const rangeSelector = document.getElementById('carbonDateRange');
-    
-    if (rangeSelector.value === 'custom') {
-        startDate = document.getElementById('carbonStartDate')?.value;
-        endDate = document.getElementById('carbonEndDate')?.value;
-    } else {
-        // 自動計算日期
-        const today = new Date();
-        const days = parseInt(rangeSelector.value);
-        const start = new Date(today);
-        start.setDate(today.getDate() - days);
-        
-        startDate = start.toISOString().split('T')[0];
-        endDate = today.toISOString().split('T')[0];
-    }
-    
-    console.log('📊 開始載入碳排資料...');
-    console.log('📅 日期範圍:', startDate, '至', endDate);
-    
-    // 2. 驗證輸入
-    if (!startDate || !endDate) {
-        if (window.app) {
-            app.showNotification('請選擇日期範圍', 'warning');
-        }
-        return;
-    }
-    
-    if (new Date(startDate) > new Date(endDate)) {
-        if (window.app) {
-            app.showNotification('開始日期不能晚於結束日期', 'error');
-        }
-        return;
-    }
-    
-    // 3. 顯示載入狀態
-    document.getElementById('carbonChartSkeleton').style.display = 'block';
-    document.getElementById('carbonChartContainer').style.display = 'none';
-    
-    try {
-        // 4. 調用 API
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZkX_tW_3vk1edpwf7fDNVMLB0tpUgvvRda90-lzJFVCrZUHvGaVH-7Gfp7idFDznR5g/exec';
-        const url = `${GOOGLE_SCRIPT_URL}?action=getCarbonChartData&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
-        
-        console.log('🌐 API 請求:', url);
-        
-        const response = await fetch(url, {
-            method: 'GET',
-            mode: 'cors',
-            cache: 'no-cache',
-            headers: {
-                'Accept': 'application/json',
-            }
-        });
-        
-        console.log('📡 Response status:', response.status);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        
-        const result = await response.json();
-        console.log('📦 API 回應:', result);
-        
-        if (result.success && result.data) {
-            console.log('✅ 成功取得資料');
-            console.log('📊 資料筆數:', result.data.dates?.length || 0);
-            
-            if (result.data.dates && result.data.dates.length > 0) {
-                updateCarbonChart(result.data);
-                if (window.app) {
-                    app.showNotification(`成功載入 ${result.data.dates.length} 筆資料`, 'success');
-                }
-            } else {
-                throw new Error('查無資料，請調整日期範圍');
-            }
-        } else {
-            throw new Error(result.error || 'API 回應格式錯誤');
-        }
-        
-    } catch (error) {
-        console.error('❌ 載入碳排資料失敗:', error);
-        
-        // 顯示錯誤訊息
-        const container = document.getElementById('carbonChartContainer');
-        container.innerHTML = `
-            <div style="text-align: center; padding: 3rem; color: #dc2626;">
-                <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                <h4>載入失敗</h4>
-                <p>${error.message}</p>
-                <button class="btn btn-primary" onclick="refreshCarbonChart()" style="margin-top: 1rem;">
-                    <i class="fas fa-sync-alt"></i> 重試
-                </button>
-            </div>
-        `;
-        
-        if (window.app) {
-            app.showNotification(`載入失敗: ${error.message}`, 'error');
-        }
-        
-    } finally {
-        // 隱藏載入狀態
-        document.getElementById('carbonChartSkeleton').style.display = 'none';
-        document.getElementById('carbonChartContainer').style.display = 'block';
-    }
-}
-
-
-
-// 更新圖表資料
-function updateCarbonChart(data) {
-    carbonChartData.labels = data.dates;
-    carbonChartData.datasets = [
-        {
-            label: '派車GAI',
-            data: data.dispatch,
-            borderColor: '#0ea5e9',
-            backgroundColor: 'rgba(14, 165, 233, 0.1)',
-            borderWidth: 2,
-            tension: 0.4,
-            yAxisID: 'yLeft',
-            unit: '公斤'
-        },
-        {
-            label: '運務GAI',
-            data: data.operation,
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            borderWidth: 2,
-            tension: 0.4,
-            yAxisID: 'yLeft',
-            unit: '公斤'
-        },
-        {
-            label: '託收托運GAI',
-            data: data.storage,
-            borderColor: '#f59e0b',
-            backgroundColor: 'rgba(245, 158, 11, 0.1)',
-            borderWidth: 2,
-            tension: 0.4,
-            yAxisID: 'yLeft',
-            unit: '公斤'
-        },
-        {
-            label: '營業額',
-            data: data.revenue,
-            borderColor: '#ef4444',
-            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-            borderWidth: 2,
-            tension: 0.4,
-            yAxisID: 'yRight',
-            unit: '元'
-        }
-    ];
-    
-    if (carbonChartInstance) {
-        carbonChartInstance.data = carbonChartData;
-        carbonChartInstance.update();
-    }
-}
-
-// 切換趨勢線
-function toggleTrendLine(type) {
-    const checkbox = document.getElementById(`trend${type.charAt(0).toUpperCase() + type.slice(1)}`);
-    const datasetIndex = {
-        'dispatch': 0,
-        'operation': 1,
-        'storage': 2,
-        'revenue': 3
-    }[type];
-    
-    if (checkbox.checked) {
-        // 計算趨勢線
-        const dataset = carbonChartData.datasets[datasetIndex];
-        const trendData = calculateTrendLine(dataset.data);
-        
-        // 新增趨勢線資料集
-        carbonChartData.datasets.push({
-            label: dataset.label + ' (趨勢)',
-            data: trendData,
-            borderColor: dataset.borderColor,
-            borderWidth: 2,
-            borderDash: [5, 5],
-            tension: 0,
-            yAxisID: dataset.yAxisID,
-            unit: dataset.unit,
-            pointRadius: 0
-        });
-    } else {
-        // 移除趨勢線
-        const trendLabel = carbonChartData.datasets[datasetIndex].label + ' (趨勢)';
-        const trendIndex = carbonChartData.datasets.findIndex(d => d.label === trendLabel);
-        if (trendIndex !== -1) {
-            carbonChartData.datasets.splice(trendIndex, 1);
-        }
-    }
-    
-    carbonChartInstance.update();
-}
-
-// 計算趨勢線（線性回歸）
-function calculateTrendLine(data) {
-    const n = data.length;
-    let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
-    
-    for (let i = 0; i < n; i++) {
-        if (data[i] !== null) {
-            sumX += i;
-            sumY += data[i];
-            sumXY += i * data[i];
-            sumX2 += i * i;
-        }
-    }
-    
-    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-    const intercept = (sumY - slope * sumX) / n;
-    
-    return data.map((_, i) => slope * i + intercept);
-}
-
-// 重新整理圖表
-function refreshCarbonChart() {
-    loadCarbonChartData();
-}
-
-// 日期範圍選擇器事件
-document.getElementById('carbonDateRange').addEventListener('change', function() {
-    const customRange = document.getElementById('customDateRange');
-    if (this.value === 'custom') {
-        customRange.style.display = 'flex';
-    } else {
-        customRange.style.display = 'none';
-        loadCarbonChartData();
-    }
-});
-
-// 自訂日期變更事件
-document.getElementById('startDate').addEventListener('change', loadCarbonChartData);
-document.getElementById('endDate').addEventListener('change', loadCarbonChartData);
-
-// 頁面載入時初始化
-document.addEventListener('DOMContentLoaded', function() {
-    // 載入 Chart.js
-    if (typeof Chart === 'undefined') {
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
-        script.onload = function() {
-            initCarbonChart();
-            loadCarbonChartData();
-        };
-        document.head.appendChild(script);
-    } else {
-        initCarbonChart();
-        loadCarbonChartData();
-    }
-});
-
     </script>
 <!-- 任務進度覆蓋層：步驟條 + 取消 -->
 <div id="taskProgressOverlay" class="task-progress-overlay" style="display:none;">
@@ -12632,7 +9479,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="lod-pulse"></span>
     </div>
     <h3 id="latestOrderTitle" class="lod-title">
-      <i class="fas fa-robot" style="margin-right:6px;"></i>TCC-GAI派車中心數位主任<br>Lisa
+      <i class="fas fa-robot" style="margin-right:6px;"></i>GAI派車數位秘書
     </h3>
     <div id="latestOrderMessage" class="lod-message">
       <!-- 動態填入 -->
@@ -12647,27 +9494,26 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
 </div>
-<!-- TCC-GAI派車中心數位主任<br>Lisa整合對話框 -->
+<!-- GAI派車數位專員整合對話框 -->
 <div id="gaiAssistantModal" class="modal" style="display: none;">
-    <div class="modal-content" style="max-width: 2000px;">
+    <div class="modal-content" style="max-width: 800px;">
         <div class="modal-header" style="
             background: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%);
             color: white;
             border-radius: 24px 24px 0 0;
-            min-height: 40px;  /* 👈 設定最小高度 */
         ">
-            <h4 style="color: white; margin: 0;">
+            <h3 style="color: white; margin: 0;">
                 <i class="fas fa-robot" style="margin-right: 0.5rem;"></i>
-                TCC-GAI派車中心數位主任<br>Lisa - 功能中心
-            </h4>
-           <span class="modal-close" id="gaiAssistantModalClose">&times;</span>
+                GAI派車數位專員 - 功能中心
+            </h3>
+            <span class="modal-close" id="gaiAssistantModalClose" style="color: white;">&times;</span>
         </div>
         <div class="modal-body" id="gaiAssistantModalBody">
             <!-- 動態內容 -->
         </div>
     </div>
 </div>
-<script src="cache-manager.js"></script>
+
    
 </body>
 </html>
