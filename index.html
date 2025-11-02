@@ -8,305 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ==================== 統計資訊樣式 ==================== */
-
-/* 統計容器動畫 */
-#carbonStats {
-    animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* 統計總覽網格 */
-.stats-overview {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-/* 統計卡片 */
-.stat-card {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.25rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-}
-
-/* 統計卡片圖示 */
-.stat-icon {
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    font-size: 1.5rem;
-}
-
-.stat-card-primary .stat-icon {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.stat-card-success .stat-icon {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-}
-
-.stat-card-warning .stat-icon {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: white;
-}
-
-.stat-card-info .stat-icon {
-    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-    color: white;
-}
-
-/* 統計內容 */
-.stat-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.stat-label {
-    font-size: 0.875rem;
-    color: #64748b;
-    font-weight: 500;
-}
-
-.stat-value {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #1e293b;
-    line-height: 1;
-}
-
-.stat-unit {
-    font-size: 0.75rem;
-    color: #94a3b8;
-    font-weight: 500;
-}
-
-/* 詳細統計區域 */
-.stats-detail {
-    margin-bottom: 1.5rem;
-}
-
-/* 統計表格容器 */
-.stats-table-container {
-    overflow-x: auto;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-/* 統計表格 */
-.stats-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    font-size: 0.875rem;
-}
-
-.stats-table thead {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.stats-table th {
-    padding: 1rem;
-    text-align: left;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.stats-table tbody tr {
-    border-bottom: 1px solid #e2e8f0;
-    transition: background 0.2s;
-}
-
-.stats-table tbody tr:hover {
-    background: #f8fafc;
-}
-
-.stats-table tbody tr.table-divider {
-    border-top: 2px solid #cbd5e1;
-}
-
-.stats-table td {
-    padding: 1rem;
-    color: #475569;
-}
-
-.table-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 600;
-}
-
-.table-label i {
-    font-size: 0.5rem;
-}
-
-/* 增長率樣式 */
-.growth-positive {
-    color: #ef4444;
-    font-weight: 600;
-}
-
-.growth-negative {
-    color: #10b981;
-    font-weight: 600;
-}
-
-/* 數據洞察區域 */
-.stats-insights {
-    /* 樣式已包含在上方 */
-}
-
-.insights-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1rem;
-}
-
-/* 洞察卡片 */
-.insight-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem;
-    background: white;
-    border-radius: 12px;
-    border-left: 4px solid;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-}
-
-.insight-card:hover {
-    transform: translateX(4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-.insight-card i {
-    font-size: 1.5rem;
-    margin-top: 0.25rem;
-}
-
-.insight-card strong {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #1e293b;
-    font-size: 0.9375rem;
-}
-
-.insight-card p {
-    margin: 0;
-    color: #64748b;
-    font-size: 0.875rem;
-    line-height: 1.5;
-}
-
-/* 洞察卡片類型 */
-.insight-warning {
-    border-left-color: #f59e0b;
-}
-
-.insight-warning i {
-    color: #f59e0b;
-}
-
-.insight-danger {
-    border-left-color: #ef4444;
-}
-
-.insight-danger i {
-    color: #ef4444;
-}
-
-.insight-success {
-    border-left-color: #10b981;
-}
-
-.insight-success i {
-    color: #10b981;
-}
-
-.insight-info {
-    border-left-color: #0ea5e9;
-}
-
-.insight-info i {
-    color: #0ea5e9;
-}
-
-/* 按鈕活動狀態 */
-#toggleStatsBtn.active {
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
-}
-
-/* 響應式設計 */
-@media (max-width: 768px) {
-    .stats-overview {
-        grid-template-columns: 1fr;
-    }
-    
-    .insights-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .stats-table {
-        font-size: 0.75rem;
-    }
-    
-    .stats-table th,
-    .stats-table td {
-        padding: 0.75rem 0.5rem;
-    }
-    
-    .stat-value {
-        font-size: 1.5rem;
-    }
-}
-
-/* 打印樣式 */
-@media print {
-    #carbonStats {
-        display: block !important;
-        page-break-inside: avoid;
-    }
-    
-    .stat-card,
-    .insight-card {
-        box-shadow: none;
-        border: 1px solid #e2e8f0;
-    }
-}
-
         /* 預測控制器樣式 */
 #showPrediction {
     accent-color: #fff;
@@ -3943,41 +3644,85 @@ justify-content:flex-end; /* 右靠齊 */
 
                     </div>
                 </div>
-                <!-- 碳排追蹤折線圖區塊 -->
+<!-- 碳排追蹤折線圖區塊 -->
 <div class="card" style="margin-top: 2rem;">
-    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; padding: 1.5rem;">
         <h3 style="margin: 0; display: flex; align-items: center; gap: 0.75rem;">
             <i class="fas fa-chart-line"></i>
             碳排追蹤趨勢分析
         </h3>
-        <div style="display: flex; gap: 1rem; align-items: center;">
+        
+        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
             <!-- 日期範圍選擇器 -->
-            <select id="carbonDateRange" class="form-input" style="width: auto; padding: 0.5rem 1rem;">
-                <option value="7">近 7 天</option>
-                <option value="30" selected>近 30 天</option>
-                <option value="90">近 90 天</option>
-                <option value="custom">自訂範圍</option>
-            </select>
-            
-            <!-- 自訂日期範圍（隱藏） -->
-            <div id="customDateRange" style="display: none; gap: 0.5rem;">
-                <input type="date" id="startDate" class="form-input" style="width: auto; padding: 0.5rem;">
-                <span style="color: var(--gray-500);">至</span>
-                <input type="date" id="endDate" class="form-input" style="width: auto; padding: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <select id="carbonDateRange" class="form-input" style="width: auto; padding: 0.5rem 1rem; min-width: 120px;">
+                    <option value="7">近 7 天</option>
+                    <option value="30" selected>近 30 天</option>
+                    <option value="90">近 90 天</option>
+                    <option value="custom">自訂範圍</option>
+                </select>
+                
+                <!-- 自訂日期範圍（隱藏） -->
+                <div id="customDateRange" style="display: none; gap: 0.5rem;">
+                    <input type="date" id="startDate" class="form-input" style="width: auto; padding: 0.5rem;">
+                    <span style="color: var(--gray-500);">至</span>
+                    <input type="date" id="endDate" class="form-input" style="width: auto; padding: 0.5rem;">
+                </div>
             </div>
- <!-- 🆕 統計按鈕 -->
+            
+            <!-- 🆕 統計按鈕 -->
             <button 
                 id="toggleStatsBtn"
                 onclick="toggleStatistics()" 
                 class="btn btn-sm" 
-                style="padding: 0.5rem 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                style="
+                    padding: 0.5rem 1rem; 
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    color: white; 
+                    border: none; 
+                    border-radius: 8px; 
+                    cursor: pointer; 
+                    display: flex; 
+                    align-items: center; 
+                    gap: 0.5rem; 
+                    transition: all 0.3s; 
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    position: relative;
+                    z-index: 10;
+                    white-space: nowrap;
+                ">
                 <i class="fas fa-chart-bar"></i>
                 顯示統計
             </button>
-                        <!-- 🆕 預測控制器 -->
-            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: white; font-size: 0.875rem; margin: 0;">
-                    <input type="checkbox" id="showPrediction" onchange="togglePrediction()" style="cursor: pointer; width: 16px; height: 16px;">
+            
+            <!-- 🆕 預測控制器 -->
+            <div style="
+                display: flex; 
+                align-items: center; 
+                gap: 0.5rem; 
+                padding: 0.5rem 1rem; 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                border-radius: 8px; 
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                position: relative;
+                z-index: 10;
+            ">
+                <label style="
+                    display: flex; 
+                    align-items: center; 
+                    gap: 0.5rem; 
+                    cursor: pointer; 
+                    color: white; 
+                    font-size: 0.875rem; 
+                    margin: 0;
+                    white-space: nowrap;
+                ">
+                    <input 
+                        type="checkbox" 
+                        id="showPrediction" 
+                        onchange="togglePrediction()" 
+                        style="cursor: pointer; width: 16px; height: 16px;"
+                    >
                     <i class="fas fa-crystal-ball"></i>
                     <span>預測</span>
                 </label>
@@ -3989,53 +3734,49 @@ justify-content:flex-end; /* 右靠齊 */
                     max="30" 
                     value="7" 
                     onchange="if(document.getElementById('showPrediction').checked) togglePrediction();"
-                    style="width: 60px; padding: 0.25rem 0.5rem; border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; background: rgba(255,255,255,0.2); color: white; text-align: center; font-size: 0.875rem;"
+                    style="
+                        width: 60px; 
+                        padding: 0.25rem 0.5rem; 
+                        border: 1px solid rgba(255,255,255,0.3); 
+                        border-radius: 4px; 
+                        background: rgba(255,255,255,0.2); 
+                        color: white; 
+                        text-align: center; 
+                        font-size: 0.875rem;
+                    "
                     placeholder="天數"
                 >
                 <span style="color: white; font-size: 0.875rem;">天</span>
             </div>
+            
             <!-- 重新整理按鈕 -->
-            <button class="btn btn-primary" onclick="refreshCarbonChart()" style="padding: 0.5rem 1rem;">
+            <button 
+                class="btn btn-primary" 
+                onclick="refreshCarbonChart()" 
+                style="
+                    padding: 0.5rem 1rem;
+                    position: relative;
+                    z-index: 10;
+                    white-space: nowrap;
+                ">
                 <i class="fas fa-sync-alt"></i>
                 重新整理
             </button>
         </div>
     </div>
-    <!-- ========== 🆕 統計資訊容器(插入在這裡) ========== -->
+    
+    <!-- 🆕 統計資訊容器 -->
     <div id="carbonStats" style="display: none; padding: 1.5rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0;"></div>
-    <!-- ========== 插入結束 ========== -->
-    <div class="card-body">
-        <!-- 趨勢線控制區 -->
-        <div style="display: flex; justify-content: flex-end; gap: 1.5rem; margin-bottom: 1rem; padding: 0.75rem; background: var(--gray-50); border-radius: 8px;">
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
-                <input type="checkbox" id="trendDispatch" onchange="toggleTrendLine('dispatch')" style="cursor: pointer;">
-                <span>派車GAI趨勢線</span>
-            </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
-                <input type="checkbox" id="trendOperation" onchange="toggleTrendLine('operation')" style="cursor: pointer;">
-                <span>運務GAI趨勢線</span>
-            </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
-                <input type="checkbox" id="trendStorage" onchange="toggleTrendLine('storage')" style="cursor: pointer;">
-                <span>託收托運GAI趨勢線</span>
-            </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
-                <input type="checkbox" id="trendRevenue" onchange="toggleTrendLine('revenue')" style="cursor: pointer;">
-                <span>營業額趨勢線</span>
-            </label>
-        </div>
-        
-        <!-- 載入骨架屏 -->
-        <div id="carbonChartSkeleton" style="display: none;">
-            <div style="height: 350px; background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 12px;"></div>
-        </div>
-        
-        <!-- 圖表容器 -->
-        <div id="carbonChartContainer" style="position: relative; height: 500px;">
-            <canvas id="carbonChart"></canvas>
-        </div>
+    
+    <!-- 預測資訊顯示區 -->
+    <div id="predictionInfo" style="display: none; margin: 1rem 1.5rem 0;"></div>
+    
+    <!-- 圖表容器 -->
+    <div class="card-body" style="padding: 1.5rem;">
+        <canvas id="carbonChart"></canvas>
     </div>
 </div>
+
 
                 <!-- 快速操作區 -->
                 <div class="quick-actions">
@@ -4557,481 +4298,6 @@ justify-content:flex-end; /* 右靠齊 */
     </div>
 
     <script>
-        // ==================== 數據統計分析功能 ====================
-
-/**
- * 計算總和
- * @param {Array} data - 數據陣列
- * @returns {number} 總和
- */
-function calculateTotal(data) {
-    if (!data || data.length === 0) return 0;
-    
-    return data
-        .filter(v => v !== null && v !== undefined && !isNaN(v))
-        .reduce((sum, val) => sum + val, 0);
-}
-
-/**
- * 計算平均值
- * @param {Array} data - 數據陣列
- * @returns {number} 平均值
- */
-function calculateAverage(data) {
-    if (!data || data.length === 0) return 0;
-    
-    const validData = data.filter(v => v !== null && v !== undefined && !isNaN(v));
-    if (validData.length === 0) return 0;
-    
-    return calculateTotal(validData) / validData.length;
-}
-
-/**
- * 計算標準差
- * @param {Array} data - 數據陣列
- * @returns {number} 標準差
- */
-function calculateStdDev(data) {
-    if (!data || data.length === 0) return 0;
-    
-    const validData = data.filter(v => v !== null && v !== undefined && !isNaN(v));
-    if (validData.length === 0) return 0;
-    
-    const avg = calculateAverage(validData);
-    const squareDiffs = validData.map(value => Math.pow(value - avg, 2));
-    const avgSquareDiff = calculateAverage(squareDiffs);
-    
-    return Math.sqrt(avgSquareDiff);
-}
-
-/**
- * 計算增長率
- * @param {Array} data - 數據陣列
- * @returns {number} 增長率（百分比）
- */
-function calculateGrowthRate(data) {
-    if (!data || data.length < 2) return 0;
-    
-    const validData = data.filter(v => v !== null && v !== undefined && !isNaN(v));
-    if (validData.length < 2) return 0;
-    
-    const firstValue = validData[0];
-    const lastValue = validData[validData.length - 1];
-    
-    if (firstValue === 0) return 0;
-    
-    return ((lastValue - firstValue) / firstValue) * 100;
-}
-
-/**
- * 計算中位數
- * @param {Array} data - 數據陣列
- * @returns {number} 中位數
- */
-function calculateMedian(data) {
-    if (!data || data.length === 0) return 0;
-    
-    const validData = data
-        .filter(v => v !== null && v !== undefined && !isNaN(v))
-        .sort((a, b) => a - b);
-    
-    if (validData.length === 0) return 0;
-    
-    const mid = Math.floor(validData.length / 2);
-    
-    return validData.length % 2 === 0
-        ? (validData[mid - 1] + validData[mid]) / 2
-        : validData[mid];
-}
-
-/**
- * 顯示數據統計資訊
- */
-function showDataStatistics() {
-    console.log('📊 開始計算統計資訊...');
-    
-    if (!carbonChartData || !carbonChartData.datasets || carbonChartData.datasets.length === 0) {
-        console.warn('⚠️ 無圖表資料');
-        return;
-    }
-    
-    // 取得各數據集（排除預測數據）
-    const datasets = carbonChartData.datasets.filter(d => !d.isPrediction);
-    
-    if (datasets.length === 0) {
-        console.warn('⚠️ 無有效數據集');
-        return;
-    }
-    
-    // 計算派車GAI統計
-    const dispatchData = datasets[0]?.data || [];
-    const dispatchStats = {
-        total: calculateTotal(dispatchData),
-        avg: calculateAverage(dispatchData),
-        max: Math.max(...dispatchData.filter(v => v !== null && !isNaN(v))),
-        min: Math.min(...dispatchData.filter(v => v !== null && !isNaN(v))),
-        stdDev: calculateStdDev(dispatchData),
-        growth: calculateGrowthRate(dispatchData),
-        median: calculateMedian(dispatchData)
-    };
-    
-    // 計算運務GAI統計
-    const operationData = datasets[1]?.data || [];
-    const operationStats = {
-        total: calculateTotal(operationData),
-        avg: calculateAverage(operationData),
-        max: Math.max(...operationData.filter(v => v !== null && !isNaN(v))),
-        min: Math.min(...operationData.filter(v => v !== null && !isNaN(v))),
-        stdDev: calculateStdDev(operationData),
-        growth: calculateGrowthRate(operationData),
-        median: calculateMedian(operationData)
-    };
-    
-    // 計算託收托運GAI統計
-    const storageData = datasets[2]?.data || [];
-    const storageStats = {
-        total: calculateTotal(storageData),
-        avg: calculateAverage(storageData),
-        max: Math.max(...storageData.filter(v => v !== null && !isNaN(v))),
-        min: Math.min(...storageData.filter(v => v !== null && !isNaN(v))),
-        stdDev: calculateStdDev(storageData),
-        growth: calculateGrowthRate(storageData),
-        median: calculateMedian(storageData)
-    };
-    
-    // 計算營業額統計
-    const revenueData = datasets[3]?.data || [];
-    const revenueStats = {
-        total: calculateTotal(revenueData),
-        avg: calculateAverage(revenueData),
-        max: Math.max(...revenueData.filter(v => v !== null && !isNaN(v))),
-        min: Math.min(...revenueData.filter(v => v !== null && !isNaN(v))),
-        stdDev: calculateStdDev(revenueData),
-        growth: calculateGrowthRate(revenueData),
-        median: calculateMedian(revenueData)
-    };
-    
-    // 計算總碳排量（三個GAI相加）
-    const totalCarbonStats = {
-        total: (dispatchStats.total * 1000) + operationStats.total + storageStats.total,
-        avg:  (dispatchStats.avg * 1000) + operationStats.avg + storageStats.avg,
-        max: (dispatchStats.max * 1000) + operationStats.max + storageStats.max,
-        min: (dispatchStats.min * 1000) + operationStats.min + storageStats.min
-    };
-    
-    console.log('✅ 統計計算完成:', {
-        dispatch: dispatchStats,
-        operation: operationStats,
-        storage: storageStats,
-        revenue: revenueStats,
-        totalCarbon: totalCarbonStats
-    });
-    
-    // 顯示統計資訊
-    const statsContainer = document.getElementById('carbonStats');
-    if (!statsContainer) {
-        console.error('❌ 找不到 carbonStats 容器');
-        return;
-    }
-    
-    statsContainer.innerHTML = `
-        <!-- 總覽統計卡片 -->
-        <div class="stats-overview">
-            <div class="stat-card stat-card-primary">
-                <div class="stat-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                         <div class="stat-content">
-                <span class="stat-label">總碳排量</span>
-                <span class="stat-value">${(totalCarbonStats.total / 1000).toFixed(2)}</span>
-                <span class="stat-unit">公噸</span>
-            </div>
-            </div>
-            
-            <div class="stat-card stat-card-success">
-                <div class="stat-icon">
-                    <i class="fas fa-chart-bar"></i>
-                </div>
-                <div class="stat-content">
-                    <span class="stat-label">平均碳排量</span>
-                    <span class="stat-value">${totalCarbonStats.avg.toFixed(2)}</span>
-                    <span class="stat-unit">公斤/天</span>
-                </div>
-            </div>
-            
-            <div class="stat-card stat-card-warning">
-                <div class="stat-icon">
-                    <i class="fas fa-arrow-up"></i>
-                </div>
-                <div class="stat-content">
-                    <span class="stat-label">單日最高</span>
-                    <span class="stat-value">${totalCarbonStats.max.toFixed(2)}</span>
-                    <span class="stat-unit">公斤</span>
-                </div>
-            </div>
-            
-            <div class="stat-card stat-card-info">
-                <div class="stat-icon">
-                    <i class="fas fa-arrow-down"></i>
-                </div>
-                <div class="stat-content">
-                    <span class="stat-label">單日最低</span>
-                    <span class="stat-value">${totalCarbonStats.min.toFixed(2)}</span>
-                    <span class="stat-unit">公斤</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 詳細統計表格 -->
-        <div class="stats-detail">
-            <h4 style="margin: 0 0 1rem 0; color: #1e293b; font-size: 1rem; font-weight: 600;">
-                <i class="fas fa-table"></i> 詳細統計資訊
-            </h4>
-            
-            <div class="stats-table-container">
-                <table class="stats-table">
-                    <thead>
-                        <tr>
-                            <th>項目</th>
-                            <th>總計</th>
-                            <th>平均</th>
-                            <th>最大值</th>
-                            <th>最小值</th>
-                            <th>標準差</th>
-                            <th>中位數</th>
-                            <th>增長率</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <span class="table-label" style="color: #0ea5e9;">
-                                    <i class="fas fa-circle"></i> 派車GAI
-                                </span>
-                            </td>
-                            <td>${dispatchStats.total.toFixed(2)} t</td>
-                            <td>${dispatchStats.avg.toFixed(2)} t</td>
-                            <td>${dispatchStats.max.toFixed(2)} t</td>
-                            <td>${dispatchStats.min.toFixed(2)} t</td>
-                            <td>${dispatchStats.stdDev.toFixed(2)}</td>
-                            <td>${dispatchStats.median.toFixed(2)} t</td>
-                            <td class="${dispatchStats.growth >= 0 ? 'growth-positive' : 'growth-negative'}">
-                                ${dispatchStats.growth >= 0 ? '↑' : '↓'} ${Math.abs(dispatchStats.growth).toFixed(2)}%
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="table-label" style="color: #10b981;">
-                                    <i class="fas fa-circle"></i> 運務GAI
-                                </span>
-                            </td>
-                            <td>${operationStats.total.toFixed(2)} kg</td>
-                            <td>${operationStats.avg.toFixed(2)} kg</td>
-                            <td>${operationStats.max.toFixed(2)} kg</td>
-                            <td>${operationStats.min.toFixed(2)} kg</td>
-                            <td>${operationStats.stdDev.toFixed(2)}</td>
-                            <td>${operationStats.median.toFixed(2)} kg</td>
-                            <td class="${operationStats.growth >= 0 ? 'growth-positive' : 'growth-negative'}">
-                                ${operationStats.growth >= 0 ? '↑' : '↓'} ${Math.abs(operationStats.growth).toFixed(2)}%
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="table-label" style="color: #f59e0b;">
-                                    <i class="fas fa-circle"></i> 託收托運GAI
-                                </span>
-                            </td>
-                            <td>${storageStats.total.toFixed(2)} kg</td>
-                            <td>${storageStats.avg.toFixed(2)} kg</td>
-                            <td>${storageStats.max.toFixed(2)} kg</td>
-                            <td>${storageStats.min.toFixed(2)} kg</td>
-                            <td>${storageStats.stdDev.toFixed(2)}</td>
-                            <td>${storageStats.median.toFixed(2)} kg</td>
-                            <td class="${storageStats.growth >= 0 ? 'growth-positive' : 'growth-negative'}">
-                                ${storageStats.growth >= 0 ? '↑' : '↓'} ${Math.abs(storageStats.growth).toFixed(2)}%
-                            </td>
-                        </tr>
-                        <tr class="table-divider">
-                            <td>
-                                <span class="table-label" style="color: #ef4444;">
-                                    <i class="fas fa-circle"></i> 營業額
-                                </span>
-                            </td>
-                            <td>${revenueStats.total.toLocaleString()} 元</td>
-                            <td>${revenueStats.avg.toLocaleString()} 元</td>
-                            <td>${revenueStats.max.toLocaleString()} 元</td>
-                            <td>${revenueStats.min.toLocaleString()} 元</td>
-                            <td>${revenueStats.stdDev.toFixed(2)}</td>
-                            <td>${revenueStats.median.toLocaleString()} 元</td>
-                            <td class="${revenueStats.growth >= 0 ? 'growth-positive' : 'growth-negative'}">
-                                ${revenueStats.growth >= 0 ? '↑' : '↓'} ${Math.abs(revenueStats.growth).toFixed(2)}%
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <!-- 數據洞察 -->
-        <div class="stats-insights">
-            <h4 style="margin: 0 0 1rem 0; color: #1e293b; font-size: 1rem; font-weight: 600;">
-                <i class="fas fa-lightbulb"></i> 數據洞察
-            </h4>
-            <div class="insights-grid">
-                ${generateInsights(dispatchStats, operationStats, storageStats, revenueStats)}
-            </div>
-        </div>
-    `;
-    
-    // 添加動畫效果
-    statsContainer.style.display = 'block';
-    statsContainer.classList.add('fade-in');
-    
-    console.log('✅ 統計資訊顯示完成');
-}
-
-/**
- * 生成數據洞察
- */
-function generateInsights(dispatch, operation, storage, revenue) {
-    const insights = [];
-    
-    // 洞察 1: 最高碳排來源
-    const maxSource = Math.max(dispatch.total * 1000, operation.total, storage.total);
-    let maxSourceName = '';
-    if (maxSource === dispatch.total * 1000) maxSourceName = '派車GAI';
-    else if (maxSource === operation.total) maxSourceName = '運務GAI';
-    else maxSourceName = '託收托運GAI';
-    
-    insights.push(`
-        <div class="insight-card insight-warning">
-            <i class="fas fa-exclamation-triangle"></i>
-            <div>
-                <strong>主要碳排來源</strong>
-                <p>${maxSourceName} 佔總碳排量最高，建議優先優化此項目</p>
-            </div>
-        </div>
-    `);
-    
-    // 洞察 2: 增長趨勢
-    const totalGrowth = dispatch.growth + operation.growth + storage.growth;
-    if (totalGrowth > 10) {
-        insights.push(`
-            <div class="insight-card insight-danger">
-                <i class="fas fa-arrow-trend-up"></i>
-                <div>
-                    <strong>碳排增長警示</strong>
-                    <p>總體碳排量呈上升趨勢（${totalGrowth.toFixed(1)}%），需要採取減碳措施</p>
-                </div>
-            </div>
-        `);
-    } else if (totalGrowth < -10) {
-        insights.push(`
-            <div class="insight-card insight-success">
-                <i class="fas fa-arrow-trend-down"></i>
-                <div>
-                    <strong>減碳成效顯著</strong>
-                    <p>總體碳排量下降 ${Math.abs(totalGrowth).toFixed(1)}%，減碳措施有效</p>
-                </div>
-            </div>
-        `);
-    }
-    
-    // 洞察 3: 營收效率
-    const carbonPerRevenue = (dispatch.total + operation.total + storage.total) / revenue.total * 1000;
-    insights.push(`
-        <div class="insight-card insight-info">
-            <i class="fas fa-chart-pie"></i>
-            <div>
-                <strong>碳排效率</strong>
-                <p>每千元營收產生 ${carbonPerRevenue.toFixed(2)} kg 碳排量</p>
-            </div>
-        </div>
-    `);
-    
-    // 洞察 4: 波動性分析
-    const avgStdDev = (dispatch.stdDev + operation.stdDev + storage.stdDev) / 3;
-    if (avgStdDev > 50) {
-        insights.push(`
-            <div class="insight-card insight-warning">
-                <i class="fas fa-wave-square"></i>
-                <div>
-                    <strong>數據波動較大</strong>
-                    <p>碳排量波動明顯（標準差 ${avgStdDev.toFixed(2)}），建議穩定作業流程</p>
-                </div>
-            </div>
-        `);
-    }
-    
-    return insights.join('');
-}
-
-/**
- * 切換統計顯示
- */
-function toggleStatistics() {
-    const statsContainer = document.getElementById('carbonStats');
-    const toggleBtn = document.getElementById('toggleStatsBtn');
-    
-    if (!statsContainer) return;
-    
-    if (statsContainer.style.display === 'none' || !statsContainer.style.display) {
-        showDataStatistics();
-        if (toggleBtn) {
-            toggleBtn.innerHTML = '<i class="fas fa-chart-bar"></i> 隱藏統計';
-            toggleBtn.classList.add('active');
-        }
-    } else {
-        statsContainer.style.display = 'none';
-        if (toggleBtn) {
-            toggleBtn.innerHTML = '<i class="fas fa-chart-bar"></i> 顯示統計';
-            toggleBtn.classList.remove('active');
-        }
-    }
-}
-
-/**
- * 匯出統計報告
- */
-function exportStatisticsReport() {
-    if (!carbonChartData || !carbonChartData.datasets || carbonChartData.datasets.length === 0) {
-        if (window.app) app.showNotification('無資料可匯出', 'warning');
-        return;
-    }
-    
-    // 生成 CSV 內容
-    let csv = '碳排追蹤統計報告\n';
-    csv += `生成時間: ${new Date().toLocaleString('zh-TW')}\n\n`;
-    
-    csv += '項目,總計,平均,最大值,最小值,標準差,中位數,增長率\n';
-    
-    const datasets = carbonChartData.datasets.filter(d => !d.isPrediction);
-    
-    datasets.forEach((dataset, index) => {
-        const data = dataset.data;
-        const stats = {
-            total: calculateTotal(data),
-            avg: calculateAverage(data),
-            max: Math.max(...data.filter(v => v !== null && !isNaN(v))),
-            min: Math.min(...data.filter(v => v !== null && !isNaN(v))),
-            stdDev: calculateStdDev(data),
-            median: calculateMedian(data),
-            growth: calculateGrowthRate(data)
-        };
-        
-        csv += `${dataset.label},${stats.total.toFixed(2)},${stats.avg.toFixed(2)},${stats.max.toFixed(2)},${stats.min.toFixed(2)},${stats.stdDev.toFixed(2)},${stats.median.toFixed(2)},${stats.growth.toFixed(2)}%\n`;
-    });
-    
-    // 下載 CSV
-    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `碳排統計報告_${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-    
-    if (window.app) app.showNotification('統計報告已匯出', 'success');
-}
-
          // ===== 碳排追蹤折線圖功能 =====
 
 let carbonChartInstance = null;
@@ -5268,8 +4534,6 @@ async function loadCarbonChartData() {
 
 // 更新圖表資料
 function updateCarbonChart(data) {
-    console.log('🎨 開始更新圖表...', data);
-    
     carbonChartData.labels = data.dates;
     carbonChartData.datasets = [
         {
@@ -5280,7 +4544,7 @@ function updateCarbonChart(data) {
             borderWidth: 2,
             tension: 0.4,
             yAxisID: 'yLeft',
-            unit: '公斤'
+            unit: '公噸'
         },
         {
             label: '運務GAI',
@@ -5317,30 +4581,8 @@ function updateCarbonChart(data) {
     if (carbonChartInstance) {
         carbonChartInstance.data = carbonChartData;
         carbonChartInstance.update();
-        
-        console.log('✅ 圖表更新完成');
-        
-        // ========== 🆕 新增：自動更新統計 ========== 
-        
-        // 如果統計面板已開啟，自動更新統計
-        const statsContainer = document.getElementById('carbonStats');
-        const toggleBtn = document.getElementById('toggleStatsBtn');
-        
-        if (statsContainer && statsContainer.style.display !== 'none') {
-            console.log('📊 統計面板已開啟，自動更新統計...');
-            // 延遲一下讓圖表先更新完成
-            setTimeout(() => {
-                showDataStatistics();
-            }, 300);
-        }
-        
-        // ========== 結束新增 ========== 
-        
-    } else {
-        console.error('❌ 圖表實例不存在');
     }
 }
-
 
 // 切換趨勢線
 function toggleTrendLine(type) {
