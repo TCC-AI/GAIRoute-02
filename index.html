@@ -5198,7 +5198,7 @@ async function loadCarbonChartData() {
     
     try {
         // 4. 調用 API
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz2gpvADgpDOSXYWtG1sEXPQWso58gxlFd8f-5U6f7yi1Bm5_-F4atvrBdeEZD90gL8Xw/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZkX_tW_3vk1edpwf7fDNVMLB0tpUgvvRda90-lzJFVCrZUHvGaVH-7Gfp7idFDznR5g/exec';
         const url = `${GOOGLE_SCRIPT_URL}?action=getCarbonChartData&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
         
         console.log('🌐 API 請求:', url);
@@ -6131,7 +6131,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const CONFIG = {
             SPREADSHEET_ID: '1miCf_ZTVyzmA1MNbbZM3uUdZjluk99gZUH5w2q_XWs8',
             EXTERNAL_SPREADSHEET_ID: '1YMYLTvbAZjUxtOrtavzOCSTt0U5NfZN7S825TQmflbc', // 第二個檔案ID（外部資料、GAI分析等）
-            GAS_URL: 'https://script.google.com/macros/s/AKfycbz2gpvADgpDOSXYWtG1sEXPQWso58gxlFd8f-5U6f7yi1Bm5_-F4atvrBdeEZD90gL8Xw/exec',
+            GAS_URL: 'https://script.google.com/macros/s/AKfycbyZkX_tW_3vk1edpwf7fDNVMLB0tpUgvvRda90-lzJFVCrZUHvGaVH-7Gfp7idFDznR5g/exec',
             USE_MOCK_DATA: false,
             MAPS_API_KEY: 'AIzaSyDtP8oDCXfr0CPLyVv_WrAqmk2V9QgteLI',
             WEATHER_API_KEY: 'a4806bc2577c0c227f9acd8bccb566a5',
@@ -6479,7 +6479,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             // 處理低碳排模態
-// 處理低碳排模態
 async handleAIPreplanCMode() {
     const resultDiv = document.getElementById('gai-route-result');
     this.showPartialLoading('gai-route-result', '正在佈建AI當日各路線預排表(低碳排模態)...');
@@ -6517,14 +6516,16 @@ async handleAIPreplanCMode() {
                         </div>
                     </div>
                     ${cardsHtml}
-                    <div style="margin-top: 2rem; text-align: center; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
-                        <button class="btn btn-success btn-sm" onclick="app.exportRouteTableC()" style="margin-right: 0.5rem;">
-                            <i class="fas fa-download"></i> 匯出路線表(C)
-                        </button>
-                        <button class="btn btn-secondary btn-sm" onclick="app.refreshRouteTableC()">
-                            <i class="fas fa-sync-alt"></i> 重新整理
-                        </button>
-                    </div>
+                    
+<div style="margin-top: 2rem; text-align: center; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
+    <button class="btn btn-primary btn-sm" onclick="app.exportCurrentDayRouteSheet()" style="margin-right: 0.5rem;">
+        <i class="fas fa-download"></i> 匯出路線表
+    </button>
+    <button class="btn btn-secondary btn-sm" onclick="app.refreshRouteTable()">
+        <i class="fas fa-sync-alt"></i> 重新整理
+    </button>
+</div>
+
                 </div>
             `;
             
@@ -6544,17 +6545,6 @@ async handleAIPreplanCMode() {
         `;
     }
 }
-
-// 匯出路線表(C)功能
-exportRouteTableC() {
-    this.showNotification('匯出功能開發中...', 'info');
-}
-
-// 重新整理路線表(C)
-refreshRouteTableC() {
-    this.handleAIPreplanCMode();
-}
-
 
 // 匯出路線表(C)功能
 exportRouteTableC() {
@@ -9716,9 +9706,7 @@ refreshRouteTable() {
 // 👇 在這裡添加 B模態處理方法
 async handleAIPreplanBMode() {
     const resultDiv = document.getElementById('gai-route-result');
-    resultDiv.style.textAlign = 'center';
     resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在佈建AI當日各路線預排表(高裝載模態)...';
-
 
     try {
         console.log('開始獲取當日各路線表(B)...');
